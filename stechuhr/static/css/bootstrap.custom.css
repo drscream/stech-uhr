@@ -1,0 +1,49 @@
+html,
+body,
+.container {
+	height: 100%;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -60px;
+	padding: 0 0 60px;
+}
+
+#content {
+	padding-top: 70px;
+}
+
+#footer {
+	height: 60px;
+	background-color: #222222;
+	color: #999999;
+}
+
+#footer li {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#footer a {
+	outline: 0;
+	text-decoration: none;
+	color: #999999;
+}
+
+#footer a:hover {
+	color: #ffffff;
+}
+
+@media (max-width: 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+/* vim: set ft=css ts=4 sw=4 : */
