@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block navbar-right %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-4">
+		<fieldset>
+			<legend>Welcome.</legend>
+			<div class="form-group">
+				<label for="id_username" class="required">Username</label>
+				<input id="id_username" maxlength="254" name="username" type="text" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="id_password" class="required">Password</label>
+				<input id="id_password" name="password" type="password" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="id_repeat_password" class="required">Repeat password</label>
+				<input id="id_repeat_password" name="repeat_password" type="password" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="id_email" class="required">Email</label>
+				<input id="id_email" maxlength="254" name="email" type="text" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="id_repeat_email" class="required">Repeat Email</label>
+				<input id="id_repeat_email" maxlength="254" name="repeat_email" type="text" class="form-control" />
+			</div>
+				<input type="hidden" name="this_is_the_signin_form" value="1" />
+			{% if next %}
+				<input type="hidden" name="next" value="{{ next }}" />
+			{% else %}
+				<input type="hidden" name="next" value="/stechuhr/" />
+			{% endif %}
+				<button class="btn btn-larg btn-info" type="submit" value="Sign in">Sign in</button>
+			</fieldset>
+		</form>
+	</div>
+</div>
+{% if form.errors %}
+<div class="row">
+	<div class="col-lg-4 form-alert">
+		<div class="alert alert-danger">
+			<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+			Something went wrong. Please try again.
+		</div>
+	</div>
+</div>
+{% endif %}
+<script type="text/javascript">
+	document.getElementById('id_username').focus()
+</script>
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=4 sw=4 : -->
