@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block navbar-right %}
+<ul class="nav navbar-nav pull-right">
+	<li><a href="/stechuhr/login/" class="navbar-link"><i class="icon-off"></i> Log in</a></li>
+</ul>
 {% endblock %}
 
 {% block content %}
 <div class="row">
-	<div class="col-lg-12 jumbotron">
+	<div class="col-lg-12">
 		<div class="page-header">
-			<h1>Goodbye. <small>Keep track of your hours worked. <a	href="/stechuhr/">Stechuhr</a>.</small></h2>
+			<h1><i class="icon-time"></i> Stechuhr <small>Keep track of your hours worked.</small></h2>
 		</div>
 	</div>
-</div>
 </div>
 {% endblock %}
 

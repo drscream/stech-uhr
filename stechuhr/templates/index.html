@@ -5,6 +5,7 @@
 {% if user.is_authenticated %}
 	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
 {% else %}
+	<li><a href="/stechuhr/signin/" class="navbar-link"><i class="icon-edit"></i> Sign in</a></li>
 	<li><a href="/stechuhr/login/" class="navbar-link"><i class="icon-off"></i> Log in</a></li>
 {% endif %}
 </ul>
@@ -12,12 +13,10 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-lg-12 jumbotron">
+	<div class="col-lg-12">
 		<div class="page-header">
-			<h1>Stechuhr <i class="icon-time"></i>. <small>Keep track of your hours worked.</small></h1>
+			<h1><i class="icon-time"></i> Stechuhr <small>Keep track of your hours worked.</small></h1>
 		</div>
-		<p>A simple application which supports you to remember your daily workday.
-		<a class="btn btn-lg btn-success" href="/stechuhr/signin/">Get started today</a></p>
 	</div>
 </div>
 {% endblock %}
