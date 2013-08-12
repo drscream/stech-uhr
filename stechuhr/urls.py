@@ -16,6 +16,15 @@ urlpatterns = patterns('',
 		# user
 		url(r'^user/dashboard/$', views.user_dashboard, name='user_dashboard'),
 		url(r'^user/settings/$', views.user_settings, name='user_settings'),
+		# reports
+		url(r'^reports/day/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
+			views.reports_day, name='reports_day'),
+		url(r'^reports/week/(?P<year>\d{4})/(?P<week>\d{1,2})/$',
+			views.reports_week, name='reports_week'),
+		url(r'^reports/month/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
+			views.reports_month, name='reports_month'),
+		url(r'^reports/year/(?P<year>\d{4})/$',
+			views.reports_year, name='reports_year'),
 	)
 
 

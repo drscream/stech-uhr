@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import datetime
+
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
@@ -19,11 +21,34 @@ def signin(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_dashboard(request):
-	return render(request, 'user/dashboard.html')
+	now = datetime.date.today()
+	context = {
+			'year': now.year,
+			'month': now.month,
+			'day': now.day,
+			'week': now.isocalendar()[1]
+		}
+	return render(request, 'user/dashboard.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
-	return HttpResponse('<h1>Settings</h1>')
+	return render(request, 'user/settings.html')
+
+@login_required(login_url='/stechuhr/login/')
+def reports_day(request, year, month, day):
+	return HttpResponse('<h1>%s/%s/%s</h1>' % (year, month, day))
+
+@login_required(login_url='/stechuhr/login/')
+def reports_week(request, year, week):
+	return HttpResponse('<h1>%s/%s</h1>' % (year, week))
+
+@login_required(login_url='/stechuhr/login/')
+def reports_month(request, year, month):
+	return HttpResponse('<h1>%s/%s</h1>' % (year, month))
+
+@login_required(login_url='/stechuhr/login/')
+def reports_year(request, year):
+	return HttpResponse('<h1>%s</h1>' % (year))
 
 def permission_denied(request):
 	return HttpResponse('<h1>Permission denied (403)</h1>')
