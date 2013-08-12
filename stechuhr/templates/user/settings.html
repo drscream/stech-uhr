@@ -32,6 +32,103 @@
 				</h5>
 			</a>
 		</div>
+		<div class="list-group">
+			<a href="#" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-user"></i> Basic
+				</h5>
+			</a>
+			<a href="#" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-bell"></i> Work
+				</h5>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<form>
+			<fieldset>
+				<legend>Basic</legend>
+				<div class="form-group">
+					<label for="id_firstname" class="required">Firstname</label>
+					<input id="id_firstname" maxlength="254" name="firstname" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_lastname" class="required">Lastname</label>
+					<input id="id_lastname" maxlength="254" name="lastname" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_email" class="required">Email</label>
+					<input id="id_email" maxlength="254" name="email" type="email" class="form-control" />
+				</div>
+				<input type="hidden" name="user_basic_settings" value="1" />
+				<button class="btn btn-larg btn-info" type="submit" value="save user basic">Save</button>
+			</fieldset>
+		</form>
+	</div>
+</div>
+<div class="row" style="margin-top: 15px;">
+	<div class="col-lg-4 col-lg-offset-2">
+		<form>
+			<fieldset>
+				<legend>Job</legend>
+				<div class="form-group">
+					<label for="id_company" class="required">Company</label>
+					<input id="id_company" maxlength="254" name="company" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_department">Department</label>
+					<input id="id_department" maxlength="254" name="department" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_position">Position</label>
+					<input id="id_position" maxlength="254" name="position" type="text" class="form-control" />
+				</div>
+				<input type="hidden" name="user_job_settings" value="1" />
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-lg-4">
+		<form>
+			<fieldset>
+				<legend>Times</legend>
+				<div class="form-group">
+					<label for="id_hours_per_week" class="required">Hours per week</label>
+					<input id="id_hours_per_week" maxlength="254" name="hours_per_week" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_pause_minutes_per_day">Pause minutes per day</label>
+					<input id="id_pause_minutes_per_day" maxlength="254" name="pause_minutes_per_day" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_leave_days_per_year">Leave days per year</label>
+					<input id="id_leave_days_per_year" maxlength="254" name="leave_days_per_year" type="text" class="form-control" />
+				</div>
+				<input type="hidden" name="user_times_settings" value="1" />
+			</fieldset>
+		</form>
+	</div>
+</div>
+<div class="row" style="margin-top: 15px; margin-bottom: 60px;">
+	<div class="col-lg-4 col-lg-offset-2">
+		<form>
+			<fieldset>
+				<div class="form-group">
+					<label for="id_valid_from">Valid from</label>
+					<input id="id_valid_from" maxlength="254" name="valid_from" type="text" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_valid_to">Valid to</label>
+					<input id="id_valid_to" maxlength="254" name="valid_to" type="text" class="form-control" />
+				</div>
+				<div class="checkbox">
+					<label>
+						<input id="id_is_active" name="is_active" type="checkbox" /> Activate
+					</label>
+				</div>
+				<button class="btn btn-larg btn-info" type="submit" value="save user job times settings">Save</button>
+			</fieldset>
+		</form>
 	</div>
 </div>
 {% endblock %}
