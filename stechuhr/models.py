@@ -4,36 +4,37 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 def validate_workday_hours_per_week(hours):
-	if hours > 168:
-		raise ValidationError('Too many workday hours per week')
-
-def validate_pause_minutes_per_day(minutes):
-	if minutes > 1440:
-		raise ValidationError('Too many pause minutes per day')
+	if hours not in range(168):
+		raise ValidationError('Too many workday hours per week.')
 
 def validate_leave_days_per_year(days):
-	if days > 365:
-		raise ValidationError('Too many leave days per year')
+	if days not in range(365):
+		raise ValidationError('Too many leave days per year.')
+
+def validate_pause_minutes_per_day(minutes):
+	if minutes not in range(1440):
+		raise ValidationError('Too many pause minutes per day.')
 
 
 class UserSettings(models.Model):
 	class Meta:
 		ordering = ('-create_date', 'user', )
 		verbose_name_plural = 'User settings'
+		unique_together = (('user', 'valid_from_date'), )
 
 	def __unicode__(self):
-		return '%s %s' % (self.user, self.company)
+		return '%s %s' % (self.company, self.valid_from_date.strftime('%y/%m/%d'))
 
 	user = models.ForeignKey(User)
-	create_date = models.DateTimeField()
-	company = models.CharField(max_length=255, null=True, blank=True)
+	create_date = models.DateTimeField(default=timezone.now)
+	company = models.CharField(max_length=255)
 	department = models.CharField(max_length=255, null=True, blank=True)
 	position = models.CharField(max_length=255, null=True, blank=True)
-	valid_from_date = models.DateField(auto_now_add=False, null=True,
-			blank=True)
+	valid_from_date = models.DateField(default=timezone.now)
 	valid_to_date = models.DateField(auto_now_add=False, null=True, blank=True)
 	hours_per_week = models.PositiveSmallIntegerField(null=True, blank=True,
 			validators=[validate_workday_hours_per_week])
@@ -41,6 +42,7 @@ class UserSettings(models.Model):
 			validators=[validate_pause_minutes_per_day])
 	leave_days_per_year = models.PositiveSmallIntegerField(null=True,
 			blank=True, validators=[validate_leave_days_per_year])
+	is_active = models.BooleanField(default=False)
 
 
 class UserProfile(models.Model):
@@ -70,29 +72,35 @@ class WorkDay(models.Model):
 			(u'Seminar', u'Seminar'),
 			(u'Business Trip', u'Business Trip'),
 			(u'Unfitness for work', u'Unfitness for work'),
-			(u'Vacation', u'Vacation'),
-			(u'Flextime compensation', u'Flextime compensation'),
+			(u'Leave day', u'Leave day'),
+			(u'Flextime leave day', u'Flextime leave day'),
 		)
 
 	def __unicode__(self):
 		return '%s %s' % (self.user, self.date.strftime('%y/%m/%d'))
 
 	user = models.ForeignKey(User)
-	created_date = models.DateTimeField()
+	created_date = models.DateTimeField(default=timezone.now)
 	date = models.DateField(auto_now_add=False)
 	kind_of_workday = models.CharField(max_length=255, choices=WORKDAY_CHOICES,
 			default='Daily routine')
 	start_time = models.TimeField(auto_now_add=False)
 	end_time = models.TimeField(auto_now_add=False, null=True,
 			blank=True)
-	pause_minutes = models.TimeField(auto_now_add=False, null=True, blank=True)
+	pause_minutes = models.PositiveSmallIntegerField(null=True, blank=True,
+			validators=[validate_pause_minutes_per_day])
 	workplace = models.CharField(max_length=255, null=True, blank=True)
-	report = models.TextField()
+	report = models.TextField(null=True, blank=True)
 
-	def get_duration(self):
+	def get_attendance_time(kind='gross'):
 		if self.end_time is None:
 			return None
-		else:
+		elif kind == 'gross':
 			return self.end_time - self.start_time
+		elif kind == 'net':
+			return self.end_time - self.start_time - self.pause_minutes
+		else:
+			return None
+
 
 # vim: set ft=python ts=4 sw=4 :

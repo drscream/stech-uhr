@@ -19,10 +19,11 @@ class UserAdmin(UserAdmin):
 
 class UserSettingsAdmin(admin.ModelAdmin):
 	list_display = ('id', 'user', 'valid_from_date', 'valid_to_date', 'company',
-			'hours_per_week', 'pause_per_day', 'leave_days_per_year', )
+			'hours_per_week', 'pause_minutes_per_day', 'leave_days_per_year', )
 	search_fields = ('user', )
 	list_filter = ('valid_from_date', 'valid_to_date', )
 	list_display_links = ('id', 'user', 'valid_from_date', )
+
 
 class WorkDayAdmin(admin.ModelAdmin):
 	list_display = ('id', 'date', 'user', 'kind_of_workday', 'start_time',
