@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 			name='user_settings_basic'),
 		url(r'^user/settings/work/$', views.user_settings_work,
 			name='user_settings_work'),
-		url(r'^user/settings/work/(?P<pk>\d)',
+		url(r'^user/settings/work/(?P<work_id>\d+)',
 			views.user_settings_work_details,
 			name='view.user_settings_work_details'),
 		# reports
