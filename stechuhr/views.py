@@ -2,13 +2,14 @@
 
 import datetime
 
-from django.http import HttpResponse, Http404, HttpResponseBadRequest
+from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
 from stechuhr.models import UserProfile, UserSettings, WorkDay
+from stechuhr.forms import UserBasicSettingsForm
 
 
 def index(request):
@@ -40,22 +41,25 @@ def user_settings(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_basic(request):
-	return render(request, 'user/settings/basic.html')
+	if request.method == 'POST':
+		form = UserBasicSettingsForm(request.POST)
+		if form.is_valid():
+			form.save(request.user)
+			return redirect(user_settings)
+	else:
+		form = UserBasicSettingsForm(request)
+
+	return render(request, 'user/settings/basic.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_work(request):
-	try:
-		settings = UserSettings.objects.filter(user=request.user.pk)
-	except UserSettings.DoesNotExist:
-		raise Http404
-	context = {
-			'settings': settings,
-		}
-	return render(request, 'user/settings/work.html', context)
+	settings = UserSettings.objects.filter(user=request.user.pk)
+	return render(request, 'user/settings/work.html', { 'settings': settings, })
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_work_details(request, pk=None):
-	return render(request, 'user/settings/work_details.html')
+def user_settings_work_details(request, work_id=None):
+	settings = UserSettings.objects.get(pk=work_id)
+	return render(request, 'user/settings/work_details.html', { 'settings': settings, })
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
