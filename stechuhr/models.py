@@ -22,7 +22,7 @@ def validate_pause_minutes_per_day(minutes):
 
 class UserSettings(models.Model):
 	class Meta:
-		ordering = ('-create_date', 'user', )
+		ordering = ('-joined_at', 'user', )
 		verbose_name_plural = 'User settings'
 		unique_together = (('user', 'joined_at'), )
 
@@ -42,7 +42,6 @@ class UserSettings(models.Model):
 			validators=[validate_pause_minutes_per_day])
 	leave_days_per_year = models.PositiveSmallIntegerField(null=True,
 			blank=True, validators=[validate_leave_days_per_year])
-	is_active = models.BooleanField(default=False)
 
 
 class UserProfile(models.Model):
@@ -53,7 +52,7 @@ class UserProfile(models.Model):
 		return '%s' % self.user
 
 	user = models.OneToOneField(User)
-	settings = models.ManyToManyField(UserSettings, null=True, blank=True)
+	settings = models.ForeignKey(UserSettings, null=True, blank=True)
 
 	def create_user_profile(sender, instance, created, **kwargs):
 		if created:
