@@ -26,7 +26,7 @@
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/" class="list-group-item active">
+			<a href="/stechuhr/user/settings/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
@@ -38,39 +38,12 @@
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/work/" class="list-group-item">
+			<a href="/stechuhr/user/settings/work/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-desktop"></i> Work
 				</h5>
 			</a>
 		</div>
-	</div>
-	<div class="col-lg-4">
-		<h3 class="table-header">Basic</h3>
-		<table class="table table-stripped table-hover">
-			<tr><th>First name</th><td>{{ user.first_name }}</td></tr>
-			<tr><th>Last name</th><td>{{ user.last_name }}</td></tr>
-			<tr><th>Email</th><td>{{ user.email }}</td></tr>
-		</table>
-	</div>
-</div>
-<div class="row" style="margin-bottom: 60px;">
-	<div class="col-lg-4 col-lg-offset-2">
-		<h3 class="table-header">Work</h3>
-		<table class="table table-stripped table-hover">
-			<tr><th>Company</th><td>{{ work.company|default:"" }}</td></tr>
-			<tr><th>Department</th><td>{{ work.department|default:"" }}</td></tr>
-			<tr><th>Position</th><td>{{ work.position|default:"" }}</td></tr>
-			<tr><th>Joined at</th><td>{{ work.joined_at|default:"" }}</td></tr>
-			<tr><th>Leaved at</th><td>{{ work.leaved_at|default:"" }}</td></tr>
-		</table>
-	</div>
-	<div class="col-lg-4">
-		<table class="table table-stripped table-hover" style="margin-top: 36px;">
-			<tr><th>Hours per week</th><td>{{ work.hours_per_week|append:" hours" }}</td></tr>
-			<tr><th>Pause minutes per day</th><td>{{ work.pause_minutes_per_day|append:" minutes" }}</td></tr>
-			<tr><th>Leave days per year</th><td>{{ work.leave_days_per_year|append:" days" }}</td></tr>
-		</table>
 	</div>
 </div>
 {% endblock %}
