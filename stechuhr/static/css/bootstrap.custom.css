@@ -50,4 +50,8 @@ body,
 	}
 }
 
+.table-header {
+	margin-top: 0;
+}
+
 /* vim: set ft=css ts=4 sw=4 : */
