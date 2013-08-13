@@ -45,6 +45,30 @@
 			</a>
 		</div>
 	</div>
+	<div class="col-lg-10">
+		<table class="table table-stripped table-hover">
+			<tr>
+				<th>#</th>
+				<th>Company</th>
+				<th>Joined at</th>
+				<th>Leaved at</th>
+				<th>Details</th>
+			</tr>
+		{% for record in settings %}
+		{% if forloop.counter == 1 %}
+			<tr class="success">
+		{% else %}
+			<tr>
+		{% endif %}
+				<td>{{ forloop.counter }}</td>
+				<td>{{ record.company }}</td>
+				<td>{{ record.joined_at }}</td>
+				<td>{{ record.leaved_at|default:"" }}</td>
+				<td><a href="/stechuhr/user/settings/work/{{ record.pk }}/">Show</a></td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
 </div>
 {% endblock %}
 

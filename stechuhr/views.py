@@ -32,9 +32,9 @@ def user_dashboard(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
-	work = UserSettings.objects.filter(user=request.user.pk).latest('joined_at')
+	profile = get_object_or_404(UserProfile, user=request.user.pk)
 	context = {
-			'work': work,
+			'settings': profile.settings,
 		}
 	return render(request, 'user/settings.html', context)
 
@@ -44,7 +44,14 @@ def user_settings_basic(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_work(request):
-	return render(request, 'user/settings/work.html')
+	try:
+		settings = UserSettings.objects.filter(user=request.user.pk)
+	except UserSettings.DoesNotExist:
+		raise Http404
+	context = {
+			'settings': settings,
+		}
+	return render(request, 'user/settings/work.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_work_details(request, pk=None):

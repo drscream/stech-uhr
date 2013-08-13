@@ -49,18 +49,38 @@
 		<form>
 			<fieldset>
 				<div class="form-group">
-					<label for="id_firstname" class="required">Firstname</label>
-					<input id="id_firstname" maxlength="254" name="firstname" type="text" class="form-control" />
+					<label for="id_first_name" class="required">First name</label>
+					<input id="id_first_name" maxlength="254" name="first_name" type="text" class="form-control" />
 				</div>
 				<div class="form-group">
-					<label for="id_lastname" class="required">Lastname</label>
-					<input id="id_lastname" maxlength="254" name="lastname" type="text" class="form-control" />
+					<label for="id_last_name" class="required">Last name</label>
+					<input id="id_last_name" maxlength="254" name="last_name" type="text" class="form-control" />
 				</div>
 				<div class="form-group">
 					<label for="id_email" class="required">Email</label>
 					<input id="id_email" maxlength="254" name="email" type="email" class="form-control" />
 				</div>
-				<input type="hidden" name="user_basic_settings" value="1" />
+				<input type="hidden" name="form_user_basic_settings" value="1" />
+				<button class="btn btn-larg btn-info" type="submit" value="save user basic">Save</button>
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-lg-4">
+		<form>
+			<fieldset>
+				<div class="form-group">
+					<label for="id_cur_password" class="required">Current password</label>
+					<input id="id_cur_password" name="cur_password" type="password" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_new_password" class="required">New password</label>
+					<input id="id_new_password" name="new_password" type="password" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="id_confirm_new_password" class="required">Confirm new password</label>
+					<input id="id_confirm_new_password" name="confirm_new_password" type="password" class="form-control" />
+				</div>
+				<input type="hidden" name="form_user_password" value="1" />
 				<button class="btn btn-larg btn-info" type="submit" value="save user basic">Save</button>
 			</fieldset>
 		</form>
