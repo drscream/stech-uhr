@@ -24,18 +24,18 @@ class UserSettings(models.Model):
 	class Meta:
 		ordering = ('-create_date', 'user', )
 		verbose_name_plural = 'User settings'
-		unique_together = (('user', 'valid_from_date'), )
+		unique_together = (('user', 'joined_at'), )
 
 	def __unicode__(self):
-		return '%s %s' % (self.company, self.valid_from_date.strftime('%y/%m/%d'))
+		return '%s %s' % (self.company, self.joined_at.strftime('%y/%m/%d'))
 
 	user = models.ForeignKey(User)
 	create_date = models.DateTimeField(default=timezone.now)
 	company = models.CharField(max_length=255)
 	department = models.CharField(max_length=255, null=True, blank=True)
 	position = models.CharField(max_length=255, null=True, blank=True)
-	valid_from_date = models.DateField(default=timezone.now)
-	valid_to_date = models.DateField(auto_now_add=False, null=True, blank=True)
+	joined_at = models.DateField(default=timezone.now)
+	leaved_at = models.DateField(auto_now_add=False, null=True, blank=True)
 	hours_per_week = models.PositiveSmallIntegerField(null=True, blank=True,
 			validators=[validate_workday_hours_per_week])
 	pause_minutes_per_day = models.PositiveSmallIntegerField(null=True, blank=True,
