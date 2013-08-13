@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
-from stechuhr.models import UserProfile, WorkDay
+from stechuhr.models import UserProfile, UserSettings, WorkDay
 
 
 def index(request):
@@ -32,7 +32,23 @@ def user_dashboard(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
-	return render(request, 'user/settings.html')
+	work = UserSettings.objects.filter(user=request.user.pk).latest('joined_at')
+	context = {
+			'work': work,
+		}
+	return render(request, 'user/settings.html', context)
+
+@login_required(login_url='/stechuhr/login/')
+def user_settings_basic(request):
+	return render(request, 'user/settings/basic.html')
+
+@login_required(login_url='/stechuhr/login/')
+def user_settings_work(request):
+	return render(request, 'user/settings/work.html')
+
+@login_required(login_url='/stechuhr/login/')
+def user_settings_work_details(request, pk=None):
+	return render(request, 'user/settings/work_details.html')
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
