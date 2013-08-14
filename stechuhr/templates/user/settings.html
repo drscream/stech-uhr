@@ -54,6 +54,7 @@
 		</table>
 	</div>
 </div>
+{% if settings %}
 <div class="row last-row">
 	<div class="col-lg-4 col-lg-offset-2">
 		<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
@@ -75,6 +76,18 @@
 		</table>
 	</div>
 </div>
+{% else %}
+<div class="row last-row">
+	<div class="col-lg-4 col-lg-offset-2">
+		<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
+		<div class="alert alert-info form-alert">
+			<strong>Attention!</strong>
+			<a href="/stechuhr/user/settings/work/" class="alert-link">Create</a>
+			a work record.
+		</div>
+	</div>
+</div>
+{% endif %}
 {% endblock %}
 
 <!-- vim: set ft=htmldjango ts=4 sw=4 : -->
