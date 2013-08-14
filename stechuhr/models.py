@@ -44,23 +44,6 @@ class UserSettings(models.Model):
 			blank=True, validators=[validate_leave_days_per_year])
 
 
-class UserProfile(models.Model):
-	class Meta:
-		ordering = ('user',)
-
-	def __unicode__(self):
-		return '%s' % self.user
-
-	user = models.OneToOneField(User)
-	settings = models.ForeignKey(UserSettings, null=True, blank=True)
-
-	def create_user_profile(sender, instance, created, **kwargs):
-		if created:
-			UserProfile.objects.create(user=instance)
-
-	post_save.connect(create_user_profile, sender=user)
-
-
 class WorkDay(models.Model):
 	class Meta:
 		ordering = ('-date', 'user',)

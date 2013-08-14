@@ -4,17 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from stechuhr.models import UserProfile, UserSettings, WorkDay
-
-
-class UserProfileInline(admin.StackedInline):
-	model = UserProfile
-	can_delete = False
-	verbose_name_plural = 'profile'
-
-
-class UserAdmin(UserAdmin):
-	inlines = (UserProfileInline, )
+from stechuhr.models import UserSettings, WorkDay
 
 
 class UserSettingsAdmin(admin.ModelAdmin):
@@ -34,9 +24,7 @@ class WorkDayAdmin(admin.ModelAdmin):
 	list_display_links = ('user', 'id', )
 
 
-admin.site.unregister(User)
 admin.site.register(UserSettings, UserSettingsAdmin)
-admin.site.register(User, UserAdmin)
 admin.site.register(WorkDay, WorkDayAdmin)
 
 # vim: set ft=python ts=4 sw=4 :
