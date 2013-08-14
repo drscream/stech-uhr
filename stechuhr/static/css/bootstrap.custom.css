@@ -54,4 +54,8 @@ body,
 	margin-top: 0;
 }
 
+.last-row {
+	margin-bottom: 60px;
+}
+
 /* vim: set ft=css ts=4 sw=4 : */
