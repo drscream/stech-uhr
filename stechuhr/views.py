@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
 from stechuhr.models import UserSettings, WorkDay
-from stechuhr.forms import UserBasicSettingsForm, UserWorkSettingsForm
+from stechuhr.forms import UserBasicSettingsForm, UserWorkSettingsForm, SigninForm
 
 
 def index(request):
@@ -18,7 +18,15 @@ def index(request):
 	return render(request, 'index.html')
 
 def signin(request):
-	return render(request, 'signin.html')
+	if request.method == 'POST':
+		form = SigninForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect(index)
+	else:
+		form = SigninForm()
+
+	return render(request, 'signin.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
 def user_dashboard(request):
@@ -50,7 +58,7 @@ def user_settings_basic(request):
 		form = UserBasicSettingsForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
-			return redirect(user_settings)
+			return redirect('user_settings')
 	else:
 		form = UserBasicSettingsForm(request)
 
@@ -62,7 +70,7 @@ def user_settings_work(request):
 		form = UserWorkSettingsForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
-			return redirect(user_settings)
+			return redirect('user_settings')
 	else:
 		form = UserWorkSettingsForm(request)
 
@@ -79,7 +87,7 @@ def user_settings_work_details(request, work_id=None):
 		form = UserWorkSettingsForm(request.POST)
 		if form.is_valid():
 			form.modify()
-			return redirect(user_settings)
+			return redirect('user_settings')
 	else:
 		form = UserWorkSettingsForm(request)
 
