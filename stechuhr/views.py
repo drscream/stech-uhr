@@ -8,8 +8,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
-from stechuhr.models import UserProfile, UserSettings, WorkDay
-from stechuhr.forms import UserBasicSettingsForm
+from stechuhr.models import UserSettings, WorkDay
+from stechuhr.forms import UserBasicSettingsForm, UserWorkSettingsForm
 
 
 def index(request):
@@ -33,10 +33,15 @@ def user_dashboard(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
-	profile = get_object_or_404(UserProfile, user=request.user.pk)
-	context = {
-			'settings': profile.settings,
-		}
+	settings = None
+	try:
+		settings = UserSettings.objects.filter(user=request.user.pk).latest('joined_at')
+	except UserSettings.DoesNotExist:
+		context = {}
+	if settings:
+		context = {
+				'settings': settings,
+			}
 	return render(request, 'user/settings.html', context)
 
 @login_required(login_url='/stechuhr/login/')
@@ -53,13 +58,40 @@ def user_settings_basic(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_work(request):
+	if request.method == 'POST':
+		form = UserWorkSettingsForm(request.POST)
+		if form.is_valid():
+			form.save(request.user)
+			return redirect(user_settings)
+	else:
+		form = UserWorkSettingsForm(request)
+
 	settings = UserSettings.objects.filter(user=request.user.pk)
-	return render(request, 'user/settings/work.html', { 'settings': settings, })
+	context = { 
+			'settings': settings,
+			'form': form,
+		}
+	return render(request, 'user/settings/work.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_work_details(request, work_id=None):
-	settings = UserSettings.objects.get(pk=work_id)
-	return render(request, 'user/settings/work_details.html', { 'settings': settings, })
+	if request.method == 'POST':
+		form = UserWorkSettingsForm(request.POST)
+		if form.is_valid():
+			form.modify()
+			return redirect(user_settings)
+	else:
+		form = UserWorkSettingsForm(request)
+
+	try:
+		settings = UserSettings.objects.get(pk=work_id)
+	except UserSettings.DoesNotExist:
+		raise Http404
+	context = { 
+			'settings': settings,
+			'form': form,
+		}
+	return render(request, 'user/settings/work_details.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
