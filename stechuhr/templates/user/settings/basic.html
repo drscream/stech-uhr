@@ -45,35 +45,39 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-4">
-		<form action="/stechuhr/user/settings/basic/" method="post" id="form_user_basic_settings">
-			{% csrf_token %}
-			<fieldset>
-				<div class="form-group">
-					<label for="id_username" class="required">Username</label>
-					<input id="id_username" maxlength="254" name="username" type="text" readonly="readonly" value="{{ user.username }}" class="form-control" />
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-lg-5">
+				<form action="/stechuhr/user/settings/basic/" method="post" id="form_user_basic_settings">
+					{% csrf_token %}
+					<fieldset>
+						<div class="form-group">
+							<label for="id_username" class="required">Username</label>
+							<input id="id_username" maxlength="254" name="username" type="text" readonly="readonly" value="{{ user.username }}" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="id_first_name" class="required">First name</label>
+							<input id="id_first_name" maxlength="254" name="first_name" type="text" value="{{ user.first_name }}" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="id_last_name" class="required">Last name</label>
+							<input id="id_last_name" maxlength="254" name="last_name" type="text" value="{{ user.last_name  }}" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="id_email" class="required">Email</label>
+							<input id="id_email" maxlength="254" name="email" type="text" value="{{ user.email  }}" class="form-control" />
+						</div>
+						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+					</fieldset>
+				</form>
+				{% if form.errors %}
+				<div class="alert alert-danger form-alert">
+					<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+					Something went wrong. Please try again.
 				</div>
-				<div class="form-group">
-					<label for="id_first_name" class="required">First name</label>
-					<input id="id_first_name" maxlength="254" name="first_name" type="text" value="{{ user.first_name }}" class="form-control" />
-				</div>
-				<div class="form-group">
-					<label for="id_last_name" class="required">Last name</label>
-					<input id="id_last_name" maxlength="254" name="last_name" type="text" value="{{ user.last_name  }}" class="form-control" />
-				</div>
-				<div class="form-group">
-					<label for="id_email" class="required">Email</label>
-					<input id="id_email" maxlength="254" name="email" type="text" value="{{ user.email  }}" class="form-control" />
-				</div>
-				<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
-			</fieldset>
-		</form>
-		{% if form.errors %}
-		<div class="alert alert-danger form-alert">
-			<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
-			Something went wrong. Please try again.
+				{% endif %}
+			</div>
 		</div>
-		{% endif %}
 	</div>
 </div>
 {% endblock %}

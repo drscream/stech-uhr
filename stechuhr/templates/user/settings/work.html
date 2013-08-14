@@ -58,11 +58,7 @@
 						<th>Details</th>
 					</tr>
 				{% for record in settings %}
-				{% if forloop.counter == 1 %}
-					<tr class="success">
-				{% else %}
 					<tr>
-				{% endif %}
 						<td>{{ forloop.counter }}</td>
 						<td>{{ record.company }}</td>
 						<td>{{ record.joined_at }}</td>
@@ -99,7 +95,7 @@
 						<label for="id_leaved_at">Leaved at</label>
 						<input id="id_leaved_at" maxlength="254" name="leaved_at" type="text" class="form-control" />
 					</div>
-					<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+					<button class="btn btn-larg btn-info" type="submit" value="save">Create new</button>
 			</div>
 			<div class="col-lg-5">
 					<div class="form-group">

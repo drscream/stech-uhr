@@ -18,7 +18,7 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+<div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
 			<a href="/stechuhr/user/dashboard/" class="list-group-item">
@@ -45,49 +45,53 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-4">
-		<h3 class="table-header"><i class="icon-user"></i> Basic</h3>
-		<table class="table table-stripped table-hover">
-			<tr><th>First name</th><td>{{ user.first_name }}</td></tr>
-			<tr><th>Last name</th><td>{{ user.last_name }}</td></tr>
-			<tr><th>Email</th><td>{{ user.email }}</td></tr>
-		</table>
-	</div>
-</div>
-{% if settings %}
-<div class="row last-row">
-	<div class="col-lg-4 col-lg-offset-2">
-		<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
-		<table class="table table-stripped table-hover">
-			<tr><th>Company</th><td>{{ settings.company|default:"" }}</td></tr>
-			<tr><th>Department</th><td>{{ settings.department|default:"" }}</td></tr>
-			<tr><th>Position</th><td>{{ settings.position|default:"" }}</td></tr>
-			<tr><th>Joined at</th><td>{{ settings.joined_at|default:"" }}</td></tr>
-			{% comment %}
-			<tr><th>Leaved at</th><td>{{ settings.leaved_at|default:"" }}</td></tr>
-			{% endcomment %}
-		</table>
-	</div>
-	<div class="col-lg-4">
-		<table class="table table-stripped table-hover" style="margin-top: 36px;">
-			<tr><th>Hours per week</th><td>{{ settings.hours_per_week|append:" hours" }}</td></tr>
-			<tr><th>Pause minutes per day</th><td>{{ settings.pause_minutes_per_day|append:" minutes" }}</td></tr>
-			<tr><th>Leave days per year</th><td>{{ settings.leave_days_per_year|append:" days" }}</td></tr>
-		</table>
-	</div>
-</div>
-{% else %}
-<div class="row last-row">
-	<div class="col-lg-4 col-lg-offset-2">
-		<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
-		<div class="alert alert-info form-alert">
-			<strong>Attention!</strong>
-			<a href="/stechuhr/user/settings/work/" class="alert-link">Create</a>
-			a work record.
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-lg-5">
+				<h3 class="table-header"><i class="icon-user"></i> Basic</h3>
+				<table class="table table-stripped table-hover">
+					<tr><th>First name</th><td>{{ user.first_name }}</td></tr>
+					<tr><th>Last name</th><td>{{ user.last_name }}</td></tr>
+					<tr><th>Email</th><td>{{ user.email }}</td></tr>
+				</table>
+			</div>
 		</div>
+	{% if settings %}
+		<div class="row">
+			<div class="col-lg-5">
+				<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
+				<table class="table table-stripped table-hover">
+					<tr><th>Company</th><td>{{ settings.company|default:"" }}</td></tr>
+					<tr><th>Department</th><td>{{ settings.department|default:"" }}</td></tr>
+					<tr><th>Position</th><td>{{ settings.position|default:"" }}</td></tr>
+					<tr><th>Joined at</th><td>{{ settings.joined_at|default:"" }}</td></tr>
+					{% comment %}
+					<tr><th>Leaved at</th><td>{{ settings.leaved_at|default:"" }}</td></tr>
+					{% endcomment %}
+				</table>
+			</div>
+			<div class="col-lg-5">
+				<table class="table table-stripped table-hover" style="margin-top: 36px;">
+					<tr><th>Hours per week</th><td>{{ settings.hours_per_week|append:" hours" }}</td></tr>
+					<tr><th>Pause minutes per day</th><td>{{ settings.pause_minutes_per_day|append:" minutes" }}</td></tr>
+					<tr><th>Leave days per year</th><td>{{ settings.leave_days_per_year|append:" days" }}</td></tr>
+				</table>
+			</div>
+		</div>
+	{% else %}
+		<div class="row">
+			<div class="col-lg-5">
+				<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
+				<div class="alert alert-info form-alert">
+					<strong>Attention!</strong>
+					<a href="/stechuhr/user/settings/work/" class="alert-link">Create</a>
+					a work record.
+				</div>
+			</div>
+		</div>
+	{% endif %}
 	</div>
 </div>
-{% endif %}
 {% endblock %}
 
 <!-- vim: set ft=htmldjango ts=4 sw=4 : -->

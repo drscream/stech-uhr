@@ -31,23 +31,16 @@
 				<input type="hidden" name="next" value="/stechuhr/" />
 			{% endif %}
 				<button class="btn btn-larg btn-info" type="submit" value="Log in">Log in</button>
+			{% if form.errors %}
+				<div class="alert alert-danger form-alert">
+					<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+					Something went wrong. Please try again.
+				</div>
+			{% endif %}
 			</fieldset>
 		</form>
 	</div>
 </div>
-{% if form.errors %}
-<div class="row">
-	<div class="col-lg-4 form-alert">
-		<div class="alert alert-danger">
-			<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
-			Something went wrong. Please try again.
-		</div>
-	</div>
-</div>
-{% endif %}
-<script type="text/javascript">
-	document.getElementById('id_username').focus()
-</script>
 {% endblock %}
 
 <!-- vim: set ft=htmldjango ts=4 sw=4 : -->
