@@ -8,7 +8,7 @@ register = template.Library()
 @register.filter(name='append')
 @stringfilter
 def append(value, arg):
-	if value:
+	if value and value != 'None':
 		return '%s%s' % (value, arg)
 	else:
 		return ''
