@@ -7,9 +7,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 
-from stechuhr.models import UserSettings, WorkDay
-from stechuhr.forms import UserBasicSettingsForm, UserWorkSettingsForm, SigninForm
+from stechuhr.models import Job, Report
+from stechuhr.forms import UserForm, JobForm, SigninForm, ReportForm
 
 
 def index(request):
@@ -34,65 +35,63 @@ def user_dashboard(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
-	settings = None
+	job = None
 	try:
-		settings = UserSettings.objects.filter(user=request.user.pk).latest('joined_at')
-	except UserSettings.DoesNotExist:
+		job = Job.objects.filter(user=request.user.pk).latest('joined_at')
+	except Job.DoesNotExist:
 		context = {}
-	if settings:
+	if job:
 		context = {
-				'settings': settings,
+				'job': job,
 			}
 	return render(request, 'user/settings.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings_basic(request):
 	if request.method == 'POST':
-		form = UserBasicSettingsForm(request.POST)
+		form = UserForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
 			return redirect('user_settings')
 	else:
-		form = UserBasicSettingsForm(request)
+		form = UserForm(request)
 
 	return render(request, 'user/settings/basic.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_work(request):
+def user_settings_job(request):
 	if request.method == 'POST':
-		form = UserWorkSettingsForm(request.POST)
+		form = JobForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
 			return redirect('user_settings')
 	else:
-		form = UserWorkSettingsForm(request)
+		form = JobForm(request)
 
-	settings = UserSettings.objects.filter(user=request.user.pk)
+	jobs = Job.objects.filter(user=request.user.pk)
 	context = { 
-			'settings': settings,
+			'jobs': jobs,
 			'form': form,
 		}
-	return render(request, 'user/settings/work.html', context)
+	return render(request, 'user/settings/job.html', context)
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_work_details(request, work_id=None):
+def user_settings_job_details(request, job_id=None):
 	if request.method == 'POST':
-		form = UserWorkSettingsForm(request.POST)
+		form = JobForm(request.POST)
 		if form.is_valid():
 			form.modify()
 			return redirect('user_settings')
 	else:
-		form = UserWorkSettingsForm(request)
+		form = JobForm(request)
 
-	try:
-		settings = UserSettings.objects.get(pk=work_id)
-	except UserSettings.DoesNotExist:
-		raise Http404
+	job = get_object_or_404(Job, pk=job_id)
+
 	context = { 
-			'settings': settings,
+			'job': job,
 			'form': form,
 		}
-	return render(request, 'user/settings/work_details.html', context)
+	return render(request, 'user/settings/job_details.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
@@ -107,16 +106,43 @@ def reports(request):
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
+	if request.method == 'POST':
+		form = ReportForm(request.method)
+	else:
+		form = ReportForm()
+
 	try:
-		datetime.date(int(year), int(month), int(day))
+		date = datetime.date(int(year), int(month), int(day))
 	except ValueError:
 		raise Http404
 
+	try:
+		report = Report.objects.filter(user=request.user).filter(date=date).get()
+	except Report.DoesNotExist:
+		report = None
+
+	try:
+		job = Job.objects.filter(
+			Q(user=request.user),
+			Q(joined_at__lte=date),
+			Q(leaved_at__gte=date) | Q(leaved_at=None)
+		).order_by('joined_at')
+	except Job.DoesNotExist:
+		job = None
+
+	if job:
+		job = job[0]
+	else:
+		job = None
+
 	context = {
-			'year': year,
-			'month': month,
-			'day': day,
-		}
+		'year': year,
+		'month': month,
+		'day': day,
+		'report': report,
+		'job': job,
+		'form': form
+	}
 	return render(request, 'reports/day.html', context)
 
 @login_required(login_url='/stechuhr/login/')
