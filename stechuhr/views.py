@@ -30,14 +30,7 @@ def signin(request):
 
 @login_required(login_url='/stechuhr/login/')
 def user_dashboard(request):
-	now = datetime.date.today()
-	context = {
-			'year': now.year,
-			'month': now.month,
-			'day': now.day,
-			'week': now.isocalendar()[1]
-		}
-	return render(request, 'user/dashboard.html', context)
+	return render(request, 'user/dashboard.html')
 
 @login_required(login_url='/stechuhr/login/')
 def user_settings(request):
@@ -102,20 +95,58 @@ def user_settings_work_details(request, work_id=None):
 	return render(request, 'user/settings/work_details.html', context)
 
 @login_required(login_url='/stechuhr/login/')
+def reports(request):
+	now = datetime.date.today()
+	context = {
+			'year': now.year,
+			'month': now.month,
+			'day': now.day,
+			'week': now.isocalendar()[1]
+		}
+	return render(request, 'reports.html', context)
+
+@login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
-	return HttpResponse('<h1>%s/%s/%s</h1>' % (year, month, day))
+	try:
+		datetime.date(int(year), int(month), int(day))
+	except ValueError:
+		raise Http404
+
+	context = {
+			'year': year,
+			'month': month,
+			'day': day,
+		}
+	return render(request, 'reports/day.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_week(request, year, week):
-	return HttpResponse('<h1>%s/%s</h1>' % (year, week))
+	if int(week) not in range(1,53):
+		raise Http404
+	context = {
+			'year': year,
+			'week': week,
+		}
+	return render(request, 'reports/week.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_month(request, year, month):
-	return HttpResponse('<h1>%s/%s</h1>' % (year, month))
+	if int(month) not in range(1,13):
+		raise Http404
+	context = {
+			'year': year,
+			'month': month,
+		}
+	return render(request, 'reports/month.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_year(request, year):
-	return HttpResponse('<h1>%s</h1>' % (year))
+	if int(year) not in range(1,10000):
+		raise Http404
+	context = {
+			'year': year,
+		}
+	return render(request, 'reports/year.html', context)
 
 def permission_denied(request):
 	return HttpResponse('<h1>Permission denied (403)</h1>')
