@@ -18,12 +18,12 @@ class UserBasicSettingsForm(forms.Form):
 		user.save()
 
 class UserWorkSettingsForm(forms.Form):
-	pk = forms.IntegerField(required=False)
+	pk = forms.IntegerField(required=False, widget=forms.HiddenInput)
 	company = forms.CharField(max_length=254)
 	department = forms.CharField(max_length=254, required=False)
 	position = forms.CharField(max_length=254, required=False)
-	joined_at = forms.DateField()
-	leaved_at = forms.DateField(required=False)
+	joined_at = forms.DateField(widget=forms.DateInput)
+	leaved_at = forms.DateField(widget=forms.DateInput, required=False)
 	hours_per_week = forms.IntegerField(required=False)
 	pause_minutes_per_day = forms.IntegerField(required=False)
 	leave_days_per_year = forms.IntegerField(required=False)
@@ -57,10 +57,6 @@ class UserWorkSettingsForm(forms.Form):
 
 class SigninForm(forms.Form):
 	username = forms.RegexField(max_length=30, regex=r'^[\w.@+-]+$')
-	first_name = forms.CharField(max_length=254)
-	last_name = forms.CharField(max_length=254)
-	email = forms.EmailField()
-	confirm_email = forms.EmailField()
 	password = forms.CharField(widget=forms.PasswordInput)
 	confirm_password = forms.CharField(widget=forms.PasswordInput)
 
@@ -72,13 +68,6 @@ class SigninForm(forms.Form):
 			return username
 		raise forms.ValidationError('duplicate_username')
 
-	def clean_confirm_email(self):
-		email = self.cleaned_data.get('email')
-		confirm_email = self.cleaned_data.get('confirm_email')
-		if email != confirm_email:
-			raise forms.ValidationError('email missmatch')
-		return confirm_email
-
 	def clean_confirm_password(self):
 		password = self.cleaned_data.get('password')
 		confirm_password = self.cleaned_data.get('confirm_password')
@@ -89,9 +78,6 @@ class SigninForm(forms.Form):
 	def save(self):
 		user = User()
 		user.username = self.cleaned_data['username']
-		user.first_name = self.cleaned_data['first_name']
-		user.last_name = self.cleaned_data['last_name']
-		user.email = self.cleaned_data['email']
 		user.set_password(self.cleaned_data["password"])
 		user.save()
 		return user
