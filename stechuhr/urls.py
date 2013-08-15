@@ -24,6 +24,7 @@ urlpatterns = patterns('',
 			views.user_settings_work_details,
 			name='view.user_settings_work_details'),
 		# reports
+		url(r'^reports/$', views.reports, name='reports'),
 		url(r'^reports/day/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
 			views.reports_day, name='reports_day'),
 		url(r'^reports/week/(?P<year>\d{4})/(?P<week>\d{1,2})/$',
