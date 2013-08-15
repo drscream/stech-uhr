@@ -4,10 +4,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from stechuhr.models import UserSettings, WorkDay
+from stechuhr.models import Job, Report
 
 
-class UserSettingsAdmin(admin.ModelAdmin):
+class JobAdmin(admin.ModelAdmin):
 	list_display = ('id', 'user', 'joined_at', 'leaved_at', 'company',
 			'hours_per_week', 'pause_minutes_per_day', 'leave_days_per_year', )
 	search_fields = ('user', )
@@ -15,16 +15,16 @@ class UserSettingsAdmin(admin.ModelAdmin):
 	list_display_links = ('id', 'user', 'joined_at', )
 
 
-class WorkDayAdmin(admin.ModelAdmin):
-	list_display = ('id', 'date', 'user', 'kind_of_workday', 'start_time',
+class ReportAdmin(admin.ModelAdmin):
+	list_display = ('id', 'date', 'user', 'workday', 'start_time',
 			'end_time', )
 	search_fields = ('user', )
 	date_hierachy = ('date', )
-	list_filter = ('date', 'kind_of_workday', )
+	list_filter = ('date', 'workday', )
 	list_display_links = ('user', 'id', )
 
 
-admin.site.register(UserSettings, UserSettingsAdmin)
-admin.site.register(WorkDay, WorkDayAdmin)
+admin.site.register(Job, JobAdmin)
+admin.site.register(Report, ReportAdmin)
 
 # vim: set ft=python ts=4 sw=4 :

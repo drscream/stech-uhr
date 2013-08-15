@@ -20,10 +20,9 @@ def validate_pause_minutes_per_day(minutes):
 		raise ValidationError('Too many pause minutes per day.')
 
 
-class UserSettings(models.Model):
+class Job(models.Model):
 	class Meta:
 		ordering = ('-joined_at', 'user', )
-		verbose_name_plural = 'User settings'
 		unique_together = (('user', 'joined_at'), )
 
 	def __unicode__(self):
@@ -44,7 +43,7 @@ class UserSettings(models.Model):
 			blank=True, validators=[validate_leave_days_per_year])
 
 
-class WorkDay(models.Model):
+class Report(models.Model):
 	class Meta:
 		ordering = ('-date', 'user',)
 
@@ -64,9 +63,9 @@ class WorkDay(models.Model):
 	user = models.ForeignKey(User)
 	created_date = models.DateTimeField(default=timezone.now)
 	date = models.DateField(auto_now_add=False)
-	kind_of_workday = models.CharField(max_length=255, choices=WORKDAY_CHOICES,
+	workday = models.CharField(max_length=255, choices=WORKDAY_CHOICES,
 			default='Daily routine')
-	start_time = models.TimeField(auto_now_add=False)
+	start_time = models.TimeField(auto_now_add=False, null=True, blank=True)
 	end_time = models.TimeField(auto_now_add=False, null=True,
 			blank=True)
 	pause_minutes = models.PositiveSmallIntegerField(null=True, blank=True,

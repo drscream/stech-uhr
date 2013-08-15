@@ -3,10 +3,10 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from stechuhr.models import UserSettings
+from stechuhr.models import Job
 
 
-class UserBasicSettingsForm(forms.Form):
+class UserForm(forms.Form):
 	first_name = forms.CharField(max_length=254)
 	last_name = forms.CharField(max_length=254)
 	email = forms.EmailField()
@@ -17,7 +17,7 @@ class UserBasicSettingsForm(forms.Form):
 		user.email = self.cleaned_data['email']
 		user.save()
 
-class UserWorkSettingsForm(forms.Form):
+class JobForm(forms.Form):
 	pk = forms.IntegerField(required=False, widget=forms.HiddenInput)
 	company = forms.CharField(max_length=254)
 	department = forms.CharField(max_length=254, required=False)
@@ -29,31 +29,31 @@ class UserWorkSettingsForm(forms.Form):
 	leave_days_per_year = forms.IntegerField(required=False)
 
 	def save(self, user):
-		settings = UserSettings()
-		settings.user = user
-		settings.company = self.cleaned_data['company']
-		settings.department = self.cleaned_data['department']
-		settings.position = self.cleaned_data['position']
-		settings.joined_at = self.cleaned_data['joined_at']
-		settings.leaved_at = self.cleaned_data['leaved_at']
-		settings.hours_per_week = self.cleaned_data['hours_per_week']
-		settings.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
-		settings.leave_days_per_year = self.cleaned_data['leave_days_per_year']
-		settings.save()
-		return settings
+		job = Job()
+		job.user = user
+		job.company = self.cleaned_data['company']
+		job.department = self.cleaned_data['department']
+		job.position = self.cleaned_data['position']
+		job.joined_at = self.cleaned_data['joined_at']
+		job.leaved_at = self.cleaned_data['leaved_at']
+		job.hours_per_week = self.cleaned_data['hours_per_week']
+		job.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
+		job.leave_days_per_year = self.cleaned_data['leave_days_per_year']
+		job.save()
+		return job
 
 	def modify(self):
-		settings = UserSettings.objects.get(pk=self.cleaned_data['pk'])
-		settings.company = self.cleaned_data['company']
-		settings.department = self.cleaned_data['department']
-		settings.position = self.cleaned_data['position']
-		settings.joined_at = self.cleaned_data['joined_at']
-		settings.leaved_at = self.cleaned_data['leaved_at']
-		settings.hours_per_week = self.cleaned_data['hours_per_week']
-		settings.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
-		settings.leave_days_per_year = self.cleaned_data['leave_days_per_year']
-		settings.save()
-		return settings
+		job = Job.objects.get(pk=self.cleaned_data['pk'])
+		job.company = self.cleaned_data['company']
+		job.department = self.cleaned_data['department']
+		job.position = self.cleaned_data['position']
+		job.joined_at = self.cleaned_data['joined_at']
+		job.leaved_at = self.cleaned_data['leaved_at']
+		job.hours_per_week = self.cleaned_data['hours_per_week']
+		job.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
+		job.leave_days_per_year = self.cleaned_data['leave_days_per_year']
+		job.save()
+		return job
 
 class SigninForm(forms.Form):
 	username = forms.RegexField(max_length=30, regex=r'^[\w.@+-]+$')
@@ -81,5 +81,26 @@ class SigninForm(forms.Form):
 		user.set_password(self.cleaned_data["password"])
 		user.save()
 		return user
+
+class ReportForm(forms.Form):
+
+	WORKDAY_CHOICES = (
+			(u'Daily routine', u'Daily routine'),
+			(u'Training', u'Training'),
+			(u'Seminar', u'Seminar'),
+			(u'Business Trip', u'Business Trip'),
+			(u'Unfitness for work', u'Unfitness for work'),
+			(u'Leave day', u'Leave day'),
+			(u'Flextime leave day', u'Flextime leave day'),
+		)
+
+	date = forms.DateField(widget=forms.DateInput)
+	workday = forms.ChoiceField(choices=WORKDAY_CHOICES)
+	start_time = forms.TimeField(widget=forms.TimeInput, required=False)
+	end_time = forms.TimeField(widget=forms.TimeInput, required=False)
+	pause_minutes = forms.IntegerField(required=False)
+	workplace = forms.CharField(max_length=254, required=False)
+	report = forms.CharField(widget=forms.Textarea, required=False)
+
 
 # vim: set ft=python ts=4 sw=4 :
