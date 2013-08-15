@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load stechuhr-tags %}
+
+{% block navbar-right %}
+<ul class="nav navbar-nav pull-right">
+	<li><a href="/stechuhr/user/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
+	<li><a href="/stechuhr/reports/" class="navbar-link"><i class="icon-calendar"></i> Reports</a></li>
+	<li><a href="/stechuhr/user/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
+	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="page-header">
+			<h1><i class="icon-calendar"></i> Reports <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+		</div>
+	</div>
+</div>
+<div class="row last-row">
+	<div class="col-lg-2">
+		<div class="list-group">
+			<a href="/stechuhr/user/dashboard/" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
+				</h5>
+			</a>
+			<a href="#" class="list-group-item active">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> Reports
+				</h5>
+			</a>
+			<a href="/stechuhr/user/settings/" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-gears"></i> Settings
+				</h5>
+			</a>
+		</div>
+		<div class="list-group">
+			<a href="{% url 'reports_day' year month day %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> Day
+					<small>{{ year }}/{{ month|leading_zero }}/{{ day|leading_zero }}</small>
+				</h5>
+			</a>
+			<a href="{% url 'reports_week' year week %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> Week
+					<small>{{ year }}/{{ week|leading_zero }}</small>
+				</h5>
+			</a>
+			<a href="{% url 'reports_month' year month %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> Month
+					<small>{{ year }}/{{ month|leading_zero }}</small>
+				</h5>
+			</a>
+			<a href="{% url 'reports_year' year %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> Year
+					<small>{{ year }}</small>
+				</h5>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-lg-12">
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=4 sw=4 : -->
