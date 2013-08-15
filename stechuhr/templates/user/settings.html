@@ -44,9 +44,9 @@
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/work/" class="list-group-item">
+			<a href="/stechuhr/user/settings/job/" class="list-group-item">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-desktop"></i> Work
+					<i class="icon-fixed-width icon-desktop"></i> Job
 				</h5>
 			</a>
 		</div>
@@ -62,35 +62,35 @@
 				</table>
 			</div>
 		</div>
-	{% if settings %}
+	{% if job %}
 		<div class="row">
 			<div class="col-lg-5">
-				<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
+				<h3 class="table-header"><i class="icon-desktop"></i> Job</h3>
 				<table class="table table-stripped table-hover">
-					<tr><th>Company</th><td>{{ settings.company|default:"" }}</td></tr>
-					<tr><th>Department</th><td>{{ settings.department|default:"" }}</td></tr>
-					<tr><th>Position</th><td>{{ settings.position|default:"" }}</td></tr>
-					<tr><th>Joined at</th><td>{{ settings.joined_at|default:"" }}</td></tr>
+					<tr><th>Company</th><td>{{ job.company|default:"" }}</td></tr>
+					<tr><th>Department</th><td>{{ job.department|default:"" }}</td></tr>
+					<tr><th>Position</th><td>{{ job.position|default:"" }}</td></tr>
+					<tr><th>Joined at</th><td>{{ job.joined_at|default:"" }}</td></tr>
 					{% comment %}
-					<tr><th>Leaved at</th><td>{{ settings.leaved_at|default:"" }}</td></tr>
+					<tr><th>Leaved at</th><td>{{ job.leaved_at|default:"" }}</td></tr>
 					{% endcomment %}
 				</table>
 			</div>
 			<div class="col-lg-5">
 				<table class="table table-stripped table-hover" style="margin-top: 36px;">
-					<tr><th>Hours per week</th><td>{{ settings.hours_per_week|append:" hours" }}</td></tr>
-					<tr><th>Pause minutes per day</th><td>{{ settings.pause_minutes_per_day|append:" minutes" }}</td></tr>
-					<tr><th>Leave days per year</th><td>{{ settings.leave_days_per_year|append:" days" }}</td></tr>
+					<tr><th>Hours per week</th><td>{{ job.hours_per_week|append:" hours" }}</td></tr>
+					<tr><th>Pause minutes per day</th><td>{{ job.pause_minutes_per_day|append:" minutes" }}</td></tr>
+					<tr><th>Leave days per year</th><td>{{ job.leave_days_per_year|append:" days" }}</td></tr>
 				</table>
 			</div>
 		</div>
 	{% else %}
 		<div class="row">
 			<div class="col-lg-5">
-				<h3 class="table-header"><i class="icon-desktop"></i> Work</h3>
+				<h3 class="table-header"><i class="icon-desktop"></i> Job</h3>
 				<div class="alert alert-info form-alert">
-					<a href="/stechuhr/user/settings/work/" class="alert-link">Create</a>
-					a work record.
+					<a href="/stechuhr/user/settings/job/" class="alert-link">Create</a>
+					a job record.
 				</div>
 			</div>
 		</div>

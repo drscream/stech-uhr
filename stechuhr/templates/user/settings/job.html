@@ -44,15 +44,15 @@
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/work/" class="list-group-item active">
+			<a href="/stechuhr/user/settings/job/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-desktop"></i> Work
+					<i class="icon-fixed-width icon-desktop"></i> Job
 				</h5>
 			</a>
 		</div>
 	</div>
 	<div class="col-lg-10">
-{% if settings %}
+{% if jobs %}
 		<div class="row">
 			<div class="col-lg-10">
 				<table class="table table-stripped table-hover">
@@ -63,13 +63,13 @@
 						<th>Leaved at</th>
 						<th>Details</th>
 					</tr>
-				{% for record in settings %}
+				{% for job in jobs %}
 					<tr>
 						<td>{{ forloop.counter }}</td>
-						<td>{{ record.company }}</td>
-						<td>{{ record.joined_at }}</td>
-						<td>{{ record.leaved_at|default:"" }}</td>
-						<td><a href="/stechuhr/user/settings/work/{{ record.pk }}/">Show</a></td>
+						<td>{{ job.company }}</td>
+						<td>{{ job.joined_at|date:"Y-m-d" }}</td>
+						<td>{{ job.leaved_at|date:"Y-m-d" }}</td>
+						<td><a href="/stechuhr/user/settings/job/{{ job.pk }}/">Show</a></td>
 					</tr>
 				{% endfor %}
 				</table>
@@ -77,7 +77,7 @@
 		</div>
 {% endif %}
 		<div class="row">
-			<form action="/stechuhr/user/settings/work/" method="post" id="form_user_work_settings">
+			<form action="/stechuhr/user/settings/job/" method="post" id="form_user_job_settings">
 				{% csrf_token %}
 				<fieldset>
 			<div class="col-lg-5">
