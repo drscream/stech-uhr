@@ -20,6 +20,15 @@ body,
 	color: #000000;
 }
 
+.report-header-link {
+	color: #999999;
+}
+
+.report-header-link:hover {
+	text-decoration: none;
+	color: #000000;
+}
+
 #wrap {
 	min-height: 100%;
 	height: auto !important;
