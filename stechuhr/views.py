@@ -8,9 +8,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from stechuhr.models import Job, Report
 from stechuhr.forms import UserForm, JobForm, SigninForm, ReportForm
+from stechuhr.utils import *
 
 
 def index(request):
@@ -157,8 +159,8 @@ def reports_day(request, year, month, day):
 		'report': report,
 		'job': job,
 		'form': form,
-		'prev_day': (date - datetime.timedelta(1)),
-		'next_day': (date + datetime.timedelta(1)),
+		'prev_day': (date - datetime.timedelta(days=1)),
+		'next_day': (date + datetime.timedelta(days=1)),
 	}
 	return render(request, 'reports/day.html', context)
 
@@ -166,9 +168,31 @@ def reports_day(request, year, month, day):
 def reports_week(request, year, week):
 	if int(week) not in range(1,53):
 		raise Http404
+
+	startdate = isoweek_startdate(int(year), int(week))
+	enddate = startdate + datetime.timedelta(days=6)
+
+	if int(week) == 1:
+		prev_week = "%d/%d/" % (int(year) - 1, 52)
+	else:
+		prev_week = "%d/%d/" % (int(year), int(week) - 1)
+
+	if int(week) == 52:
+		next_week = "%d/%d" % (int(year) + 1, 1)
+	else:
+		next_week = "%d/%d" % (int(year), int(week) + 1)
+
+	try:
+		reports = Report.objects.filter(date__gte=startdate).filter(date__lte=enddate).order_by('date')
+	except Report.DoesNotExist:
+		reports = None
+
 	context = {
 			'year': year,
 			'week': week,
+			'reports': reports,
+			'prev_week': prev_week,
+			'next_week': next_week,
 		}
 	return render(request, 'reports/week.html', context)
 
@@ -176,9 +200,46 @@ def reports_week(request, year, week):
 def reports_month(request, year, month):
 	if int(month) not in range(1,13):
 		raise Http404
+
+	startdate = datetime.date(int(year), int(month), 1)
+	if int(month) == 12:
+		enddate = datetime.date(int(year) + 1, 1, 1) - datetime.timedelta(days=1)
+	else:
+		enddate = datetime.date(int(year), int(month) + 1, 1) - datetime.timedelta(days=1)
+
+	if int(month) == 12:
+		next_mon = "%d/%d/" % (int(year) + 1, 1)
+	else:
+		next_mon = "%d/%d/" % (int(year), int(month) + 1)
+	if int(month) == 1:
+		prev_mon = "%d/%d/" % (int(year) - 1, 12)
+	else:
+		prev_mon = "%d/%d/" % (int(year), int(month) - 1)
+
+	try:
+		report_objs = Report.objects.filter(date__gte=startdate).filter(date__lte=enddate).order_by('date')
+	except Report.DoesNotExist:
+		report_objs = None
+
+	if report_objs:
+		paginator = Paginator(report_objs, 7)
+	
+		page = request.GET.get('page')
+		try:
+			reports = paginator.page(page)
+		except PageNotAnInteger:
+			reports = paginator.page(1)
+		except EmptyPage:
+			reports = paginator.page(paginator.num_pages)
+	else:
+		reports = None
+
 	context = {
 			'year': year,
 			'month': month,
+			'prev_mon': prev_mon,
+			'next_mon': next_mon,
+			'reports': reports,
 		}
 	return render(request, 'reports/month.html', context)
 
