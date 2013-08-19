@@ -15,7 +15,7 @@ from stechuhr.forms import UserForm, JobForm, SigninForm, ReportForm
 
 def index(request):
 	if request.user.is_authenticated():
-		return redirect('user_dashboard')
+		return redirect('dashboard')
 	return render(request, 'index.html')
 
 def signin(request):
@@ -30,11 +30,11 @@ def signin(request):
 	return render(request, 'signin.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
-def user_dashboard(request):
-	return render(request, 'user/dashboard.html')
+def dashboard(request):
+	return render(request, 'dashboard.html')
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings(request):
+def settings(request):
 	job = None
 	try:
 		job = Job.objects.filter(user=request.user.pk).latest('joined_at')
@@ -44,44 +44,38 @@ def user_settings(request):
 		context = {
 				'job': job,
 			}
-	return render(request, 'user/settings.html', context)
+	return render(request, 'settings.html', context)
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_basic(request):
+def settings_basic(request):
 	if request.method == 'POST':
 		form = UserForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
-			return redirect('user_settings')
+			return redirect('settings')
 	else:
 		form = UserForm(request)
 
-	return render(request, 'user/settings/basic.html', { 'form': form, })
+	return render(request, 'settings/basic.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_job(request):
+def settings_job(request):
 	if request.method == 'POST':
-		form = JobForm(request.POST)
-		if form.is_valid():
-			form.save(request.user)
-			return redirect('user_settings')
-	else:
-		form = JobForm(request)
-
+		job = Job.objects.get(pk=request.POST.get('pk'))
+		job.delete()
 	jobs = Job.objects.filter(user=request.user.pk)
 	context = { 
 			'jobs': jobs,
-			'form': form,
 		}
-	return render(request, 'user/settings/job.html', context)
+	return render(request, 'settings/job.html', context)
 
 @login_required(login_url='/stechuhr/login/')
-def user_settings_job_details(request, job_id=None):
+def settings_job_details(request, job_id=None):
 	if request.method == 'POST':
 		form = JobForm(request.POST)
 		if form.is_valid():
 			form.modify()
-			return redirect('user_settings')
+			return redirect('settings_job')
 	else:
 		form = JobForm(request)
 
@@ -91,7 +85,22 @@ def user_settings_job_details(request, job_id=None):
 			'job': job,
 			'form': form,
 		}
-	return render(request, 'user/settings/job_details.html', context)
+	return render(request, 'settings/job/details.html', context)
+
+@login_required(login_url='/stechuhr/login/')
+def settings_job_new(request):
+	if request.method == 'POST':
+		form = JobForm(request.POST)
+		if form.is_valid():
+			form.new(request.user)
+			return redirect('settings_job')
+	else:
+		form = JobForm(request)
+
+	context = { 
+			'form': form,
+		}
+	return render(request, 'settings/job/new.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
@@ -107,7 +116,13 @@ def reports(request):
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
 	if request.method == 'POST':
-		form = ReportForm(request.method)
+		form = ReportForm(request.POST)
+		if form.is_valid():
+			if request.POST.__contains__('pk'):
+				form.modify()
+			else:
+				form.new(request.user)
+		return redirect('reports')
 	else:
 		form = ReportForm()
 
@@ -141,7 +156,9 @@ def reports_day(request, year, month, day):
 		'day': day,
 		'report': report,
 		'job': job,
-		'form': form
+		'form': form,
+		'prev_day': (date - datetime.timedelta(1)),
+		'next_day': (date + datetime.timedelta(1)),
 	}
 	return render(request, 'reports/day.html', context)
 
