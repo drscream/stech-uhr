@@ -3,9 +3,9 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/user/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
+	<li><a href="/stechuhr/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
 	<li><a href="/stechuhr/reports/" class="navbar-link"><i class="icon-calendar"></i> Reports</a></li>
-	<li><a href="/stechuhr/user/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
+	<li><a href="/stechuhr/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
 	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
 </ul>
 {% endblock %}
@@ -14,14 +14,22 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-calendar"></i> Day <small>{{ year }}/{{ month|leading_zero }}/{{ day|leading_zero }}</small></h1>
+			<h1><i class="icon-calendar"></i> Day <small>
+					{{ year }}/{{ month|leading_zero }}/{{ day|leading_zero }}
+					<a href="/stechuhr/reports/day/{{ prev_day|date:"Y/m/d/"}}" class="report-header-link">
+						<i class="icon-arrow-left"></i>
+					</a>
+					<a href="/stechuhr/reports/day/{{ next_day|date:"Y/m/d/"}}" class="report-header-link">
+						<i class="icon-arrow-right"></i>
+					</a>
+			</small></h1>
 		</div>
 	</div>
 </div>
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/user/dashboard/" class="list-group-item">
+			<a href="/stechuhr/dashboard/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
@@ -31,7 +39,7 @@
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/" class="list-group-item">
+			<a href="/stechuhr/settings/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
@@ -48,25 +56,25 @@
 	</div>
 	<div class="col-lg-10">
 		{% if report %}
-		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_day">
+		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_modify_day">
 		{% csrf_token %}
 			<fieldset>
 				<div class="row">
 					<div class="col-lg-5">
 						<div class="form-group">
 							<label for="id_date">Date</label>
-							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}"/>
+							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}" readonly/>
 						</div>
 						<div class="form-group">
-							<label for="id_kind_of_workday">Kind of workday</label>
-							<select id="id_kind_of_workday" name="kind_of_workday" class="form-control">
-								<option value="Daily routine" {% if report.kind_of_workday == "Daily routine" %}selected{% endif %}>Daily routine</option>
-								<option value="Training" {% if report.kind_of_workday == "Training" %}selected{% endif %}>Training</option>
-								<option value="Seminar" {% if report.kind_of_workday == "Seminar" %}selected{% endif %}>Seminar</option>
-								<option value="Business Trip" {% if report.kind_of_workday == "Business Trip" %}selected{% endif %}>Business Trip</option>
-								<option value="Unfitness for work" {% if report.kind_of_workday == "Unfitness for work" %}selected{% endif %}>Unfitness for work</option>
-								<option value="Leave day" {% if report.kind_of_workday == "Leave day" %}selected{% endif %}>Leave day</option>
-								<option value="Flextime leave day" {% if report.kind_of_workday == "Flextime leave day" %}selected{% endif %}>Flextime leave day</option>
+							<label for="id_workday">Kind of workday</label>
+							<select id="id_workday" name="workday" class="form-control">
+								<option value="Daily routine" {% if report.workday == "Daily routine" %}selected{% endif %}>Daily routine</option>
+								<option value="Training" {% if report.workday == "Training" %}selected{% endif %}>Training</option>
+								<option value="Seminar" {% if report.workday == "Seminar" %}selected{% endif %}>Seminar</option>
+								<option value="Business Trip" {% if report.workday == "Business Trip" %}selected{% endif %}>Business Trip</option>
+								<option value="Unfitness for work" {% if report.workday == "Unfitness for work" %}selected{% endif %}>Unfitness for work</option>
+								<option value="Leave day" {% if report.workday == "Leave day" %}selected{% endif %}>Leave day</option>
+								<option value="Flextime leave day" {% if report.workday == "Flextime leave day" %}selected{% endif %}>Flextime leave day</option>
 							</select>
 						</div>
 						<div class="form-group">
@@ -92,27 +100,34 @@
 				<div class="row">
 					<div class="col-lg-10">
 						<div class="form-group">
-							<label for="id_report">Report</label>
-							 <textarea id="id_report" name="report" rows="10" class="form-control">{{ report.report }}</textarea>
+							<label for="id_log">Log</label>
+							 <textarea id="id_log" name="log" rows="10" class="form-control">{{ report.log }}</textarea>
 						</div>
+						<input type="hidden" name="pk" value="{{ user.pk }}" />
 						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+					{% if form.errors %}
+						<div class="alert alert-danger form-alert">
+							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+							Something went wrong. Please try again.
+						</div>
+					{% endif %}
 					</div>
 				</div>
 			</fieldset>
 		</form>
 	{% else %}
-		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_day">
+		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_new_day">
 		{% csrf_token %}
 			<fieldset>
 				<div class="row">
 					<div class="col-lg-5">
 						<div class="form-group">
 							<label for="id_date">Date</label>
-							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}"/>
+							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}" readonly/>
 						</div>
 						<div class="form-group">
-							<label for="id_kind_of_workday">Kind of workday</label>
-							<select id="id_kind_of_workday" name="kind_of_workday" class="form-control">
+							<label for="id_workday">Kind of workday</label>
+							<select id="id_workday" name="workday" class="form-control">
 								<option value="Daily routine">Daily routine</option>
 								<option value="Training">Training</option>
 								<option value="Seminar">Seminar</option>
@@ -145,10 +160,16 @@
 				<div class="row">
 					<div class="col-lg-10">
 						<div class="form-group">
-							<label for="id_report">Report</label>
-							 <textarea id="id_report" name="report" rows="10" class="form-control"></textarea>
+							<label for="id_log">Log</label>
+							 <textarea id="id_log" name="log" rows="10" class="form-control"></textarea>
 						</div>
 						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+					{% if form.errors %}
+						<div class="alert alert-danger form-alert">
+							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+							Something went wrong. Please try again.
+						</div>
+					{% endif %}
 					</div>
 				</div>
 			</fieldset>

@@ -3,9 +3,9 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/user/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
+	<li><a href="/stechuhr/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
 	<li><a href="/stechuhr/reports/" class="navbar-link"><i class="icon-calendar"></i> Reports</a></li>
-	<li><a href="/stechuhr/user/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
+	<li><a href="/stechuhr/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
 	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
 </ul>
 
@@ -22,7 +22,7 @@
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/user/dashboard/" class="list-group-item">
+			<a href="/stechuhr/dashboard/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
@@ -32,19 +32,19 @@
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/" class="list-group-item">
+			<a href="/stechuhr/settings/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="/stechuhr/user/settings/basic/" class="list-group-item">
+			<a href="/stechuhr/settings/basic/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/user/settings/job/" class="list-group-item active">
+			<a href="/stechuhr/settings/job/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-desktop"></i> Job
 				</h5>
@@ -53,7 +53,7 @@
 	</div>
 	<div class="col-lg-10">
 		<div class="row">
-			<form action="/stechuhr/user/settings/job/{{ job.pk }}/" method="post" id="form_user_job_job">
+			<form action="/stechuhr/settings/job/{{ job.pk }}/" method="post" id="form_job_job">
 				{% csrf_token %}
 				<fieldset>
 					<div class="col-lg-5">
@@ -77,7 +77,7 @@
 							<label for="id_leaved_at">Leaved at</label>
 							<input id="id_leaved_at" maxlength="254" name="leaved_at" type="text" class="form-control" value="{{ job.leaved_at|date:"Y-m-d" }}"/>
 						</div>
-						<button class="btn btn-larg btn-info" type="submit" value="save user job times job">Save</button>
+						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
 					</div>
 					<div class="col-lg-5">
 						<div class="form-group">
@@ -93,7 +93,7 @@
 							<input id="id_leave_days_per_year" maxlength="254" name="leave_days_per_year" type="text" class="form-control" value="{{ job.leave_days_per_year|default:"" }}"/>
 						</div>
 						<input type="hidden" name="pk" value="{{ job.pk }}" />
-						<input type="hidden" name="form_user_job_settings" value="1" />
+						<input type="hidden" name="form_job_settings" value="1" />
 						{% if form.errors %}
 							<div class="alert alert-danger form-alert">
 								<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
