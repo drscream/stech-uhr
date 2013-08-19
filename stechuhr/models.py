@@ -46,6 +46,7 @@ class Job(models.Model):
 class Report(models.Model):
 	class Meta:
 		ordering = ('-date', 'user',)
+		unique_together = (('user', 'date'),)
 
 	WORKDAY_CHOICES = (
 			(u'Daily routine', u'Daily routine'),
@@ -71,7 +72,7 @@ class Report(models.Model):
 	pause_minutes = models.PositiveSmallIntegerField(null=True, blank=True,
 			validators=[validate_pause_minutes_per_day])
 	workplace = models.CharField(max_length=255, null=True, blank=True)
-	report = models.TextField(null=True, blank=True)
+	log = models.TextField(null=True, blank=True)
 
 	def get_attendance_time(kind='gross'):
 		if self.end_time is None:
