@@ -14,7 +14,15 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-calendar"></i> Month <small>{{ year }}/{{ month|leading_zero }}</small></h1>
+			<h1><i class="icon-calendar"></i> Month <small>
+				{{ year }}/{{ month|leading_zero }}
+					<a href="/stechuhr/reports/month/{{ prev_mon }}" class="report-header-link">
+						<i class="icon-arrow-left"></i>
+					</a>
+					<a href="/stechuhr/reports/month/{{ next_mon }}" class="report-header-link">
+						<i class="icon-arrow-right"></i>
+					</a>
+			</small></h1>
 		</div>
 	</div>
 </div>
@@ -47,10 +55,56 @@
 		</div>
 	</div>
 	<div class="col-lg-10">
+		{% if reports %}
 		<div class="row">
 			<div class="col-lg-12">
+				<table class="table">
+					<tr>
+						<th>Weekday</th>
+						<th>Date</th>
+						<th>Kind of workday</th>
+						<th>Start time</th>
+						<th>End time</th>
+						<th>Details</th>
+					</tr>
+				{% for report in reports %}
+					<tr>
+						<td>{{ report.date|date:"l" }}</td>
+						<td>{{ report.date }}</td>
+						<td>{{ report.workday }}</td>
+						<td>{{ report.start_time|time:"H:i:s" }}</td>
+						<td>{{ report.end_time|time:"H:i:s" }}</td>
+						<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"m" report.date|date:"d" %}">Show</a></td>
+					</tr>
+				{% endfor %}
+				</table>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="pager">
+					{% if reports.has_previous %}
+						<li><a href="?page={{ reports.previous_page_number }}"><i class="icon-arrow-left"></i></a></li>
+					{% else %}
+						<li class="disabled"><a href=""><i class="icon-arrow-left"></i></a></li>
+					{% endif %}
+					{% if reports.has_next %}
+						<li><a href="?page={{ reports.next_page_number }}"><i class="icon-arrow-right"></i></a></li>
+					{% else %}
+						<li class="disabled"><a href=""><i class="icon-arrow-right"></i></a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+		{% else %}
+		<div class="row">
+			<div class="col-lg-5">
+				<div class="alert alert-info form-alert">
+					No reports found.
+				</div>
+			</div>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

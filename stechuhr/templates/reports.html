@@ -56,12 +56,14 @@
 					<small>{{ year }}/{{ month|leading_zero }}</small>
 				</h5>
 			</a>
+			{% comment %}
 			<a href="{% url 'reports_year' year %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Year
 					<small>{{ year }}</small>
 				</h5>
 			</a>
+			{% endcomment %}
 		</div>
 	</div>
 	<div class="col-lg-10">
