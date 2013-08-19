@@ -3,7 +3,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from stechuhr.models import Job
+from stechuhr.models import Job, Report
 
 
 class UserForm(forms.Form):
@@ -28,9 +28,7 @@ class JobForm(forms.Form):
 	pause_minutes_per_day = forms.IntegerField(required=False)
 	leave_days_per_year = forms.IntegerField(required=False)
 
-	def save(self, user):
-		job = Job()
-		job.user = user
+	def save(self, job):
 		job.company = self.cleaned_data['company']
 		job.department = self.cleaned_data['department']
 		job.position = self.cleaned_data['position']
@@ -42,18 +40,14 @@ class JobForm(forms.Form):
 		job.save()
 		return job
 
+	def new(self, user):
+		job = Job()
+		job.user = user
+		self.save(job)
+
 	def modify(self):
 		job = Job.objects.get(pk=self.cleaned_data['pk'])
-		job.company = self.cleaned_data['company']
-		job.department = self.cleaned_data['department']
-		job.position = self.cleaned_data['position']
-		job.joined_at = self.cleaned_data['joined_at']
-		job.leaved_at = self.cleaned_data['leaved_at']
-		job.hours_per_week = self.cleaned_data['hours_per_week']
-		job.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
-		job.leave_days_per_year = self.cleaned_data['leave_days_per_year']
-		job.save()
-		return job
+		self.save(job)
 
 class SigninForm(forms.Form):
 	username = forms.RegexField(max_length=30, regex=r'^[\w.@+-]+$')
@@ -94,13 +88,33 @@ class ReportForm(forms.Form):
 			(u'Flextime leave day', u'Flextime leave day'),
 		)
 
+	pk = forms.IntegerField(required=False, widget=forms.HiddenInput)
 	date = forms.DateField(widget=forms.DateInput)
 	workday = forms.ChoiceField(choices=WORKDAY_CHOICES)
 	start_time = forms.TimeField(widget=forms.TimeInput, required=False)
 	end_time = forms.TimeField(widget=forms.TimeInput, required=False)
 	pause_minutes = forms.IntegerField(required=False)
 	workplace = forms.CharField(max_length=254, required=False)
-	report = forms.CharField(widget=forms.Textarea, required=False)
+	log = forms.CharField(widget=forms.Textarea, required=False)
 
+	def save(self, report):
+		report.date = self.cleaned_data['date']
+		report.workday = self.cleaned_data['workday']
+		report.start_time = self.cleaned_data['start_time']
+		report.end_time = self.cleaned_data['end_time']
+		report.pause_minutes = self.cleaned_data['pause_minutes']
+		report.workplace = self.cleaned_data['workplace']
+		report.log = self.cleaned_data['log']
+		report.save()
+		return report
+
+	def new(self, user):
+		report = Report()
+		report.user = user
+		self.save(report)
+
+	def modify(self):
+		report = Report.objects.get(pk=self.cleaned_data['pk'])
+		self.save(report)
 
 # vim: set ft=python ts=4 sw=4 :
