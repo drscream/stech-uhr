@@ -33,8 +33,6 @@ urlpatterns = patterns('',
 			views.reports_week, name='reports_week'),
 		url(r'^reports/month/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
 			views.reports_month, name='reports_month'),
-		url(r'^reports/year/(?P<year>\d{4})/$',
-			views.reports_year, name='reports_year'),
 	)
 
 

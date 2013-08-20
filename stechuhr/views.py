@@ -169,8 +169,8 @@ def reports_week(request, year, week):
 	if int(week) not in range(1,53):
 		raise Http404
 
-	startdate = isoweek_startdate(int(year), int(week))
-	enddate = startdate + datetime.timedelta(days=6)
+	start_date = isoweek_startdate(int(year), int(week))
+	end_date = start_date + datetime.timedelta(days=6)
 
 	if int(week) == 1:
 		prev_week = "%d/%d/" % (int(year) - 1, 52)
@@ -183,7 +183,7 @@ def reports_week(request, year, week):
 		next_week = "%d/%d" % (int(year), int(week) + 1)
 
 	try:
-		reports = Report.objects.filter(date__gte=startdate).filter(date__lte=enddate).order_by('date')
+		reports = Report.objects.filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
 	except Report.DoesNotExist:
 		reports = None
 
@@ -193,6 +193,7 @@ def reports_week(request, year, week):
 			'reports': reports,
 			'prev_week': prev_week,
 			'next_week': next_week,
+			'start_date': start_date,
 		}
 	return render(request, 'reports/week.html', context)
 
@@ -242,15 +243,6 @@ def reports_month(request, year, month):
 			'reports': reports,
 		}
 	return render(request, 'reports/month.html', context)
-
-@login_required(login_url='/stechuhr/login/')
-def reports_year(request, year):
-	if int(year) not in range(1,10000):
-		raise Http404
-	context = {
-			'year': year,
-		}
-	return render(request, 'reports/year.html', context)
 
 def permission_denied(request):
 	return HttpResponse('<h1>Permission denied (403)</h1>')
