@@ -1,6 +1,9 @@
 # -*- coding: UTF-8 -*-
 
+import csv
+
 from django import forms
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 from stechuhr.models import Job, Report
@@ -98,7 +101,6 @@ class ReportForm(forms.Form):
 	log = forms.CharField(widget=forms.Textarea, required=False)
 
 	def save(self, report):
-		report.date = self.cleaned_data['date']
 		report.workday = self.cleaned_data['workday']
 		report.start_time = self.cleaned_data['start_time']
 		report.end_time = self.cleaned_data['end_time']
@@ -111,10 +113,27 @@ class ReportForm(forms.Form):
 	def new(self, user):
 		report = Report()
 		report.user = user
+		report.date = self.cleaned_data['date']
 		self.save(report)
 
 	def modify(self):
 		report = Report.objects.get(pk=self.cleaned_data['pk'])
 		self.save(report)
+
+	def export(self):
+		report = Report.objects.get(pk=self.cleaned_data['pk'])
+
+		response = HttpResponse(content_type='text/csv')
+		response['Content-Disposition'] = 'attachment; filename="report_%s.csv"' % (report.date.strftime("%Y-%m-%d"))
+
+		export = csv.writer(response)
+		export.writerow(['Date', 'Kind of workday', 'Pause minutes', 'Workplace', 'Start time', 'End time', 'Log'])
+		export.writerow([report.date, report.workday, report.pause_minutes, report.workplace, report.start_time, report.end_time, report.log])
+
+		return response
+
+	def delete(self):
+		report = Report.objects.get(pk=self.cleaned_data['pk'])
+		report.delete()
 
 # vim: set ft=python ts=4 sw=4 :
