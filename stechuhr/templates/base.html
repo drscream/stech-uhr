@@ -51,19 +51,7 @@
 		<script src="{% static "js/jquery.min.js" %}"></script>
 		<script src="{% static "js/bootstrap.min.js" %}"></script>
 		<script src="{% static "js/bootstrap-datepicker.js" %}"></script>
-		<script>
-			$('#date-picker-day').datepicker({
-				weekStart: 1,
-				minViewMode: 0,
-				todayBtn: "linked",
-				calendarWeeks: true
-			});
-			$('#date-picker-month').datepicker({
-				weekStart: 1,
-				minViewMode: 1,
-				todayBtn: "linked"
-			});
-		</script>
+		<script src="{% static "js/bootstrap-datepicker.custom.js" %}"></script>
 	</body>
 </html>
 
