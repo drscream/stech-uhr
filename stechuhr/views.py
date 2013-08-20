@@ -54,7 +54,6 @@ def settings_basic(request):
 		form = UserForm(request.POST)
 		if form.is_valid():
 			form.save(request.user)
-			return redirect('settings')
 	else:
 		form = UserForm(request)
 
@@ -120,11 +119,15 @@ def reports_day(request, year, month, day):
 	if request.method == 'POST':
 		form = ReportForm(request.POST)
 		if form.is_valid():
-			if request.POST.__contains__('pk'):
-				form.modify()
-			else:
-				form.new(request.user)
-		return redirect('reports')
+			if request.POST.__contains__('save'):
+				if request.POST.__contains__('pk'):
+					form.modify()
+				else:
+					form.new(request.user)
+			elif request.POST.__contains__('export'):
+					return form.export()
+			elif request.POST.__contains__('reset'):
+					form.delete()
 	else:
 		form = ReportForm()
 
@@ -223,7 +226,7 @@ def reports_month(request, year, month):
 		report_objs = None
 
 	if report_objs:
-		paginator = Paginator(report_objs, 7)
+		paginator = Paginator(report_objs, 5)
 	
 		page = request.GET.get('page')
 		try:
