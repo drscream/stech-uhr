@@ -51,10 +51,10 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-lg-7">
 {% if jobs %}
 		<div class="row">
-			<div class="col-lg-10">
+			<div class="col-lg-12">
 				<table class="table table-stripped table-hover">
 					<tr>
 						<th>#</th>
@@ -78,7 +78,7 @@
 		</div>
 {% else %}
 		<div class="row">
-			<div class="col-lg-5">
+			<div class="col-lg-12">
 				<h3 class="table-header">No jobs found</h3>
 				<div class="alert alert-info form-alert">
 					<a href="/stechuhr/settings/job/new/" class="alert-link">Create</a>
@@ -87,6 +87,8 @@
 			</div>
 		</div>
 {% endif %}
+	</div>
+	<div class="col-lg-3">
 	</div>
 </div>
 {% endblock %}

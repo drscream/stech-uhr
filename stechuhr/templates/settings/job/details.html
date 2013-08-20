@@ -51,12 +51,12 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-lg-7">
 		<div class="row">
 			<form action="/stechuhr/settings/job/{{ job.pk }}/" method="post" id="form_job_job">
 				{% csrf_token %}
 				<fieldset>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_company" class="required">Company</label>
 							<input id="id_company" maxlength="254" name="company" type="text" class="form-control" value="{{ job.company }}"/>
@@ -79,7 +79,7 @@
 						</div>
 						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_hours_per_week">Hours per week</label>
 							<input id="id_hours_per_week" maxlength="254" name="hours_per_week" type="text" class="form-control" value="{{ job.hours_per_week|default:"" }}"/>
@@ -104,6 +104,8 @@
 				</fieldset>
 			</form>
 		</div>
+	</div>
+	<div class="col-lg-3">
 	</div>
 </div>
 {% endblock %}

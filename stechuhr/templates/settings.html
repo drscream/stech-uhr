@@ -51,9 +51,9 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-lg-7">
 		<div class="row">
-			<div class="col-lg-5">
+			<div class="col-lg-6">
 				<h3 class="table-header"><i class="icon-user"></i> Basic</h3>
 				<table class="table table-stripped table-hover">
 					<tr><th>First name</th><td>{{ user.first_name }}</td></tr>
@@ -64,7 +64,7 @@
 		</div>
 	{% if job %}
 		<div class="row">
-			<div class="col-lg-5">
+			<div class="col-lg-6">
 				<h3 class="table-header"><i class="icon-desktop"></i> Job</h3>
 				<table class="table table-stripped table-hover">
 					<tr><th>Company</th><td>{{ job.company|default:"" }}</td></tr>
@@ -76,7 +76,7 @@
 					{% endcomment %}
 				</table>
 			</div>
-			<div class="col-lg-5">
+			<div class="col-lg-6">
 				<table class="table table-stripped table-hover" style="margin-top: 36px;">
 					<tr><th>Hours per week</th><td>{{ job.hours_per_week|append:" hours" }}</td></tr>
 					<tr><th>Pause minutes per day</th><td>{{ job.pause_minutes_per_day|append:" minutes" }}</td></tr>
@@ -86,7 +86,7 @@
 		</div>
 	{% else %}
 		<div class="row">
-			<div class="col-lg-5">
+			<div class="col-lg-6">
 				<h3 class="table-header"><i class="icon-desktop"></i> Job</h3>
 				<div class="alert alert-info form-alert">
 					<a href="/stechuhr/settings/job/new/" class="alert-link">Create</a>
@@ -95,6 +95,8 @@
 			</div>
 		</div>
 	{% endif %}
+	</div>
+	<div class="col-lg-3">
 	</div>
 </div>
 {% endblock %}

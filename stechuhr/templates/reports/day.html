@@ -85,7 +85,7 @@
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_pause_minutes">Pause minutes</label>
-							<input id="id_pause_minutes" name="pause_minutes" type="text" class="form-control" value="{{ report.pause_minutes }}" />
+							<input id="id_pause_minutes" name="pause_minutes" type="text" class="form-control" value="{{ report.pause_minutes|default:"" }}" />
 						</div>
 						<div class="form-group">
 							<label for="id_workplace">Workplace</label>
@@ -103,8 +103,10 @@
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control">{{ report.log }}</textarea>
 						</div>
-						<input type="hidden" name="pk" value="{{ user.pk }}" />
-						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+						<input type="hidden" name="pk" value="{{ report.pk }}" />
+						<button name="save" class="btn btn-default btn-primary" type="submit" value="1">Save</button>
+						<button name="export" class="btn btn-default btn-success" type="submit" value="1">Export</button>
+						<button name="reset" class="btn btn-default btn-danger pull-right" type="submit" value="1">Reset</button>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
@@ -163,7 +165,7 @@
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control"></textarea>
 						</div>
-						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
+						<button name="save" class="btn btn-default btn-primary" type="submit" value="1">Save</button>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
@@ -177,7 +179,11 @@
 	{% endif %}
 	</div>
 	<div class="col-lg-3">
-		<div class="pull-right" id="date-picker-day" data-date="{{ year }}-{{ month }}-{{ day }}" data-date-format="yyyy-m-d"></div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="pull-right" id="date-picker-day" data-date="{{ year }}-{{ month }}-{{ day }}" data-date-format="yyyy-m-d"></div>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}
