@@ -54,13 +54,13 @@
 			</a>
 		</div>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-lg-7">
 		{% if report %}
 		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_modify_day">
 		{% csrf_token %}
 			<fieldset>
 				<div class="row">
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_date">Date</label>
 							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}" readonly/>
@@ -82,7 +82,7 @@
 							<input id="id_start_time" name="start_time" type="text" class="form-control" value="{{ report.start_time|time:"H:i:s" }}" />
 						</div>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_pause_minutes">Pause minutes</label>
 							<input id="id_pause_minutes" name="pause_minutes" type="text" class="form-control" value="{{ report.pause_minutes }}" />
@@ -98,7 +98,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-10">
+					<div class="col-lg-12">
 						<div class="form-group">
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control">{{ report.log }}</textarea>
@@ -120,7 +120,7 @@
 		{% csrf_token %}
 			<fieldset>
 				<div class="row">
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_date">Date</label>
 							<input id="id_date" maxlength="254" name="date" type="text" class="form-control" value="{{ year }}-{{ month|leading_zero }}-{{ day|leading_zero }}" readonly/>
@@ -142,7 +142,7 @@
 							<input id="id_start_time" name="start_time" type="text" class="form-control" value="{% now "H:m:s" %}" />
 						</div>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_pause_minutes">Pause minutes</label>
 							<input id="id_pause_minutes" name="pause_minutes" type="text" class="form-control" value="{{ job.pause_minutes_per_day }}" />
@@ -158,7 +158,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-10">
+					<div class="col-lg-12">
 						<div class="form-group">
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control"></textarea>
@@ -175,6 +175,9 @@
 			</fieldset>
 		</form>
 	{% endif %}
+	</div>
+	<div class="col-lg-3">
+		<div class="pull-right" id="date-picker-day" data-date="{{ year }}-{{ month }}-{{ day }}" data-date-format="yyyy-m-d"></div>
 	</div>
 </div>
 {% endblock %}
