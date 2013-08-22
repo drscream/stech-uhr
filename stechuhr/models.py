@@ -56,6 +56,7 @@ class Report(models.Model):
 			(u'Unfitness for work', u'Unfitness for work'),
 			(u'Leave day', u'Leave day'),
 			(u'Flextime leave day', u'Flextime leave day'),
+			(u'Holiday', u'Holiday'), 
 		)
 
 	def __unicode__(self):
@@ -74,8 +75,8 @@ class Report(models.Model):
 	workplace = models.CharField(max_length=255, null=True, blank=True)
 	log = models.TextField(null=True, blank=True)
 
-	def get_attendance_time(kind='gross'):
-		if self.end_time is None:
+	def get_attendance_time(self, kind='gross'):
+		if self.start_time is None or self.end_time is None:
 			return None
 		elif kind == 'gross':
 			return self.end_time - self.start_time
@@ -83,6 +84,27 @@ class Report(models.Model):
 			return self.end_time - self.start_time - self.pause_minutes
 		else:
 			return None
+
+	def is_finished(self):
+		if self.workday == 'Unfitness for work':
+			return True
+
+		if self.workday == 'Leave day':
+			return True
+
+		if self.workday == 'Flextime leave day':
+			return True
+
+		if self.workday == 'Holiday':
+			return True
+
+		if self.start_time is not None and self.end_time is not None:
+			return True
+		else:
+			return False
+
+	is_finished.boolean = True
+	is_finished.short_description = 'Finished'
 
 
 # vim: set ft=python ts=4 sw=4 :

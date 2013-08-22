@@ -17,7 +17,7 @@ class JobAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
 	list_display = ('id', 'date', 'user', 'workday', 'start_time',
-			'end_time', )
+			'end_time', 'is_finished', )
 	search_fields = ('user', )
 	date_hierachy = ('date', )
 	list_filter = ('date', 'workday', )
