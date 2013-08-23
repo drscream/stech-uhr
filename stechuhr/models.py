@@ -81,7 +81,7 @@ class Report(models.Model):
 		elif kind == 'gross':
 			return self.end_time - self.start_time
 		elif kind == 'net':
-			return self.end_time - self.start_time - self.pause_minutes
+			return self.end_time - self.start_time - (self.pause_minutes or 0)
 		else:
 			return None
 
