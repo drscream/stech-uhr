@@ -124,7 +124,7 @@ class ReportForm(forms.Form):
 		report = Report.objects.get(pk=self.cleaned_data['pk'])
 
 		response = HttpResponse(content_type='text/csv')
-		response['Content-Disposition'] = 'attachment; filename="report_%s.csv"' % (report.date.strftime("%Y-%m-%d"))
+		response['Content-Disposition'] = 'attachment; filename="stechuhr_report_%s.csv"' % (report.date.strftime("%Y-%m-%d"))
 
 		export = csv.writer(response)
 		export.writerow(['Date', 'Kind of workday', 'Pause minutes', 'Workplace', 'Start time', 'End time', 'Log'])
