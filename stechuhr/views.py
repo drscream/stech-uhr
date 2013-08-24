@@ -2,6 +2,8 @@
 
 import datetime
 
+from reportlab.pdfgen import canvas
+
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
@@ -124,8 +126,6 @@ def reports_day(request, year, month, day):
 					form.modify()
 				else:
 					form.new(request.user)
-			elif request.POST.__contains__('export'):
-					return form.export()
 			elif request.POST.__contains__('reset'):
 					form.delete()
 	else:
