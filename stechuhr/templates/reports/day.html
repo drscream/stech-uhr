@@ -46,10 +46,22 @@
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="#" class="list-group-item active">
+			<a href="{% url 'reports_day' reports_nav.year reports_nav.month reports_nav.day %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-calendar"></i> Day
-					<small>{{ year }}/{{ month|leading_zero }}/{{ day|leading_zero }}</small>
+					<i class="icon-fixed-width icon-calendar"></i> Today
+					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}/{{ reports_nav.day|leading_zero }}</small>
+				</h5>
+			</a>
+			<a href="{% url 'reports_week' reports_nav.year reports_nav.week %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> This week
+					<small>{{ reports_nav.year }}/{{ reports_nav.week|leading_zero }}</small>
+				</h5>
+			</a>
+			<a href="{% url 'reports_month' reports_nav.year reports_nav.month %}" class="list-group-item">
+				<h5 class="list-group-item-heading">
+					<i class="icon-fixed-width icon-calendar"></i> This month
+					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}</small>
 				</h5>
 			</a>
 		</div>
@@ -105,8 +117,8 @@
 							 <textarea id="id_log" name="log" rows="10" class="form-control">{{ report.log }}</textarea>
 						</div>
 						<input type="hidden" name="pk" value="{{ report.pk }}" />
-						<button name="save" class="btn btn-default btn-primary" type="submit" value="1">Save</button>
-						<button name="reset" class="btn btn-default btn-danger pull-right" type="submit" value="1">Reset</button>
+						<button name="save" class="btn btn-default btn-info" type="submit" value="1">Save</button>
+						<button name="reset" class="btn btn-default btn-danger" type="submit" value="1">Reset</button>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
@@ -166,7 +178,7 @@
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control"></textarea>
 						</div>
-						<button name="save" class="btn btn-default btn-primary" type="submit" value="1">Save</button>
+						<button name="save" class="btn btn-default btn-info" type="submit" value="1">Save</button>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
