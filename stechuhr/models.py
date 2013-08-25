@@ -85,6 +85,12 @@ class Report(models.Model):
 		else:
 			return None
 
+	def is_started(self):
+		if self.start_time is not None:
+			return True
+		else:
+			return False
+
 	def is_finished(self):
 		if self.workday == 'Unfitness for work':
 			return True
