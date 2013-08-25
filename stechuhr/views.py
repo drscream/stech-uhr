@@ -2,8 +2,6 @@
 
 import datetime
 
-from reportlab.pdfgen import canvas
-
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
@@ -62,7 +60,7 @@ def settings_basic(request):
 	return render(request, 'settings/basic.html', { 'form': form, })
 
 @login_required(login_url='/stechuhr/login/')
-def settings_job(request):
+def settings_jobs(request):
 	if request.method == 'POST':
 		job = Job.objects.get(pk=request.POST.get('pk'))
 		job.delete()
@@ -70,15 +68,18 @@ def settings_job(request):
 	context = { 
 			'jobs': jobs,
 		}
-	return render(request, 'settings/job.html', context)
+	return render(request, 'settings/jobs.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def settings_job_details(request, job_id=None):
 	if request.method == 'POST':
 		form = JobForm(request.POST)
 		if form.is_valid():
-			form.modify()
-			return redirect('settings_job')
+			if request.POST.__contains__('save'):
+				form.modify()
+			elif request.POST.__contains__('delete'):
+				form.delete()
+			return redirect('settings_jobs')
 	else:
 		form = JobForm(request)
 
@@ -88,7 +89,7 @@ def settings_job_details(request, job_id=None):
 			'job': job,
 			'form': form,
 		}
-	return render(request, 'settings/job/details.html', context)
+	return render(request, 'settings/jobs/details.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def settings_job_new(request):
@@ -96,23 +97,25 @@ def settings_job_new(request):
 		form = JobForm(request.POST)
 		if form.is_valid():
 			form.new(request.user)
-			return redirect('settings_job')
+			return redirect('settings_jobs')
 	else:
 		form = JobForm(request)
 
 	context = { 
 			'form': form,
 		}
-	return render(request, 'settings/job/new.html', context)
+	return render(request, 'settings/jobs/new.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
 	now = datetime.date.today()
 	context = {
-			'year': now.year,
-			'month': now.month,
-			'day': now.day,
-			'week': now.isocalendar()[1]
+			'reports_nav': {
+				'year': now.year,
+				'month': now.month,
+				'day': now.day,
+				'week': now.isocalendar()[1]
+			}
 		}
 	return render(request, 'reports.html', context)
 
@@ -155,7 +158,16 @@ def reports_day(request, year, month, day):
 	else:
 		job = None
 
+	now = datetime.date.today()
+	reports_nav = {
+		'year': now.year,
+		'month': now.month,
+		'day': now.day,
+		'week': now.isocalendar()[1]
+	}
+
 	context = {
+		'reports_nav': reports_nav,
 		'year': year,
 		'month': month,
 		'day': day,
@@ -190,7 +202,16 @@ def reports_week(request, year, week):
 	except Report.DoesNotExist:
 		reports = None
 
+	now = datetime.date.today()
+	reports_nav = {
+		'year': now.year,
+		'month': now.month,
+		'day': now.day,
+		'week': now.isocalendar()[1]
+	}
+
 	context = {
+			'reports_nav': reports_nav,
 			'year': year,
 			'week': week,
 			'reports': reports,
@@ -238,7 +259,16 @@ def reports_month(request, year, month):
 	else:
 		reports = None
 
+	now = datetime.date.today()
+	reports_nav = {
+		'year': now.year,
+		'month': now.month,
+		'day': now.day,
+		'week': now.isocalendar()[1]
+	}
+
 	context = {
+			'reports_nav': reports_nav,
 			'year': year,
 			'month': month,
 			'prev_mon': prev_mon,
