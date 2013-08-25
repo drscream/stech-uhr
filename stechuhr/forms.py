@@ -49,6 +49,11 @@ class JobForm(forms.Form):
 		job = Job.objects.get(pk=self.cleaned_data['pk'])
 		self.save(job)
 
+	def delete(self):
+		job = Job.objects.get(pk=self.cleaned_data['pk'])
+		job.delete()
+
+
 class SigninForm(forms.Form):
 	username = forms.RegexField(max_length=30, regex=r'^[\w.@+-]+$')
 	password = forms.CharField(widget=forms.PasswordInput)
