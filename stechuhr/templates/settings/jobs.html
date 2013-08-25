@@ -44,9 +44,9 @@
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/job/" class="list-group-item active">
+			<a href="/stechuhr/settings/jobs/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-desktop"></i> Job
+					<i class="icon-fixed-width icon-desktop"></i> Jobs
 				</h5>
 			</a>
 		</div>
@@ -69,11 +69,11 @@
 						<td>{{ job.company }}</td>
 						<td>{{ job.joined_at|date:"Y-m-d" }}</td>
 						<td>{{ job.leaved_at|date:"Y-m-d" }}</td>
-						<td><a href="/stechuhr/settings/job/{{ job.pk }}/">Show</a></td>
+						<td><a href="/stechuhr/settings/jobs/{{ job.pk }}/">Show</a></td>
 					</tr>
 				{% endfor %}
 				</table>
-				<a href="/stechuhr/settings/job/new/" class="btn btn-primary">Create new</a>
+				<a href="/stechuhr/settings/jobs/new/" class="btn btn-info">Create new</a>
 			</div>
 		</div>
 {% else %}

@@ -44,55 +44,54 @@
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/job/" class="list-group-item active">
+			<a href="/stechuhr/settings/jobs/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-desktop"></i> Job
+					<i class="icon-fixed-width icon-desktop"></i> Jobs
 				</h5>
 			</a>
 		</div>
 	</div>
 	<div class="col-lg-7">
 		<div class="row">
-			<form action="/stechuhr/settings/job/{{ job.pk }}/" method="post" id="form_job_job">
+			<form action="/stechuhr/settings/jobs/new/" method="post" id="form_job_new">
 				{% csrf_token %}
 				<fieldset>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_company" class="required">Company</label>
-							<input id="id_company" maxlength="254" name="company" type="text" class="form-control" value="{{ job.company }}"/>
+							<input id="id_company" maxlength="254" name="company" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_department">Department</label>
-							<input id="id_department" maxlength="254" name="department" type="text" class="form-control" value="{{ job.department|default:"" }}"/>
+							<input id="id_department" maxlength="254" name="department" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_position">Position</label>
-							<input id="id_position" maxlength="254" name="position" type="text" class="form-control" value="{{ job.position|default:"" }}"/>
+							<input id="id_position" maxlength="254" name="position" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_joined_at">Joined at</label>
-							<input id="id_joined_at" maxlength="254" name="joined_at" type="text" class="form-control" value="{{ job.joined_at|date:"Y-m-d" }}"/>
+							<input id="id_joined_at" maxlength="254" name="joined_at" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_leaved_at">Leaved at</label>
-							<input id="id_leaved_at" maxlength="254" name="leaved_at" type="text" class="form-control" value="{{ job.leaved_at|date:"Y-m-d" }}"/>
+							<input id="id_leaved_at" maxlength="254" name="leaved_at" type="text" class="form-control" />
 						</div>
 						<button class="btn btn-larg btn-info" type="submit" value="save">Save</button>
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="id_hours_per_week">Hours per week</label>
-							<input id="id_hours_per_week" maxlength="254" name="hours_per_week" type="text" class="form-control" value="{{ job.hours_per_week|default:"" }}"/>
+							<input id="id_hours_per_week" maxlength="254" name="hours_per_week" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_pause_minutes_per_day">Pause minutes per day</label>
-							<input id="id_pause_minutes_per_day" maxlength="254" name="pause_minutes_per_day" type="text" class="form-control" value="{{ job.pause_minutes_per_day|default:"" }}"/>
+							<input id="id_pause_minutes_per_day" maxlength="254" name="pause_minutes_per_day" type="text" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="id_leave_days_per_year">Leave days per year</label>
-							<input id="id_leave_days_per_year" maxlength="254" name="leave_days_per_year" type="text" class="form-control" value="{{ job.leave_days_per_year|default:"" }}"/>
+							<input id="id_leave_days_per_year" maxlength="254" name="leave_days_per_year" type="text" class="form-control" />
 						</div>
-						<input type="hidden" name="pk" value="{{ job.pk }}" />
 						<input type="hidden" name="form_job_settings" value="1" />
 						{% if form.errors %}
 							<div class="alert alert-danger form-alert">
