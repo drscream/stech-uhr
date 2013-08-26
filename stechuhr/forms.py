@@ -24,6 +24,7 @@ class JobForm(forms.Form):
 	position = forms.CharField(max_length=254, required=False)
 	joined_at = forms.DateField(widget=forms.DateInput)
 	leaved_at = forms.DateField(widget=forms.DateInput, required=False)
+	days_per_week = forms.IntegerField(required=False)
 	hours_per_week = forms.IntegerField(required=False)
 	pause_minutes_per_day = forms.IntegerField(required=False)
 	leave_days_per_year = forms.IntegerField(required=False)
@@ -34,6 +35,7 @@ class JobForm(forms.Form):
 		job.position = self.cleaned_data['position']
 		job.joined_at = self.cleaned_data['joined_at']
 		job.leaved_at = self.cleaned_data['leaved_at']
+		job.days_per_week = self.cleaned_data['days_per_week']
 		job.hours_per_week = self.cleaned_data['hours_per_week']
 		job.pause_minutes_per_day = self.cleaned_data['pause_minutes_per_day']
 		job.leave_days_per_year = self.cleaned_data['leave_days_per_year']

@@ -9,7 +9,8 @@ from stechuhr.models import Job, Report
 
 class JobAdmin(admin.ModelAdmin):
 	list_display = ('id', 'user', 'joined_at', 'leaved_at', 'company',
-			'hours_per_week', 'pause_minutes_per_day', 'leave_days_per_year', )
+			'days_per_week', 'hours_per_week', 'pause_minutes_per_day',
+			'leave_days_per_year', )
 	search_fields = ('user', )
 	list_filter = ('joined_at', 'leaved_at', )
 	list_display_links = ('id', 'user', 'joined_at', )

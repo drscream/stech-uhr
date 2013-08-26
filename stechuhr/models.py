@@ -7,7 +7,11 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
-def validate_workday_hours_per_week(hours):
+def validate_days_per_week(days):
+	if days not in range(7):
+		raise ValidationError('Too many workdays per week.')
+
+def validate_hours_per_week(hours):
 	if hours not in range(168):
 		raise ValidationError('Too many workday hours per week.')
 
@@ -35,8 +39,10 @@ class Job(models.Model):
 	position = models.CharField(max_length=255, null=True, blank=True)
 	joined_at = models.DateField(default=timezone.now)
 	leaved_at = models.DateField(auto_now_add=False, null=True, blank=True)
+	days_per_week = models.PositiveSmallIntegerField(null=True, blank=True,
+			validators=[validate_days_per_week])
 	hours_per_week = models.PositiveSmallIntegerField(null=True, blank=True,
-			validators=[validate_workday_hours_per_week])
+			validators=[validate_hours_per_week])
 	pause_minutes_per_day = models.PositiveSmallIntegerField(null=True, blank=True,
 			validators=[validate_pause_minutes_per_day])
 	leave_days_per_year = models.PositiveSmallIntegerField(null=True,
