@@ -118,14 +118,14 @@ class ReportForm(forms.Form):
 		report = Report()
 		report.user = user
 		report.date = self.cleaned_data['date']
-		self.save(report)
+		return self.save(report)
 
 	def modify(self):
 		report = Report.objects.get(pk=self.cleaned_data['pk'])
-		self.save(report)
+		return self.save(report)
 
 	def delete(self):
 		report = Report.objects.get(pk=self.cleaned_data['pk'])
-		report.delete()
+		return report.delete()
 
 # vim: set ft=python ts=4 sw=4 :
