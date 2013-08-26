@@ -141,7 +141,11 @@ def reports_day(request, year, month, day):
 				else:
 					form.new(request.user)
 			elif request.POST.__contains__('reset'):
-					form.delete()
+				form.delete()
+			elif request.POST.__contains__('view'):
+				report = form.modify()
+				return redirect(reports_day_view, year=report.date.year,
+						month=report.date.month, day=report.date.day)
 	else:
 		form = ReportForm()
 
@@ -189,6 +193,25 @@ def reports_day(request, year, month, day):
 		'next_day': (date + datetime.timedelta(days=1)),
 	}
 	return render(request, 'reports/day.html', context)
+
+@login_required(login_url='/stechur/login/')
+def reports_day_view(request, year, month, day):
+	try:
+		date = datetime.date(int(year), int(month), int(day))
+	except ValueError:
+		raise Http404
+
+	try:
+		report = Report.objects.filter(user=request.user).filter(date=date).get()
+	except Report.DoesNotExist:
+		raise Http404
+
+	context = {
+			'report': report,
+		}
+
+	return render(request, 'reports/view.html', context)
+
 
 @login_required(login_url='/stechuhr/login/')
 def reports_week(request, year, week):
