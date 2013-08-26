@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import datetime
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -48,6 +50,20 @@ class Job(models.Model):
 	leave_days_per_year = models.PositiveSmallIntegerField(null=True,
 			blank=True, validators=[validate_leave_days_per_year])
 
+	def get_days_per_week_as_timedelta(self):
+		if self.days_per_week is None:
+			return None
+		return datetime.timedelta(days=self.days_per_week)
+
+	def get_hours_per_week_as_timedelta(self):
+		if self.hours_per_week is None:
+			return None
+		return datetime.timedelta(hours=self.hours_per_week)
+
+	def get_pause_minutes_per_day_as_timedelta(self):
+		if self.pause_minutes_per_day is None:
+			return None
+		return datetime.timedelta(minutes=self.pause_minutes_per_day)
 
 class Report(models.Model):
 	class Meta:
@@ -81,15 +97,31 @@ class Report(models.Model):
 	workplace = models.CharField(max_length=255, null=True, blank=True)
 	log = models.TextField(null=True, blank=True)
 
-	def get_attendance_time(self, kind='gross'):
-		if self.start_time is None or self.end_time is None:
+	def get_start_time_as_date(self):
+		if self.start_time is None:
 			return None
-		elif kind == 'gross':
-			return self.end_time - self.start_time
-		elif kind == 'net':
-			return self.end_time - self.start_time - (self.pause_minutes or 0)
-		else:
+		return datetime.datetime.combine(self.date, self.start_time)
+
+	def get_end_time_as_date(self):
+		if self.end_time is None:
 			return None
+		return datetime.datetime.combine(self.date, self.end_time)
+
+	def get_pause_minutes_as_timedelta(self):
+		if self.pause_minutes is None:
+			return None
+		return datetime.timedelta(minutes=self.pause_minutes)
+
+	def get_work_time(self):
+		try:
+			work_time = self.get_end_time_as_date() - self.get_start_time_as_date()
+		except:
+			return None
+		try:
+			work_time -= self.get_pause_minutes_as_timedelta()
+		except:
+			pass
+		return work_time
 
 	def is_started(self):
 		if self.start_time is not None:
