@@ -41,6 +41,30 @@
 	<div class="col-lg-7">
 		<div class="row">
 			<div class="col-lg-12">
+			{% if report %}
+				<table class="table table-stripped table-hover">
+					<tr>
+						<th>Weekday</th>
+						<th>Date</th>
+						<th>Kind of workday</th>
+						<th>Start time</th>
+						<th>End time</th>
+						<th>Details</th>
+					</tr>
+					<tr>
+						<td>{{ report.date|date:"l" }}</td>
+						<td>{{ report.date }}</td>
+						<td>{{ report.workday }}</td>
+						<td>{{ report.start_time|time:"H:i:s" }}</td>
+						<td>{{ report.end_time|time:"H:i:s" }}</td>
+						<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"m" report.date|date:"d" %}">Show</a></td>
+					</tr>
+				</table>
+			{% else %}
+				<div class="alert alert-info form-alert">
+					<a href="/stechuhr/reports/day/{% now "Y" %}/{% now "m" %}/{% now "d" %}/"><strong>Create</strong></a> today's report.
+				</div>
+			{% endif %}
 			</div>
 		</div>
 	</div>
