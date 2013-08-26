@@ -40,19 +40,19 @@
 		<div class="list-group">
 			<a href="{% url 'reports_day' reports_nav.year reports_nav.month reports_nav.day %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-calendar"></i> Today
+					<i class="icon-fixed-width icon-calendar"></i> Day
 					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}/{{ reports_nav.day|leading_zero }}</small>
 				</h5>
 			</a>
 			<a href="{% url 'reports_week' reports_nav.year reports_nav.week %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-calendar"></i> This week
+					<i class="icon-fixed-width icon-calendar"></i> Week
 					<small>{{ reports_nav.year }}/{{ reports_nav.week|leading_zero }}</small>
 				</h5>
 			</a>
 			<a href="{% url 'reports_month' reports_nav.year reports_nav.month %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
-					<i class="icon-fixed-width icon-calendar"></i> This month
+					<i class="icon-fixed-width icon-calendar"></i> Month
 					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}</small>
 				</h5>
 			</a>
