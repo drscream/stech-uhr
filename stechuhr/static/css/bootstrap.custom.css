@@ -29,10 +29,6 @@ body,
 	color: #000000;
 }
 
-.list-group-item-heading {
-	font-weight: bold;
-}
-
 #wrap {
 	min-height: 100%;
 	height: auto !important;
