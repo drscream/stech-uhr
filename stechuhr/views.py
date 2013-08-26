@@ -33,7 +33,18 @@ def signin(request):
 
 @login_required(login_url='/stechuhr/login/')
 def dashboard(request):
-	return render(request, 'dashboard.html')
+	today = datetime.date.today()
+
+	try:
+		report = Report.objects.filter(user=request.user.pk).filter(date=today).get()
+	except Report.DoesNotExist:
+		report = None
+
+	context = {
+			'report': report,
+		}
+
+	return render(request, 'dashboard.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def settings(request):
@@ -108,13 +119,13 @@ def settings_job_new(request):
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
-	now = datetime.date.today()
+	today = datetime.date.today()
 	context = {
 			'reports_nav': {
-				'year': now.year,
-				'month': now.month,
-				'day': now.day,
-				'week': now.isocalendar()[1]
+				'year': today.year,
+				'month': today.month,
+				'day': today.day,
+				'week': today.isocalendar()[1]
 			}
 		}
 	return render(request, 'reports.html', context)
@@ -158,12 +169,12 @@ def reports_day(request, year, month, day):
 	else:
 		job = None
 
-	now = datetime.date.today()
+	today = datetime.date.today()
 	reports_nav = {
-		'year': now.year,
-		'month': now.month,
-		'day': now.day,
-		'week': now.isocalendar()[1]
+		'year': today.year,
+		'month': today.month,
+		'day': today.day,
+		'week': today.isocalendar()[1]
 	}
 
 	context = {
@@ -202,12 +213,12 @@ def reports_week(request, year, week):
 	except Report.DoesNotExist:
 		reports = None
 
-	now = datetime.date.today()
+	today = datetime.date.today()
 	reports_nav = {
-		'year': now.year,
-		'month': now.month,
-		'day': now.day,
-		'week': now.isocalendar()[1]
+		'year': today.year,
+		'month': today.month,
+		'day': today.day,
+		'week': today.isocalendar()[1]
 	}
 
 	context = {
@@ -259,12 +270,12 @@ def reports_month(request, year, month):
 	else:
 		reports = None
 
-	now = datetime.date.today()
+	today = datetime.date.today()
 	reports_nav = {
-		'year': now.year,
-		'month': now.month,
-		'day': now.day,
-		'week': now.isocalendar()[1]
+		'year': today.year,
+		'month': today.month,
+		'day': today.day,
+		'week': today.isocalendar()[1]
 	}
 
 	context = {
