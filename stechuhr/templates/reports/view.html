@@ -6,11 +6,11 @@
 	<div class="col-lg-12">
 		<h1>{{ report.date|date:"l" }}, {{ report.date }}</h1>
 		<ul>
-			<li><strong>{{ report.workday }}</strong></li>
-			<li>Started at <strong>{{ report.start_time|time:"H:i:s" }}</strong></li>
-			<li>Ended at <strong>{{ report.end_time|time:"H:i:s" }}</strong></li>
+			<li>Kind of work <strong>{{ report.workday }}</strong></li>
+			<li>Started at <strong>{{ report.start_time|time:"TIME_FORMAT" }}</strong></li>
+			<li>Ended at <strong>{{ report.end_time|time:"TIME_FORMAT" }}</strong></li>
 			<li>Pause <strong>{{ report.pause_minutes }}</strong> minutes</li>
-			<li><strong>{{ report.workplace }}</strong></li>
+			<li>Workplace <strong>{{ report.workplace }}</strong></li>
 		</ul>
 		{{ report.log|md|safe|escape }}
 		<p class="noprint">

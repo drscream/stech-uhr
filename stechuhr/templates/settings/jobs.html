@@ -67,8 +67,8 @@
 					<tr>
 						<td>{{ forloop.counter }}</td>
 						<td>{{ job.company }}</td>
-						<td>{{ job.joined_at|date:"Y-m-d" }}</td>
-						<td>{{ job.leaved_at|date:"Y-m-d" }}</td>
+						<td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
+						<td>{{ job.leaved_at|date:"DATE_FORMAT" }}</td>
 						<td><a href="/stechuhr/settings/jobs/{{ job.pk }}/">Show</a></td>
 					</tr>
 				{% endfor %}

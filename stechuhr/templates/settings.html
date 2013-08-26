@@ -70,7 +70,7 @@
 					<tr><th>Company</th><td>{{ job.company|default:"" }}</td></tr>
 					<tr><th>Department</th><td>{{ job.department|default:"" }}</td></tr>
 					<tr><th>Position</th><td>{{ job.position|default:"" }}</td></tr>
-					<tr><th>Joined at</th><td>{{ job.joined_at|default:"" }}</td></tr>
+					<tr><th>Joined at</th><td>{{ job.joined_at|date:"DATE_FORMAT" }}</td></tr>
 					{% comment %}
 					<tr><th>Leaved at</th><td>{{ job.leaved_at|default:"" }}</td></tr>
 					{% endcomment %}
