@@ -113,41 +113,62 @@ class Report(models.Model):
 		return datetime.timedelta(minutes=self.pause_minutes)
 
 	def get_working_time(self):
+		if not self.is_working_day():
+			return datetime.timedelta(seconds=0)
 		try:
 			work_time = self.get_end_time_as_date() - self.get_start_time_as_date()
 		except:
-			return None
+			return datetime.timedelta(seconds=0)
 		try:
 			work_time -= self.get_pause_minutes_as_timedelta()
 		except:
 			pass
 		return work_time
 
-	def is_working_day(self):
-		if self.workday == 'Daily routine':
+	def is_leave_day(self):
+		if self.workday == 'Leave day':
 			return True
-		if self.workday == 'Training':
-			return True
-		if self.workday == 'Seminar':
-			return True
-		if self.workday == 'Business Trip':
+		elif self.workday == 'Flextime leave day':
 			return True
 
 		return False
 
-	is_working_day.boolean = True
-	is_working_day.short_description = 'Working day'
+	def is_sick_day(self):
+		if self.workday == 'Unfitness for work':
+			return True
 
-	def is_finished(self):
+		return False
+
+	def is_working_day(self):
+		if self.workday == 'Daily routine':
+			return True
+		elif self.workday == 'Training':
+			return True
+		elif self.workday == 'Seminar':
+			return True
+		elif self.workday == 'Business Trip':
+			return True
+		
+		return False
+
+	def is_opened(self):
+		if not self.is_working_day():
+			return False
+		elif self.start_time is None or self.end_time is None:
+			return True
+
+		return False
+
+	def is_closed(self):
 		if not self.is_working_day():
 			return True
 		elif self.start_time is not None and self.end_time is not None:
 			return True
-		else:
-			return False
 
-	is_finished.boolean = True
-	is_finished.short_description = 'Finished'
+		return False
+
+	is_closed.boolean = True
+	is_closed.short_description = 'Closed'
 
 
 # vim: set ft=python ts=4 sw=4 :
