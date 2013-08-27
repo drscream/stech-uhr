@@ -112,7 +112,7 @@ class Report(models.Model):
 			return None
 		return datetime.timedelta(minutes=self.pause_minutes)
 
-	def get_work_time(self):
+	def get_working_time(self):
 		try:
 			work_time = self.get_end_time_as_date() - self.get_start_time_as_date()
 		except:
@@ -123,26 +123,25 @@ class Report(models.Model):
 			pass
 		return work_time
 
-	def is_started(self):
-		if self.start_time is not None:
+	def is_working_day(self):
+		if self.workday == 'Daily routine':
 			return True
-		else:
-			return False
+		if self.workday == 'Training':
+			return True
+		if self.workday == 'Seminar':
+			return True
+		if self.workday == 'Business Trip':
+			return True
+
+		return False
+
+	is_working_day.boolean = True
+	is_working_day.short_description = 'Working day'
 
 	def is_finished(self):
-		if self.workday == 'Unfitness for work':
+		if not self.is_working_day():
 			return True
-
-		if self.workday == 'Leave day':
-			return True
-
-		if self.workday == 'Flextime leave day':
-			return True
-
-		if self.workday == 'Holiday':
-			return True
-
-		if self.start_time is not None and self.end_time is not None:
+		elif self.start_time is not None and self.end_time is not None:
 			return True
 		else:
 			return False
