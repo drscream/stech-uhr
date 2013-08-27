@@ -15,13 +15,7 @@
 	<div class="col-lg-12">
 		<div class="page-header">
 			<h1><i class="icon-calendar"></i> Week <small>
-					{{ year }}/{{ week|leading_zero }}
-					<a href="/stechuhr/reports/week/{{ prev_week }}" class="report-header-link">
-						<i class="icon-arrow-left"></i>
-					</a>
-					<a href="/stechuhr/reports/week/{{ next_week }}" class="report-header-link">
-						<i class="icon-arrow-right"></i>
-					</a>
+					{{ date|date:"Y/W" }}
 			</small></h1>
 		</div>
 	</div>
@@ -46,22 +40,22 @@
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="{% url 'reports_day' reports_nav.year reports_nav.month reports_nav.day %}" class="list-group-item">
+			<a href="/stechuhr/reports/day/{% now "Y/n/j" %}/" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Day
-					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}/{{ reports_nav.day|leading_zero }}</small>
+					<small>{% now "Y/n/j" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_week' reports_nav.year reports_nav.week %}" class="list-group-item active">
+			<a href="/stechuhr/reports/week/{% now "Y" %}/{% now "W" %}/" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Week
-					<small>{{ reports_nav.year }}/{{ reports_nav.week|leading_zero }}</small>
+					<small>{% now "Y" %}/{% now "W" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_month' reports_nav.year reports_nav.month %}" class="list-group-item">
+			<a href="/stechuhr/reports/month/{% now "Y/n" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Month
-					<small>{{ reports_nav.year }}/{{ reports_nav.month|leading_zero }}</small>
+					<small>{% now "Y/n" %}</small>
 				</h5>
 			</a>
 		</div>
@@ -86,7 +80,7 @@
 						<td>{{ report.workday }}</td>
 						<td>{{ report.start_time|time:"TIME_FORMAT" }}</td>
 						<td>{{ report.end_time|time:"TIME_FORMAT" }}</td>
-						<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"m" report.date|date:"d" %}">Show</a></td>
+						<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"n" report.date|date:"j" %}">Show</a></td>
 					</tr>
 				{% endfor %}
 				</table>
@@ -101,7 +95,7 @@
 		</div>
 	</div>
 	<div class="col-lg-3">
-		<div class="pull-right" id="date-picker-week" data-date="{{ start_date|date:"Y-m-d" }}" data-date-format="yyyy-m-d"></div>
+		<div class="pull-right" id="date-picker-week" data-date="{{ date|date:"Y-n-j" }}" data-date-format="yyyy-m-d"></div>
 	</div>
 </div>
 {% endblock %}
