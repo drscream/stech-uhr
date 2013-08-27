@@ -206,8 +206,8 @@ def reports_week(request, year, week):
 	except:
 		raise Http404
 
-		start_date = date
-		end_date = start_date + datetime.timedelta(days=6)
+	start_date = date
+	end_date = start_date + datetime.timedelta(days=6)
 
 	try:
 		reports = Report.objects.filter(user=request.user.pk).filter(date__range=(start_date, end_date)).order_by('date')
