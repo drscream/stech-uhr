@@ -52,7 +52,7 @@ def dashboard(request):
 		week = today.isocalendar()[1]
 		start_date = isoweek_startdate(today.year, week)
 		end_date = start_date + datetime.timedelta(days=6)
-		reports = Report.objects.filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
+		reports = Report.objects.filter(user=request.user.pk).filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
 		total = reports.count()
 		not_finished = 0
 		working_time = None
@@ -190,7 +190,7 @@ def reports_day(request, year, month, day):
 		raise Http404
 
 	try:
-		report = Report.objects.filter(user=request.user).filter(date=date).get()
+		report = Report.objects.filter(user=request.user.pk).filter(date=date).get()
 	except Report.DoesNotExist:
 		report = None
 
@@ -237,18 +237,13 @@ def reports_week(request, year, week):
 	start_date = isoweek_startdate(int(year), int(week))
 	end_date = start_date + datetime.timedelta(days=6)
 
-	if int(week) == 1:
-		prev_week = "%d/%d/" % (int(year) - 1, 52)
-	else:
-		prev_week = "%d/%d/" % (int(year), int(week) - 1)
-
-	if int(week) == 52:
-		next_week = "%d/%d" % (int(year) + 1, 1)
-	else:
-		next_week = "%d/%d" % (int(year), int(week) + 1)
+	prev_week = start_date - datetime.timedelta(days=1)
+	prev_week = "%d/%d" % (prev_week.year, prev_week.isocalendar()[1])
+	next_week = start_date + datetime.timedelta(days=9)
+	next_week = "%d/%d" % (next_week.year, next_week.isocalendar()[1])
 
 	try:
-		reports = Report.objects.filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
+		reports = Report.objects.filter(user=request.user.pk).filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
 	except Report.DoesNotExist:
 		reports = None
 
@@ -276,23 +271,13 @@ def reports_month(request, year, month):
 	if int(month) not in range(1,13):
 		raise Http404
 
-	startdate = datetime.date(int(year), int(month), 1)
-	if int(month) == 12:
-		enddate = datetime.date(int(year) + 1, 1, 1) - datetime.timedelta(days=1)
-	else:
-		enddate = datetime.date(int(year), int(month) + 1, 1) - datetime.timedelta(days=1)
-
-	if int(month) == 12:
-		next_mon = "%d/%d/" % (int(year) + 1, 1)
-	else:
-		next_mon = "%d/%d/" % (int(year), int(month) + 1)
-	if int(month) == 1:
-		prev_mon = "%d/%d/" % (int(year) - 1, 12)
-	else:
-		prev_mon = "%d/%d/" % (int(year), int(month) - 1)
+	next_mon = datetime.date(int(year), int(month), 1) + datetime.timedelta(days=32)
+	next_mon = "%d/%d" % (next_mon.year, next_mon.month)
+	prev_mon = datetime.date(int(year), int(month), 1) - datetime.timedelta(days=1)
+	prev_mon = "%d/%d" % (prev_mon.year, prev_mon.month)
 
 	try:
-		report_objs = Report.objects.filter(date__gte=startdate).filter(date__lte=enddate).order_by('date')
+		report_objs = Report.objects.filter(user=request.user.pk).filter(date__month=int(month)).order_by('date')
 	except Report.DoesNotExist:
 		report_objs = None
 
