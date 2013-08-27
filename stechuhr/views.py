@@ -142,10 +142,6 @@ def reports_day(request, year, month, day):
 					form.new(request.user)
 			elif request.POST.__contains__('reset'):
 				form.delete()
-			elif request.POST.__contains__('view'):
-				report = form.modify()
-				return redirect(reports_day_view, year=report.date.year,
-						month=report.date.month, day=report.date.day)
 	else:
 		form = ReportForm()
 
