@@ -50,7 +50,7 @@
 						<th>Kind of workday</th>
 						<th>Start time</th>
 						<th>End time</th>
-						<th>Details</th>
+						<!-- <th>Details</th> -->
 					</tr>
 					<tr>
 						<td>{{ day.report.date|date:"l" }}</td>
@@ -58,7 +58,7 @@
 						<td>{{ day.report.workday }}</td>
 						<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
 						<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
-						<td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">Show</a></td>
+						<!-- <td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">Show</a></td> -->
 					</tr>
 				</table>
 				{% if not day.is_working_day %}
@@ -84,15 +84,17 @@
 				<table class="table table-stripped table-hover">
 					<tr>
 						<th>Total reports</th>
-						<th>Open reports</th>
 						<th>Working days</th>
-						<th>Details</th>
+						<th>Leave days</th>
+						<th>Sick days</th>
+						<!-- <th>Details</th> -->
 					</tr>
 					<tr>
 						<td>{{ week.reports.count.total }}</td>
-						<td>{{ week.reports.count.opened }}</td>
 						<td>{{ week.reports.count.working_days }}</td>
-						<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
+						<td>{{ week.reports.count.leave_days }}</td>
+						<td>{{ week.reports.count.sick_days }}</td>
+						<!-- <td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td> -->
 					</tr>
 				</table>
 				<div class="alert alert-info">
