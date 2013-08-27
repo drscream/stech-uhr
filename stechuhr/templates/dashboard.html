@@ -41,8 +41,8 @@
 	<div class="col-lg-7">
 		<div class="row">
 			<div class="col-lg-12">
-			{% if report %}
-				<h1 class="table-header">Today <small>{{ report.date|date:"Y/m/d" }}</small></h1>
+			{% if day %}
+				<h3 class="table-header"><i class="icon-calendar"></i> Today <small>{{ day.report.date|date:"Y/m/d" }}</small></h3>
 				<table class="table table-stripped table-hover">
 					<tr>
 						<th>Weekday</th>
@@ -53,17 +53,46 @@
 						<th>Details</th>
 					</tr>
 					<tr>
-						<td>{{ report.date|date:"l" }}</td>
-						<td>{{ report.date|date:"DATE_FORMAT" }}</td>
-						<td>{{ report.workday }}</td>
-						<td>{{ report.start_time|time:"TIME_FORMAT" }}</td>
-						<td>{{ report.end_time|time:"TIME_FORMAT" }}</td>
-						<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"m" report.date|date:"d" %}">Show</a></td>
+						<td>{{ day.report.date|date:"l" }}</td>
+						<td>{{ day.report.date|date:"DATE_FORMAT" }}</td>
+						<td>{{ day.report.workday }}</td>
+						<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
+						<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
+						<td><a href="{% url 'reports_day' day.report.date|date:"Y" day.report.date|date:"m" day.report.date|date:"d" %}">Show</a></td>
 					</tr>
 				</table>
+				{% if day.end_date %}
+				<div class="alert alert-info">
+					{{ day.end_date|timeuntil  }} to go till end of work.
+				</div>
+				{% elif day.start_date %}
+				<div class="alert alert-info">
+					{{ day.start_date|timesince  }} past since start of work.
+				</div>
+				{% endif %}
 			{% else %}
-				<div class="alert alert-info form-alert">
+				<div class="alert alert-info">
 					<a href="/stechuhr/reports/day/{% now "Y" %}/{% now "m" %}/{% now "d" %}/"><strong>Create</strong></a> today's report.
+				</div>
+			{% endif %}
+			{% if week %}
+				<h3 class="table-header"><i class="icon-calendar"></i> Week <small>{{ week.year }}/{{ week.number }}</small></h3>
+				<table class="table table-stripped table-hover">
+					<tr>
+						<th>Total reports</th>
+						<th>Open reports</th>
+						<th>Working days</th>
+						<th>Details</th>
+					</tr>
+					<tr>
+						<td>{{ week.reports.count.total }}</td>
+						<td>{{ week.reports.count.not_finished }}</td>
+						<td>{{ week.reports.count.working_days }}</td>
+						<td><a href="{% url 'reports_week' week.year week.number %}">Show</a></td>
+					</tr>
+				</table>
+				<div class="alert alert-info">
+					{{ week.reports.working_time|timedelta_until }} worked this week.
 				</div>
 			{% endif %}
 			</div>
