@@ -1,5 +1,22 @@
-.noprint {
+body * {
+	visibility: hidden;
+}
+
+#date-picker-day, #date-picker-day * {
 	display: none;
+}
+
+.print, .print * {
+	visibility: visible;
+	font-family: sans-serif;
+	-webkit-text-size-adjust: 100%;
+		-ms-text-size-adjust: 100%;
+}
+
+.print {
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 /* vim: set ft=css ts=4 sw=4 : */
