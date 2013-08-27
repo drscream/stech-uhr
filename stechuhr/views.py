@@ -33,16 +33,55 @@ def signin(request):
 
 @login_required(login_url='/stechuhr/login/')
 def dashboard(request):
-	today = datetime.date.today()
+
+	context = {}
+	try:
+		today = datetime.date.today()
+		report = Report.objects.filter(user=request.user.pk).filter(date=today).get()
+		day = {
+			'report': report,
+			'start_date': report.get_start_time_as_date(),
+			'end_date': report.get_end_time_as_date(),
+		}
+		context.update(day=day)
+	except Report.DoesNotExist:
+		pass
 
 	try:
-		report = Report.objects.filter(user=request.user.pk).filter(date=today).get()
-	except Report.DoesNotExist:
-		report = None
-
-	context = {
-			'report': report,
+		today = datetime.date.today()
+		week = today.isocalendar()[1]
+		start_date = isoweek_startdate(today.year, week)
+		end_date = start_date + datetime.timedelta(days=6)
+		reports = Report.objects.filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
+		total = reports.count()
+		not_finished = 0
+		working_time = None
+		working_days = 0
+		for report in reports:
+			if report.is_working_day():
+				working_days += 1
+			if report.is_working_day() and not report.is_finished():
+				not_finished += 1
+			if report.is_working_day() and report.is_finished():
+				if working_time is None:
+					working_time = report.get_working_time()
+				else:
+					working_time += report.get_working_time()
+		week = {
+			'number': week,
+			'year': today.year,
+			'reports': {
+				'count': {
+					'total': total,
+					'not_finished': not_finished,
+					'working_days': working_days,
+				},
+				'working_time': working_time,
+			}
 		}
+		context.update(week=week)
+	except:
+		pass
 
 	return render(request, 'dashboard.html', context)
 
@@ -189,25 +228,6 @@ def reports_day(request, year, month, day):
 		'next_day': (date + datetime.timedelta(days=1)),
 	}
 	return render(request, 'reports/day.html', context)
-
-@login_required(login_url='/stechur/login/')
-def reports_day_view(request, year, month, day):
-	try:
-		date = datetime.date(int(year), int(month), int(day))
-	except ValueError:
-		raise Http404
-
-	try:
-		report = Report.objects.filter(user=request.user).filter(date=date).get()
-	except Report.DoesNotExist:
-		raise Http404
-
-	context = {
-			'report': report,
-		}
-
-	return render(request, 'reports/view.html', context)
-
 
 @login_required(login_url='/stechuhr/login/')
 def reports_week(request, year, week):
