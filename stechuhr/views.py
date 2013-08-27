@@ -62,6 +62,8 @@ def dashboard(request):
 		total = reports.count()
 		opened = [report.is_opened() for report in reports].count(True)
 		working_days = [report.is_working_day() for report in reports].count(True)
+		leave_days = [report.is_leave_day() for report in reports].count(True)
+		sick_days = [report.is_sick_day() for report in reports].count(True)
 		working_time = sum([report.get_working_time() for report in reports], datetime.timedelta(seconds=0))
 		week = {
 			'reports': {
@@ -69,6 +71,8 @@ def dashboard(request):
 					'total': total,
 					'opened': opened,
 					'working_days': working_days,
+					'leave_days': leave_days,
+					'sick_days': sick_days,
 				},
 				'working_time': working_time,
 			}
