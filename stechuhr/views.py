@@ -18,6 +18,7 @@ from stechuhr.utils import *
 def index(request):
 	if request.user.is_authenticated():
 		return redirect('dashboard')
+
 	return render(request, 'index.html')
 
 def signin(request):
@@ -33,69 +34,60 @@ def signin(request):
 
 @login_required(login_url='/stechuhr/login/')
 def dashboard(request):
+	today = datetime.date.today()
 
 	context = {}
+
 	try:
-		today = datetime.date.today()
 		report = Report.objects.filter(user=request.user.pk).filter(date=today).get()
+	except Report.DoesNotExist:
+		pass
+	else:
 		day = {
 			'report': report,
+			'is_working_day': report.is_working_day(),
 			'start_date': report.get_start_time_as_date(),
 			'end_date': report.get_end_time_as_date(),
 		}
 		context.update(day=day)
-	except Report.DoesNotExist:
-		pass
 
+	week = today.isocalendar()[1]
+	start_date = isoweek_startdate(today.year, week)
+	end_date = start_date + datetime.timedelta(days=6)
 	try:
-		today = datetime.date.today()
-		week = today.isocalendar()[1]
-		start_date = isoweek_startdate(today.year, week)
-		end_date = start_date + datetime.timedelta(days=6)
-		reports = Report.objects.filter(user=request.user.pk).filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
+		reports = Report.objects.filter(user=request.user.pk).filter(date__range=(start_date, end_date)).order_by('date')
+	except:
+		pass
+	else:
 		total = reports.count()
-		not_finished = 0
-		working_time = None
-		working_days = 0
-		for report in reports:
-			if report.is_working_day():
-				working_days += 1
-			if report.is_working_day() and not report.is_finished():
-				not_finished += 1
-			if report.is_working_day() and report.is_finished():
-				if working_time is None:
-					working_time = report.get_working_time()
-				else:
-					working_time += report.get_working_time()
+		opened = [report.is_opened() for report in reports].count(True)
+		working_days = [report.is_working_day() for report in reports].count(True)
+		working_time = sum([report.get_working_time() for report in reports], datetime.timedelta(seconds=0))
 		week = {
-			'number': week,
-			'year': today.year,
 			'reports': {
 				'count': {
 					'total': total,
-					'not_finished': not_finished,
+					'opened': opened,
 					'working_days': working_days,
 				},
 				'working_time': working_time,
 			}
 		}
 		context.update(week=week)
-	except:
-		pass
 
 	return render(request, 'dashboard.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def settings(request):
-	job = None
 	try:
 		job = Job.objects.filter(user=request.user.pk).latest('joined_at')
 	except Job.DoesNotExist:
 		context = {}
-	if job:
+	else:
 		context = {
-				'job': job,
-			}
+			'job': job,
+		}
+
 	return render(request, 'settings.html', context)
 
 @login_required(login_url='/stechuhr/login/')
@@ -114,10 +106,12 @@ def settings_jobs(request):
 	if request.method == 'POST':
 		job = Job.objects.get(pk=request.POST.get('pk'))
 		job.delete()
+
 	jobs = Job.objects.filter(user=request.user.pk)
 	context = { 
-			'jobs': jobs,
-		}
+		'jobs': jobs,
+	}
+
 	return render(request, 'settings/jobs.html', context)
 
 @login_required(login_url='/stechuhr/login/')
@@ -136,9 +130,10 @@ def settings_job_details(request, job_id=None):
 	job = get_object_or_404(Job, pk=job_id)
 
 	context = { 
-			'job': job,
-			'form': form,
-		}
+		'job': job,
+		'form': form,
+	}
+
 	return render(request, 'settings/jobs/details.html', context)
 
 @login_required(login_url='/stechuhr/login/')
@@ -151,23 +146,15 @@ def settings_job_new(request):
 	else:
 		form = JobForm(request)
 
-	context = { 
-			'form': form,
-		}
+	context = {
+		'form': form,
+	}
+
 	return render(request, 'settings/jobs/new.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
-	today = datetime.date.today()
-	context = {
-			'reports_nav': {
-				'year': today.year,
-				'month': today.month,
-				'day': today.day,
-				'week': today.isocalendar()[1]
-			}
-		}
-	return render(request, 'reports.html', context)
+	return render(request, 'reports.html')
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
@@ -199,82 +186,47 @@ def reports_day(request, year, month, day):
 			Q(user=request.user),
 			Q(joined_at__lte=date),
 			Q(leaved_at__gte=date) | Q(leaved_at=None)
-		).order_by('joined_at')
+		).order_by('joined_at').get()
 	except Job.DoesNotExist:
 		job = None
 
-	if job:
-		job = job[0]
-	else:
-		job = None
-
-	today = datetime.date.today()
-	reports_nav = {
-		'year': today.year,
-		'month': today.month,
-		'day': today.day,
-		'week': today.isocalendar()[1]
-	}
-
 	context = {
-		'reports_nav': reports_nav,
-		'year': year,
-		'month': month,
-		'day': day,
+		'date': date,
 		'report': report,
 		'job': job,
 		'form': form,
-		'prev_day': (date - datetime.timedelta(days=1)),
-		'next_day': (date + datetime.timedelta(days=1)),
 	}
+
 	return render(request, 'reports/day.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_week(request, year, week):
-	if int(week) not in range(1,53):
+	try:
+		date = isoweek_startdate(int(year), int(week))
+	except:
 		raise Http404
 
-	start_date = isoweek_startdate(int(year), int(week))
-	end_date = start_date + datetime.timedelta(days=6)
-
-	prev_week = start_date - datetime.timedelta(days=1)
-	prev_week = "%d/%d" % (prev_week.year, prev_week.isocalendar()[1])
-	next_week = start_date + datetime.timedelta(days=9)
-	next_week = "%d/%d" % (next_week.year, next_week.isocalendar()[1])
+		start_date = date
+		end_date = start_date + datetime.timedelta(days=6)
 
 	try:
-		reports = Report.objects.filter(user=request.user.pk).filter(date__gte=start_date).filter(date__lte=end_date).order_by('date')
+		reports = Report.objects.filter(user=request.user.pk).filter(date__range=(start_date, end_date)).order_by('date')
 	except Report.DoesNotExist:
 		reports = None
 
-	today = datetime.date.today()
-	reports_nav = {
-		'year': today.year,
-		'month': today.month,
-		'day': today.day,
-		'week': today.isocalendar()[1]
+	context = {
+		'date': date,
+		'reports': reports,
 	}
 
-	context = {
-			'reports_nav': reports_nav,
-			'year': year,
-			'week': week,
-			'reports': reports,
-			'prev_week': prev_week,
-			'next_week': next_week,
-			'start_date': start_date,
-		}
 	return render(request, 'reports/week.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_month(request, year, month):
-	if int(month) not in range(1,13):
+	try:
+		date = datetime.date(int(year), int(month), 1)
+	except:
 		raise Http404
-
-	next_mon = datetime.date(int(year), int(month), 1) + datetime.timedelta(days=32)
-	next_mon = "%d/%d" % (next_mon.year, next_mon.month)
-	prev_mon = datetime.date(int(year), int(month), 1) - datetime.timedelta(days=1)
-	prev_mon = "%d/%d" % (prev_mon.year, prev_mon.month)
 
 	try:
 		report_objs = Report.objects.filter(user=request.user.pk).filter(date__month=int(month)).order_by('date')
@@ -283,7 +235,6 @@ def reports_month(request, year, month):
 
 	if report_objs:
 		paginator = Paginator(report_objs, 5)
-	
 		page = request.GET.get('page')
 		try:
 			reports = paginator.page(page)
@@ -294,22 +245,11 @@ def reports_month(request, year, month):
 	else:
 		reports = None
 
-	today = datetime.date.today()
-	reports_nav = {
-		'year': today.year,
-		'month': today.month,
-		'day': today.day,
-		'week': today.isocalendar()[1]
+	context = {
+		'date': date,
+		'reports': reports,
 	}
 
-	context = {
-			'reports_nav': reports_nav,
-			'year': year,
-			'month': month,
-			'prev_mon': prev_mon,
-			'next_mon': next_mon,
-			'reports': reports,
-		}
 	return render(request, 'reports/month.html', context)
 
 def permission_denied(request):
