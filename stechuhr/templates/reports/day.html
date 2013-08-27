@@ -117,9 +117,9 @@
 							 <textarea id="id_log" name="log" rows="10" class="form-control">{{ report.log }}</textarea>
 						</div>
 						<input type="hidden" name="pk" value="{{ report.pk }}" />
-						<button name="save" class="btn btn-default btn-info" type="submit" value="1">Save</button>
-						<button name="reset" class="btn btn-default btn-danger" type="submit" value="1">Reset</button>
-						<button name="view" class="btn btn-default btn-success" type="submit" value="1">View</button>
+						<button name="save" class="btn btn-default btn-sm" type="submit" value="1">Save</button>
+						<button name="reset" class="btn btn-default btn-sm" type="submit" value="1">Reset</button>
+						<a data-toggle="modal" href="#reports-day-print" class="btn btn-default btn-sm">View</a>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
@@ -130,6 +130,7 @@
 				</div>
 			</fieldset>
 		</form>
+		{% include "reports/print.html" %}
 	{% else %}
 		<form action="/stechuhr/reports/day/{{ year }}/{{ month }}/{{ day }}/" method="post" id="form_reports_new_day">
 		{% csrf_token %}
@@ -179,7 +180,7 @@
 							<label for="id_log">Log</label>
 							 <textarea id="id_log" name="log" rows="10" class="form-control"></textarea>
 						</div>
-						<button name="save" class="btn btn-default btn-info" type="submit" value="1">Save</button>
+						<button name="save" class="btn btn-default btn-sm" type="submit" value="1">Save</button>
 					{% if form.errors %}
 						<div class="alert alert-danger form-alert">
 							<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>

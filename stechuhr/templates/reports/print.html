@@ -1,0 +1,29 @@
+{% load stechuhr-tags %}
+
+<div class="modal fade" id="reports-day-print" tabindex="-1" role="dialog" aria-labelledby="reports-day-print" aria-hidden="true">
+	<div class="modal-dialog" style="min-width: 65%;">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="print">
+					<h4><i class="icon-calendar"></i>
+						<small>
+							{{ report.date|date:"l" }}, {{ report.date|date:"DATE_FORMAT" }},
+							{{ report.start_time|time:"TIME_FORMAT" }} to
+							{{ report.end_time|time:"TIME_FORMAT" }} @{{ report.workplace }}.
+						</small>
+					</h4>
+					{{ report.log|md|safe|escape }}
+					<blockquote>
+						<em>{{ user.first_name }} {{ user.last_name }}</em>
+					</blockquote>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+				<a class="btn btn-default btn-sm" href="javascript:window.print()">Print</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- vim: set ft=htmldjango ts=4 sw=4 : -->
