@@ -5,10 +5,16 @@
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
 {% if user.is_authenticated %}
-	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
+	<li><a href="/stechuhr/logout/" class="navbar-link">
+		<i class="icon-off"></i> Log out</a>
+	</li>
 {% else %}
-	<li><a href="/stechuhr/signin/" class="navbar-link"><i class="icon-edit"></i> Sign in</a></li>
-	<li><a href="/stechuhr/login/" class="navbar-link"><i class="icon-off"></i> Log in</a></li>
+	<li><a href="/stechuhr/signin/" class="navbar-link">
+		<i class="icon-edit"></i> Sign in</a>
+	</li>
+	<li><a href="/stechuhr/login/" class="navbar-link">
+		<i class="icon-off"></i> Log in</a>
+	</li>
 {% endif %}
 </ul>
 {% endblock %}
@@ -17,7 +23,9 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-time"></i> Stechuhr. <small>Keep track of your hours worked.</small></h1>
+			<h1><i class="icon-time"></i> Stechuhr.
+				<small>Keep track of your hours worked.</small>
+			</h1>
 		</div>
 		<div class="lead">
 			<p>A simplistic and compact application to support your daily job life.</p>
@@ -27,7 +35,9 @@
 <div class="row last-row">
 	<div class="col-lg-4">
 		<div class="thumbnail">
-			<a href="{% static "img/showcase/user-dashboard.png" %}" class="thumbnail"><img src="{% static "img/showcase/user-dashboard.png" %}"></a>
+			<a href="{% static "img/showcase/user-dashboard.png" %}" class="thumbnail">
+				<img src="{% static "img/showcase/user-dashboard.png" %}">
+			</a>
 			<div class="caption">
 				<h3><i class="icon-dashboard"></i> Dashboard</h3>
 				<p>A well formed dashboard showing you a summarize of your reports,
@@ -37,7 +47,9 @@
 	</div>
 	<div class="col-lg-4">
 		<div class="thumbnail">
-			<a href="{% static "img/showcase/user-settings.png" %}" class="thumbnail"><img src="{% static "img/showcase/user-settings.png" %}"></a>
+			<a href="{% static "img/showcase/user-settings.png" %}" class="thumbnail">
+				<img src="{% static "img/showcase/user-settings.png" %}">
+			</a>
 			<div class="caption">
 				<h3><i class="icon-gears"></i> Settings</h3>
 				<p>Within the straight settings system, you just need to
@@ -48,10 +60,12 @@
 	</div>
 	<div class="col-lg-4">
 		<div class="thumbnail">
-			<a href="{% static "img/showcase/user-report.png" %}" class="thumbnail"><img src="{% static "img/showcase/user-report.png" %}"></a>
+			<a href="{% static "img/showcase/user-report.png" %}" class="thumbnail">
+				<img src="{% static "img/showcase/user-report.png" %}">
+			</a>
 			<div class="caption">
 				<h3><i class="icon-calendar"></i> Report</h3>
-				<p>Just take a few moments to provide a handful of information 
+				<p>Just take a few moments to provide a handful of information
 				and a meaningful note for your daily report.
 				</p>
 			</div>

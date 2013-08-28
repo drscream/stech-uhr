@@ -45,8 +45,8 @@ class Job(models.Model):
 			validators=[validate_days_per_week])
 	hours_per_week = models.PositiveSmallIntegerField(null=True, blank=True,
 			validators=[validate_hours_per_week])
-	pause_minutes_per_day = models.PositiveSmallIntegerField(null=True, blank=True,
-			validators=[validate_pause_minutes_per_day])
+	pause_minutes_per_day = models.PositiveSmallIntegerField(null=True,
+			blank=True, validators=[validate_pause_minutes_per_day])
 	leave_days_per_year = models.PositiveSmallIntegerField(null=True,
 			blank=True, validators=[validate_leave_days_per_year])
 

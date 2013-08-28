@@ -39,7 +39,10 @@ def dashboard(request):
 	context = {}
 
 	try:
-		report = Report.objects.filter(user=request.user.pk).filter(date=today).get()
+		report = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date=today). \
+			get()
 	except Report.DoesNotExist:
 		pass
 	else:
@@ -55,20 +58,22 @@ def dashboard(request):
 	start_date = isoweek_startdate(today.year, week)
 	end_date = start_date + datetime.timedelta(days=6)
 	try:
-		reports = Report.objects.filter(user=request.user.pk).filter(date__range=(start_date, end_date)).order_by('date')
+		reports = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date__range=(start_date, end_date)). \
+			order_by('date')
 	except:
 		pass
 	else:
-		total = reports.count()
 		opened = [report.is_opened() for report in reports].count(True)
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		working_time = sum([report.get_working_time() for report in reports], datetime.timedelta(seconds=0))
+		working_time = sum([report.get_working_time() for report in reports],
+			datetime.timedelta(seconds=0))
 		week = {
 			'reports': {
 				'count': {
-					'total': total,
 					'opened': opened,
 					'working_days': working_days,
 					'leave_days': leave_days,
@@ -84,7 +89,9 @@ def dashboard(request):
 @login_required(login_url='/stechuhr/login/')
 def settings(request):
 	try:
-		job = Job.objects.filter(user=request.user.pk).latest('joined_at')
+		job = Job.objects. \
+			filter(user=request.user.pk). \
+			latest('joined_at')
 	except Job.DoesNotExist:
 		context = {}
 	else:
@@ -181,7 +188,10 @@ def reports_day(request, year, month, day):
 		raise Http404
 
 	try:
-		report = Report.objects.filter(user=request.user.pk).filter(date=date).get()
+		report = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date=date). \
+			get()
 	except Report.DoesNotExist:
 		report = None
 
@@ -214,7 +224,10 @@ def reports_week(request, year, week):
 	end_date = start_date + datetime.timedelta(days=6)
 
 	try:
-		reports = Report.objects.filter(user=request.user.pk).filter(date__range=(start_date, end_date)).order_by('date')
+		reports = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date__range=(start_date, end_date)). \
+			order_by('date')
 	except Report.DoesNotExist:
 		reports = None
 
@@ -233,7 +246,10 @@ def reports_month(request, year, month):
 		raise Http404
 
 	try:
-		report_objs = Report.objects.filter(user=request.user.pk).filter(date__month=int(month)).order_by('date')
+		report_objs = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date__month=int(month)). \
+			order_by('date')
 	except Report.DoesNotExist:
 		report_objs = None
 

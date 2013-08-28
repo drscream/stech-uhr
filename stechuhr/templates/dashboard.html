@@ -3,10 +3,18 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
-	<li><a href="/stechuhr/reports/" class="navbar-link"><i class="icon-calendar"></i> Reports</a></li>
-	<li><a href="/stechuhr/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
-	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
+	<li><a href="/stechuhr/dashboard/" class="navbar-link">
+		<i class="icon-dashboard"></i> Dashboard</a>
+	</li>
+	<li><a href="/stechuhr/reports/" class="navbar-link">
+		<i class="icon-calendar"></i> Reports</a>
+	</li>
+	<li><a href="/stechuhr/settings/" class="navbar-link">
+		<i class="icon-gears"></i> Settings</a>
+	</li>
+	<li><a href="/stechuhr/logout/" class="navbar-link">
+		<i class="icon-off"></i> Log out</a>
+	</li>
 </ul>
 {% endblock %}
 
@@ -14,7 +22,9 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-dashboard"></i> Dashboard <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+			<h1><i class="icon-dashboard"></i> Dashboard
+				<small>{{ user.first_name }} {{ user.last_name }}</small>
+			</h1>
 		</div>
 	</div>
 </div>
@@ -41,7 +51,9 @@
 	<div class="col-lg-7">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="table-header"><i class="icon-calendar"></i> Today <small>{% now "Y/n/j" %}</small></h3>
+				<h3 class="table-header"><i class="icon-calendar"></i> Today
+					<small>{% now "Y/n/j" %}</small>
+				</h3>
 			{% if day %}
 				<table class="table table-stripped table-hover">
 					<tr>
@@ -50,7 +62,7 @@
 						<th>Kind of workday</th>
 						<th>Start time</th>
 						<th>End time</th>
-						<!-- <th>Details</th> -->
+						<th>Details</th>
 					</tr>
 					<tr>
 						<td>{{ day.report.date|date:"l" }}</td>
@@ -58,7 +70,9 @@
 						<td>{{ day.report.workday }}</td>
 						<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
 						<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
-						<!-- <td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">Show</a></td> -->
+						<td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">
+							Show</a>
+						</td>
 					</tr>
 				</table>
 				{% if not day.is_working_day %}
@@ -76,25 +90,26 @@
 				{% endif %}
 			{% else %}
 				<div class="alert alert-info">
-					<a href="/stechuhr/reports/day/{% now "Y" %}/{% now "n" %}/{% now "j" %}/"><strong>Create</strong></a> today's report.
+					<a href="/stechuhr/reports/day/{% now "Y" %}/{% now "n" %}/{% now "j" %}/">
+					<strong>Create</strong></a> today's report.
 				</div>
 			{% endif %}
-				<h3 class="table-header"><i class="icon-calendar"></i> Week <small>{% now "Y/W" %}</small></h3>
+				<h3 class="table-header"><i class="icon-calendar"></i> Week
+					<small>{% now "Y/W" %}</small>
+				</h3>
 			{% if week %}
 				<table class="table table-stripped table-hover">
 					<tr>
-						<th>Total reports</th>
 						<th>Working days</th>
 						<th>Leave days</th>
 						<th>Sick days</th>
-						<!-- <th>Details</th> -->
+						<th>Details</th>
 					</tr>
 					<tr>
-						<td>{{ week.reports.count.total }}</td>
 						<td>{{ week.reports.count.working_days }}</td>
 						<td>{{ week.reports.count.leave_days }}</td>
 						<td>{{ week.reports.count.sick_days }}</td>
-						<!-- <td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td> -->
+						<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
 					</tr>
 				</table>
 				<div class="alert alert-info">

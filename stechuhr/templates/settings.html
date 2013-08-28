@@ -3,10 +3,18 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/dashboard/" class="navbar-link"><i class="icon-dashboard"></i> Dashboard</a></li>
-	<li><a href="/stechuhr/reports/" class="navbar-link"><i class="icon-calendar"></i> Reports</a></li>
-	<li><a href="/stechuhr/settings/" class="navbar-link"><i class="icon-gears"></i> Settings</a></li>
-	<li><a href="/stechuhr/logout/" class="navbar-link"><i class="icon-off"></i> Log out</a></li>
+	<li><a href="/stechuhr/dashboard/" class="navbar-link">
+		<i class="icon-dashboard"></i> Dashboard</a>
+	</li>
+	<li><a href="/stechuhr/reports/" class="navbar-link">
+		<i class="icon-calendar"></i> Reports</a>
+	</li>
+	<li><a href="/stechuhr/settings/" class="navbar-link">
+		<i class="icon-gears"></i> Settings</a>
+	</li>
+	<li><a href="/stechuhr/logout/" class="navbar-link">
+		<i class="icon-off"></i> Log out</a>
+	</li>
 </ul>
 
 {% endblock %}
@@ -15,7 +23,9 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-gears"></i> Settings <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+			<h1><i class="icon-gears"></i> Settings
+				<small>{{ user.first_name }} {{ user.last_name }}</small>
+			</h1>
 		</div>
 	</div>
 </div>
@@ -70,7 +80,9 @@
 					<tr><th>Company</th><td>{{ job.company|default:"" }}</td></tr>
 					<tr><th>Department</th><td>{{ job.department|default:"" }}</td></tr>
 					<tr><th>Position</th><td>{{ job.position|default:"" }}</td></tr>
-					<tr><th>Joined at</th><td>{{ job.joined_at|date:"DATE_FORMAT" }}</td></tr>
+					<tr>
+						<th>Joined at</th><td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
+					</tr>
 					{% comment %}
 					<tr><th>Leaved at</th><td>{{ job.leaved_at|default:"" }}</td></tr>
 					{% endcomment %}
@@ -80,8 +92,14 @@
 				<table class="table table-stripped table-hover" style="margin-top: 36px;">
 					<tr><th>Days per week</th><td>{{ job.days_per_week|append:" days" }}</td></tr>
 					<tr><th>Hours per week</th><td>{{ job.hours_per_week|append:" hours" }}</td></tr>
-					<tr><th>Pause minutes per day</th><td>{{ job.pause_minutes_per_day|append:" minutes" }}</td></tr>
-					<tr><th>Leave days per year</th><td>{{ job.leave_days_per_year|append:" days" }}</td></tr>
+					<tr>
+						<th>Pause minutes per day</th>
+						<td>{{ job.pause_minutes_per_day|append:" minutes" }}</td>
+					</tr>
+					<tr>
+						<th>Leave days per year</th>
+						<td>{{ job.leave_days_per_year|append:" days" }}</td>
+					</tr>
 				</table>
 			</div>
 		</div>

@@ -8,21 +8,26 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
-			<h1><i class="icon-off"></i> Welcome. <small>Keep track of your hours worked.</small></h1>
+			<h1><i class="icon-off"></i> Welcome.
+				<small>Keep track of your hours worked.</small>
+			</h1>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-4">
-		<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+		<form action="{{ app_path }}" method="post" id="login-form">
+			{% csrf_token %}
 			<fieldset>
 				<div class="form-group">
 					<label for="id_username" class="required">Username</label>
-					<input id="id_username" maxlength="254" name="username" type="text" class="form-control" />
+					<input id="id_username" maxlength="254" name="username" type="text"
+						class="form-control" />
 				</div>
 				<div class="form-group">
 					<label for="id_password" class="required">Password</label>
-					<input id="id_password" name="password" type="password" class="form-control" />
+					<input id="id_password" name="password" type="password"
+						class="form-control" />
 				</div>
 				<input type="hidden" name="this_is_the_login_form" value="1" />
 			{% if next %}
@@ -30,10 +35,14 @@
 			{% else %}
 				<input type="hidden" name="next" value="/stechuhr/" />
 			{% endif %}
-				<button class="btn btn-primary btn-sm" type="submit" value="Log in">Log in</button>
+				<button class="btn btn-primary btn-sm" type="submit" value="Log in">
+					Log in
+				</button>
 			{% if form.errors %}
 				<div class="alert alert-danger form-alert">
-					<a class="close" data-dismiss="alert"><i class="icon-remove-sign"></i></a>
+					<a class="close" data-dismiss="alert">
+						<i class="icon-remove-sign"></i>
+					</a>
 					Something went wrong. Please try again.
 				</div>
 			{% endif %}
