@@ -1,5 +1,6 @@
 import datetime
 import markdown
+import re
 
 from django import template
 from django.template.defaultfilters import stringfilter
@@ -21,11 +22,22 @@ def append(value, arg):
 def md(value):
 	return markdown.markdown(value)
 
-@register.filter(name='timeuntil_with_timedelta')
-def timeuntil_with_timedelta(tdelta):
+@register.filter(name='timeuntil_tdelta')
+def timeuntil_tdelta(tdelta):
 	if not isinstance(tdelta, datetime.timedelta):
 		raise TemplateSyntaxError("invalid timedelta object")
 	return timeuntil(datetime.datetime.now() + tdelta)
+
+@register.filter(name='tdelta_beautify')
+def tdelta_beautify(tdelta, limit="h"):
+	if not isinstance(tdelta, datetime.timedelta):
+		raise TemplateSyntaxError("invalid timedelta object")
+	if limit not in ["d","h","m","s"]:
+		return ""
+
+	re.findall("([0-9]+)", str(t))
+
+	return tdelta
 
 
 # vim: set ft=python ts=4 sw=4 :
