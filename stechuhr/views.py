@@ -48,6 +48,7 @@ def dashboard(request):
 	else:
 		day = {
 			'report': report,
+			'closed': report.is_closed(),
 			'is_working_day': report.is_working_day(),
 			'start_date': report.get_start_time_as_date(),
 			'end_date': report.get_end_time_as_date(),
@@ -65,7 +66,7 @@ def dashboard(request):
 	except:
 		pass
 	else:
-		opened = [report.is_opened() for report in reports].count(True)
+		closed = [report.is_closed() for report in reports].count(False)
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
@@ -74,7 +75,7 @@ def dashboard(request):
 		week = {
 			'reports': {
 				'count': {
-					'opened': opened,
+					'closed': closed,
 					'working_days': working_days,
 					'leave_days': leave_days,
 					'sick_days': sick_days,
