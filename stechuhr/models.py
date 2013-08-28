@@ -151,14 +151,6 @@ class Report(models.Model):
 		
 		return False
 
-	def is_opened(self):
-		if not self.is_working_day():
-			return False
-		elif self.start_time is None or self.end_time is None:
-			return True
-
-		return False
-
 	def is_closed(self):
 		if not self.is_working_day():
 			return True
