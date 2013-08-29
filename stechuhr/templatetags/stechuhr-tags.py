@@ -1,9 +1,8 @@
 import datetime
 import markdown
-import re
 
 from django import template
-from django.template.defaultfilters import stringfilter
+from django.template.defaultfilters import stringfilter, pluralize
 from django.template.base import TemplateSyntaxError
 
 from django.utils.timesince import timesince, timeuntil
@@ -22,22 +21,46 @@ def append(value, arg):
 def md(value):
 	return markdown.markdown(value)
 
-@register.filter(name='timeuntil_tdelta')
-def timeuntil_tdelta(tdelta):
-	if not isinstance(tdelta, datetime.timedelta):
-		raise TemplateSyntaxError("invalid timedelta object")
-	return timeuntil(datetime.datetime.now() + tdelta)
+@register.filter(name='timeelapsed')
+def timeelapsed(delta, unit='h'):
 
-@register.filter(name='tdelta_beautify')
-def tdelta_beautify(tdelta, limit="h"):
-	if not isinstance(tdelta, datetime.timedelta):
-		raise TemplateSyntaxError("invalid timedelta object")
-	if limit not in ["d","h","m","s"]:
-		return ""
+	if not isinstance(delta, datetime.timedelta):
+		raise TemplateSyntaxError('invalid timedelta object')
 
-	re.findall("([0-9]+)", str(t))
+	if unit not in ['d', 'h', 'w']:
+		return ''
 
-	return tdelta
+	if delta.days <= 0 and delta.seconds <= 60:
+		return '0 minutes'
 
+	if unit == 'w':
+		days = delta.days
+		weeks, days = divmod(days, 7)
+		since = delta.seconds
+	if unit == 'd':
+		weeks = 0
+		days = delta.days
+		since = delta.seconds
+	if unit == 'h':
+		weeks = 0
+		days = 0
+		since = delta.days * 24 * 60 * 60 + delta.seconds
+
+	hours, remainder = divmod(since, 3600)
+	minutes, seconds = divmod(remainder, 60)
+
+	slices = (
+		('week', weeks),
+		('day', days),
+		('hour', hours),
+		('minute', minutes),
+	)
+
+	elapsed = ''
+	for unit, num in slices:
+		if num > 0:
+			elapsed = "%s %d %s%s" % (elapsed, num, unit, pluralize(num))
+
+	return elapsed.strip()
 
 # vim: set ft=python ts=4 sw=4 :
