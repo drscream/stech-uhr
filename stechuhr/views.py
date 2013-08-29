@@ -56,7 +56,7 @@ def dashboard(request):
 		context.update(day=day)
 
 	week = today.isocalendar()[1]
-	start_date = isoweek_startdate(today.year, week)
+	start_date = first_day_isoweek(today.year, week)
 	end_date = start_date + datetime.timedelta(days=6)
 	try:
 		reports = Report.objects. \
@@ -66,7 +66,8 @@ def dashboard(request):
 	except:
 		pass
 	else:
-		closed = [report.is_closed() for report in reports].count(False)
+		total = reports.count()
+		opened = [report.is_closed() for report in reports].count(False)
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
@@ -75,7 +76,8 @@ def dashboard(request):
 		week = {
 			'reports': {
 				'count': {
-					'closed': closed,
+					'total': total,
+					'opened': opened,
 					'working_days': working_days,
 					'leave_days': leave_days,
 					'sick_days': sick_days,
@@ -166,7 +168,67 @@ def settings_job_new(request):
 
 @login_required(login_url='/stechuhr/login/')
 def reports(request):
-	return render(request, 'reports.html')
+	today = datetime.date.today()
+
+	context = {
+		'date': today,
+	}
+
+	try:
+		reports = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date__year=int(today.year))
+	except:
+		pass
+	else:
+		total = reports.count()
+		opened = [report.is_closed() for report in reports].count(False)
+		working_days = [report.is_working_day() for report in reports].count(True)
+		leave_days = [report.is_leave_day() for report in reports].count(True)
+		sick_days = [report.is_sick_day() for report in reports].count(True)
+		working_time = sum([report.get_working_time() for report in reports],
+			datetime.timedelta(seconds=0))
+
+		year = {
+			'count': {
+				'total': total,
+				'opened': opened,
+				'working_days': working_days,
+				'leave_days': leave_days,
+				'sick_days': sick_days,
+				'working_time': working_time,
+			}
+		}
+		context.update(year=year)
+
+	try:
+		reports = Report.objects. \
+			filter(user=request.user.pk). \
+			filter(date__month=int(today.month))
+	except:
+		pass
+	else:
+		total = reports.count()
+		opened = [report.is_closed() for report in reports].count(False)
+		working_days = [report.is_working_day() for report in reports].count(True)
+		leave_days = [report.is_leave_day() for report in reports].count(True)
+		sick_days = [report.is_sick_day() for report in reports].count(True)
+		working_time = sum([report.get_working_time() for report in reports],
+			datetime.timedelta(seconds=0))
+
+		month = {
+			'count': {
+				'total': total,
+				'opened': opened,
+				'working_days': working_days,
+				'leave_days': leave_days,
+				'sick_days': sick_days,
+				'working_time': working_time,
+			}
+		}
+		context.update(month=month)
+
+	return render(request, 'reports.html', context)
 
 @login_required(login_url='/stechuhr/login/')
 def reports_day(request, year, month, day):
