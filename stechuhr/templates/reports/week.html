@@ -23,7 +23,15 @@
 	<div class="col-lg-12">
 		<div class="page-header">
 			<h1><i class="icon-calendar"></i> Week
-				<small>{{ date|date:"Y/W" }}</small>
+				<small>
+					{{ date|isoyearweek }}
+					<a href="/stechuhr/reports/week/{{ date|prevweek|isoyearweek }}/" class="report-header-link">
+						<i class="icon-arrow-left"></i>
+					</a>
+					<a href="/stechuhr/reports/week/{{ date|nextweek|isoyearweek }}/" class="report-header-link">
+						<i class="icon-arrow-right"></i>
+					</a>
+				</small>
 			</h1>
 		</div>
 	</div>
@@ -105,8 +113,12 @@
 		</div>
 	</div>
 	<div class="col-lg-3">
-		<div class="pull-right" id="date-picker-week"
-			data-date="{{ date|date:"Y-n-j" }}" data-date-format="yyyy-m-d"></div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="pull-right" id="date-picker-week"
+					data-date="{{ date|date:"Y-n-j" }}" data-date-format="yyyy-m-d"></div>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

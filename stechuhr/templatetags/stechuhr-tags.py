@@ -4,8 +4,9 @@ import markdown
 from django import template
 from django.template.defaultfilters import stringfilter, pluralize
 from django.template.base import TemplateSyntaxError
-
 from django.utils.timesince import timesince, timeuntil
+
+from stechuhr.utils import first_day_isoweek, last_day_isoweek
 
 register = template.Library()
 
@@ -17,13 +18,83 @@ def append(value, arg):
 	else:
 		return ''
 
-@register.filter(name='md')
-def md(value):
+@register.filter(name='markdown2html')
+def markdown2html(value):
 	return markdown.markdown(value)
+
+@register.filter(name='isoyearweek')
+def isoyearweek(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	year, week, dow = date.isocalendar()
+	return "%s/%s" % (year, week)
+
+@register.filter(name='nextday')
+def nextday(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	return (date + datetime.timedelta(days=1))
+
+@register.filter(name='prevday')
+def prevday(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	return (date - datetime.timedelta(days=1))
+
+@register.filter(name='nextweek')
+def nextweek(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	year, week, dow = date.isocalendar()
+	return last_day_isoweek(year, week) + datetime.timedelta(days=1)
+
+@register.filter(name='prevweek')
+def prevweek(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	year, week, dow = date.isocalendar()
+	return first_day_isoweek(year, week) - datetime.timedelta(days=1)
+
+@register.filter(name='nextmonth')
+def nextmonth(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	try:
+		date = date.replace(month=(date.month + 1))
+	except:
+		date = date.replace(year=(date.year + 1), month=1)
+
+	return date
+
+@register.filter(name='prevmonth')
+def prevmonth(date):
+	if not isinstance(date, datetime.date) and not isinstance(date,
+			datetime.datetime):
+		raise TemplateSyntaxError('invalid date or datetime object')
+
+	try:
+		date = date.replace(month=(date.month - 1))
+	except:
+		date = date.replace(year=(date.year - 1), month=12)
+
+	return date
+
+
 
 @register.filter(name='timeelapsed')
 def timeelapsed(delta, unit='h'):
-
 	if not isinstance(delta, datetime.timedelta):
 		raise TemplateSyntaxError('invalid timedelta object')
 

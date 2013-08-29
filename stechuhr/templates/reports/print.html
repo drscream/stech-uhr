@@ -13,7 +13,7 @@
 							{{ report.end_time|time:"TIME_FORMAT" }} @{{ report.workplace }}.
 						</small>
 					</h4>
-					{{ report.log|md|safe|escape }}
+					{{ report.log|markdown2html|safe|escape }}
 					<blockquote>
 						<em>{{ user.first_name }} {{ user.last_name }}</em>
 					</blockquote>

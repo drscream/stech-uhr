@@ -1,7 +1,25 @@
-Date.prototype.getWeek = function() {
-	var onejan = new Date(this.getFullYear(),0,1);
-	return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+Date.prototype.getISOWeek = function () {
+	var target = new Date(this.valueOf());
+
+	var dayNr = (this.getDay() + 6) % 7;
+	target.setDate(target.getDate() - dayNr + 3);
+	var firstThursday = target.valueOf();
+
+	target.setMonth(0, 1);
+	if (target.getDay() != 4) {
+		target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+	}
+
+	return 1 + Math.ceil((firstThursday - target) / 604800000);
 }
+
+Date.prototype.getISOYear = function () {
+	var target	= new Date(this.valueOf());
+	target.setDate(target.getDate() - ((this.getDay() + 6) % 7) + 3);
+
+	return target.getFullYear();
+}
+
 
 $('#date-picker-day')
 	.datepicker({
@@ -26,8 +44,8 @@ $('#date-picker-week')
 		calendarWeeks: true
 	})
 	.on('changeDate', function(action){
-		var year = action.date.getFullYear();
-		var week = action.date.getWeek();
+		var year = action.date.getISOYear();
+		var week = action.date.getISOWeek();
 		var url_base = '/stechuhr/reports/week/';
 		window.location = url_base + year + '/' + week + '/';
 	});

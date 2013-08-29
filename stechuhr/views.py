@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from stechuhr.models import Job, Report
 from stechuhr.forms import UserForm, JobForm, SigninForm, ReportForm
-from stechuhr.utils import *
+from stechuhr.utils import first_day_isoweek
 
 
 def index(request):
@@ -216,8 +216,13 @@ def reports_day(request, year, month, day):
 
 @login_required(login_url='/stechuhr/login/')
 def reports_week(request, year, week):
+	if request.method == 'POST':
+		js_date = request.POST.__getitem__('js-date')
+		date = datetime.datetime.strptime(js_date, "%Y-%m-%d")
+		year, week, dow = date.isocalendar()
+
 	try:
-		date = isoweek_startdate(int(year), int(week))
+		date = first_day_isoweek(int(year), int(week))
 	except:
 		raise Http404
 

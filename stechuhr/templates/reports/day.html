@@ -23,7 +23,15 @@
 	<div class="col-lg-12">
 		<div class="page-header">
 			<h1><i class="icon-calendar"></i> Day
-				<small>{{ date|date:"Y/n/j" }}</small>
+				<small>
+					{{ date|date:"Y/n/j" }}
+					<a href="/stechuhr/reports/day/{{ date|prevday|date:"Y/n/j" }}/" class="report-header-link">
+						<i class="icon-arrow-left"></i>
+					</a>
+					<a href="/stechuhr/reports/day/{{ date|nextday|date:"Y/n/j" }}/" class="report-header-link">
+						<i class="icon-arrow-right"></i>
+					</a>
+				</small>
 			</h1>
 		</div>
 	</div>
