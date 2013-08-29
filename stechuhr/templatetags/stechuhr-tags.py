@@ -1,5 +1,6 @@
 import datetime
 import markdown
+import re
 
 from django import template
 from django.template.defaultfilters import stringfilter, pluralize
@@ -22,14 +23,23 @@ def append(value, arg):
 def markdown2html(value):
 	return markdown.markdown(value)
 
-@register.filter(name='isoyearweek')
-def isoyearweek(date):
+@register.filter(name='isocalendar')
+def isocalendar(date, fmt='ISOCALENDAR'):
 	if not isinstance(date, datetime.date) and not isinstance(date,
 			datetime.datetime):
 		raise TemplateSyntaxError('invalid date or datetime object')
 
 	year, week, dow = date.isocalendar()
-	return "%s/%s" % (year, week)
+	formats = {
+		'ISOCALENDAR': '%s/%s/%s' % (year, week, dow),
+		'ISOYEARWEEK': '%s/%s' % (year, week),
+		'ISOWEEKDAY': '%s/%s' % (week, dow),
+		'ISOYEAR': '%s' % (year),
+		'ISOWEEK': '%s' % (week),
+		'ISODAY': '%s' % (dow),
+	}
+
+	return formats.get(fmt)
 
 @register.filter(name='nextday')
 def nextday(date):
