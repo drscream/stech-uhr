@@ -135,7 +135,7 @@
 					</tr>
 				</table>
 				<div class="alert alert-info">
-					{{ week.reports.working_time|tdelta_beautify:"d" }} worked this week.
+					{{ week.reports.working_time|timeelapsed:"h" }} worked this week.
 				</div>
 			{% else %}
 				<div class="alert alert-info">
