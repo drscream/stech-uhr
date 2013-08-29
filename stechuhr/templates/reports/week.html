@@ -24,11 +24,11 @@
 		<div class="page-header">
 			<h1><i class="icon-calendar"></i> Week
 				<small>
-					{{ date|isoyearweek }}
-					<a href="/stechuhr/reports/week/{{ date|prevweek|isoyearweek }}/" class="report-header-link">
+					{{ date|isocalendar:"ISOYEARWEEK" }}
+					<a href="/stechuhr/reports/week/{{ date|prevweek|isocalendar:"ISOYEARWEEK" }}/" class="report-header-link">
 						<i class="icon-arrow-left"></i>
 					</a>
-					<a href="/stechuhr/reports/week/{{ date|nextweek|isoyearweek }}/" class="report-header-link">
+					<a href="/stechuhr/reports/week/{{ date|nextweek|isocalendar:"ISOYEARWEEK" }}/" class="report-header-link">
 						<i class="icon-arrow-right"></i>
 					</a>
 				</small>
