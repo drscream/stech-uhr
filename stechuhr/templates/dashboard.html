@@ -108,7 +108,7 @@
 				<h3 class="table-header"><i class="icon-calendar"></i> Week
 					<small>
 						{% now "Y/W" %}
-					{% if week.reports.count.closed > 0 %}
+					{% if week.reports.count.opened > 0 %}
 						<span class="text-info">
 							<i class="icon-star-empty"></i>
 						</span>
@@ -122,12 +122,14 @@
 			{% if week %}
 				<table class="table table-stripped table-hover">
 					<tr>
+						<th>Reports</th>
 						<th>Working days</th>
 						<th>Leave days</th>
 						<th>Sick days</th>
 						<th>Details</th>
 					</tr>
 					<tr>
+						<td>{{ week.reports.count.total }}</td>
 						<td>{{ week.reports.count.working_days }}</td>
 						<td>{{ week.reports.count.leave_days }}</td>
 						<td>{{ week.reports.count.sick_days }}</td>
