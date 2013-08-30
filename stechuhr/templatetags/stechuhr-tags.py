@@ -31,7 +31,8 @@ def isocalendar(date, fmt='ISOCALENDAR'):
 
 	year, week, dow = date.isocalendar()
 	formats = {
-		'ISOCALENDAR': '%s/%s/%s' % (year, week, dow),
+		'ISOCALENDAR': (year, week, dow),
+		'ISOYEARWEEKDAY': '%s/%s/%s' % (year, week, dow),
 		'ISOYEARWEEK': '%s/%s' % (year, week),
 		'ISOWEEKDAY': '%s/%s' % (week, dow),
 		'ISOYEAR': '%s' % (year),
