@@ -186,18 +186,50 @@ def reports(request):
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		working_time = sum([report.get_working_time() for report in reports],
-			datetime.timedelta(seconds=0))
+		early = reports.filter(start_time__gt='00:00.00') . \
+				order_by('start_time')[0]. \
+				get_start_time_as_date()
+		late = reports.filter(end_time__gt='00:00.00') . \
+				order_by('-end_time')[0]. \
+				get_end_time_as_date()
+
+		wt_objs = [report.get_working_time() for report in reports]
+		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
+		wt_avg_per_day = wt_total / working_days
+		wt_objs_secs = [wt_obj.seconds for wt_obj in wt_objs
+				if wt_obj.seconds > 0]
+		wt_max = datetime.timedelta(seconds=max(wt_objs_secs))
+		wt_min = datetime.timedelta(seconds=min(wt_objs_secs))
+
+		pm_objs = [report.pause_minutes * 60 for report in reports if
+				report.pause_minutes > 0 and report.is_closed()]
+		pm_total = datetime.timedelta(seconds=sum(pm_objs))
+		pm_max = datetime.timedelta(seconds=max(pm_objs))
+		pm_min = datetime.timedelta(seconds=min(pm_objs))
+		pm_avg_per_day = pm_total / working_days
 
 		year = {
+			'early': early,
+			'late': late,
 			'count': {
 				'total': total,
 				'opened': opened,
 				'working_days': working_days,
 				'leave_days': leave_days,
 				'sick_days': sick_days,
-				'working_time': working_time,
-			}
+				'working_time': {
+					'total': wt_total,
+					'max': wt_max,
+					'min': wt_min,
+					'avg_per_day': wt_avg_per_day,
+				},
+				'pause': {
+					'total': pm_total,
+					'max': pm_max,
+					'min': pm_min,
+					'avg_per_day': pm_avg_per_day
+				},
+			},
 		}
 		context.update(year=year)
 
@@ -213,18 +245,50 @@ def reports(request):
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		working_time = sum([report.get_working_time() for report in reports],
-			datetime.timedelta(seconds=0))
+		early = reports.filter(start_time__gt='00:00.00') . \
+				order_by('start_time')[0]. \
+				get_start_time_as_date()
+		late = reports.filter(end_time__gt='00:00.00') . \
+				order_by('-end_time')[0]. \
+				get_end_time_as_date()
+
+		wt_objs = [report.get_working_time() for report in reports]
+		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
+		wt_avg_per_day = wt_total / working_days
+		wt_objs_secs = [wt_obj.seconds for wt_obj in wt_objs
+				if wt_obj.seconds > 0]
+		wt_max = datetime.timedelta(seconds=max(wt_objs_secs))
+		wt_min = datetime.timedelta(seconds=min(wt_objs_secs))
+
+		pm_objs = [report.pause_minutes * 60 for report in reports if
+				report.pause_minutes > 0 and report.is_closed()]
+		pm_total = datetime.timedelta(seconds=sum(pm_objs))
+		pm_max = datetime.timedelta(seconds=max(pm_objs))
+		pm_min = datetime.timedelta(seconds=min(pm_objs))
+		pm_avg_per_day = pm_total / working_days
 
 		month = {
+			'early': early,
+			'late': late,
 			'count': {
 				'total': total,
 				'opened': opened,
 				'working_days': working_days,
 				'leave_days': leave_days,
 				'sick_days': sick_days,
-				'working_time': working_time,
-			}
+				'working_time': {
+					'total': wt_total,
+					'max': wt_max,
+					'min': wt_min,
+					'avg_per_day': wt_avg_per_day,
+				},
+				'pause': {
+					'total': pm_total,
+					'max': pm_max,
+					'min': pm_min,
+					'avg_per_day': pm_avg_per_day
+				},
+			},
 		}
 		context.update(month=month)
 
