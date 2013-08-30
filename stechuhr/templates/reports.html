@@ -74,7 +74,7 @@
 				<h3 class="table-header"><i class="icon-calendar"></i> Year
 					<small>
 						{% now "Y" %}
-					{% if year.count.opened > 0 %}
+					{% if not year or year.count.opened > 0 %}
 						<span class="text-info">
 							<i class="icon-star-empty"></i>
 						</span>
@@ -86,7 +86,40 @@
 					</small>
 				</h3>
 			{% if year %}
-				<p>Foo</p>
+				<table class="table table-stripped table-hover">
+					<thead>
+						<tr>
+							<th>Reports</th>
+							<th>Working days</th>
+							<th>Leave days</th>
+							<th>Sick days</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ year.count.total }}</td>
+							<td>{{ year.count.working_days }}</td>
+							<td>{{ year.count.leave_days }}</td>
+							<td>{{ year.count.sick_days }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="alert alert-info">
+					<table class="table table-stripped table-no-border">
+						<thead>
+							<tr>
+								<th>Total</th>
+								<th>Avg per day<th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{ year.count.working_time.total|timeelapsed }}</td>
+								<td>{{ year.count.working_time.avg_per_day|timeelapsed }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			{% else %}
 				<div class="alert alert-info">
 					No reports found.

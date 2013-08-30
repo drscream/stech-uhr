@@ -62,26 +62,30 @@
 		</div>
 	</div>
 	<div class="col-lg-7">
-{% if jobs %}
+	{% if jobs %}
 		<div class="row">
 			<div class="col-lg-12">
 				<table class="table table-stripped table-hover">
-					<tr>
-						<th>#</th>
-						<th>Company</th>
-						<th>Joined at</th>
-						<th>Leaved at</th>
-						<th>Details</th>
-					</tr>
-				{% for job in jobs %}
-					<tr>
-						<td>{{ forloop.counter }}</td>
-						<td>{{ job.company }}</td>
-						<td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
-						<td>{{ job.leaved_at|date:"DATE_FORMAT" }}</td>
-						<td><a href="/stechuhr/settings/jobs/{{ job.pk }}/">Show</a></td>
-					</tr>
-				{% endfor %}
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Company</th>
+							<th>Joined at</th>
+							<th>Leaved at</th>
+							<th>Details</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for job in jobs %}
+						<tr>
+							<td>{{ forloop.counter }}</td>
+							<td>{{ job.company }}</td>
+							<td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
+							<td>{{ job.leaved_at|date:"DATE_FORMAT" }}</td>
+							<td><a href="/stechuhr/settings/jobs/{{ job.pk }}/">Show</a></td>
+						</tr>
+					{% endfor %}
+					</tbody>
 				</table>
 				<a href="/stechuhr/settings/jobs/new/" class="btn btn-primary btn-sm">
 					Create new

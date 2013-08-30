@@ -67,24 +67,28 @@
 				</h3>
 			{% if day %}
 				<table class="table table-stripped table-hover">
-					<tr>
-						<th>Weekday</th>
-						<th>Date</th>
-						<th>Kind of workday</th>
-						<th>Start time</th>
-						<th>End time</th>
-						<th>Details</th>
-					</tr>
-					<tr>
-						<td>{{ day.report.date|date:"l" }}</td>
-						<td>{{ day.report.date|date:"DATE_FORMAT" }}</td>
-						<td>{{ day.report.workday }}</td>
-						<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
-						<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
-						<td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">
-							Show</a>
-						</td>
-					</tr>
+					<thead>
+						<tr>
+							<th>Weekday</th>
+							<th>Date</th>
+							<th>Kind of workday</th>
+							<th>Start time</th>
+							<th>End time</th>
+							<th>Details</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ day.report.date|date:"l" }}</td>
+							<td>{{ day.report.date|date:"DATE_FORMAT" }}</td>
+							<td>{{ day.report.workday }}</td>
+							<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
+							<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
+							<td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">
+								Show</a>
+							</td>
+						</tr>
+					</tbody>
 				</table>
 				{% if not day.is_working_day %}
 				<div class="alert alert-info">
@@ -121,20 +125,24 @@
 				</h3>
 			{% if week %}
 				<table class="table table-stripped table-hover">
-					<tr>
-						<th>Reports</th>
-						<th>Working days</th>
-						<th>Leave days</th>
-						<th>Sick days</th>
-						<th>Details</th>
-					</tr>
-					<tr>
-						<td>{{ week.reports.count.total }}</td>
-						<td>{{ week.reports.count.working_days }}</td>
-						<td>{{ week.reports.count.leave_days }}</td>
-						<td>{{ week.reports.count.sick_days }}</td>
-						<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
-					</tr>
+					<thead>
+						<tr>
+							<th>Reports</th>
+							<th>Working days</th>
+							<th>Leave days</th>
+							<th>Sick days</th>
+							<th>Details</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ week.reports.count.total }}</td>
+							<td>{{ week.reports.count.working_days }}</td>
+							<td>{{ week.reports.count.leave_days }}</td>
+							<td>{{ week.reports.count.sick_days }}</td>
+							<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
+						</tr>
+					</tbody>
 				</table>
 				<div class="alert alert-info">
 					{{ week.reports.working_time|timeelapsed:"h" }} worked this week.
