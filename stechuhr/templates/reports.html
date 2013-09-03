@@ -176,8 +176,8 @@
 							<td>{{ month.count.working_days }}</td>
 							<td>{{ month.count.leave_days }}</td>
 							<td>{{ month.count.sick_days }}</td>
-							<td>{{ month.early }}</td>
-							<td>{{ month.late }}</td>
+							<td>{% if month.early %}{{ month.early }}{% endif %}</td>
+							<td>{% if month.late %}{{ month.late }}{% endif %}</td>
 						</tr>
 					</tbody>
 				</table>

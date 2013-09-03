@@ -245,27 +245,47 @@ def reports(request):
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		early = reports.filter(start_time__gt='00:00.00') . \
-				order_by('start_time')[0]. \
-				get_start_time_as_date()
-		late = reports.filter(end_time__gt='00:00.00') . \
-				order_by('-end_time')[0]. \
-				get_end_time_as_date()
+		early = reports.filter(start_time__gt='00:00.00'). \
+				order_by('start_time')
+		if early:
+			early = early[0].get_start_time_as_date()
+		late = reports.filter(end_time__gt='00:00.00'). \
+				order_by('-end_time')
+		if late:
+			late = late[0].get_end_time_as_date()
 
 		wt_objs = [report.get_working_time() for report in reports]
 		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
-		wt_avg_per_day = wt_total / working_days
+		try:
+			wt_avg_per_day = wt_total / working_days
+		except:
+			wt_avg_per_day = datetime.timedelta(seconds=0)
 		wt_objs_secs = [wt_obj.seconds for wt_obj in wt_objs
 				if wt_obj.seconds > 0]
-		wt_max = datetime.timedelta(seconds=max(wt_objs_secs))
-		wt_min = datetime.timedelta(seconds=min(wt_objs_secs))
+		try:
+			wt_max = datetime.timedelta(seconds=max(wt_objs_secs))
+		except:
+			wt_max = datetime.timedelta(seconds=0)
+		try:
+			wt_min = datetime.timedelta(seconds=min(wt_objs_secs))
+		except:
+			wt_min = datetime.timedelta(seconds=0)
 
 		pm_objs = [report.pause_minutes * 60 for report in reports if
 				report.pause_minutes > 0 and report.is_closed()]
 		pm_total = datetime.timedelta(seconds=sum(pm_objs))
-		pm_max = datetime.timedelta(seconds=max(pm_objs))
-		pm_min = datetime.timedelta(seconds=min(pm_objs))
-		pm_avg_per_day = pm_total / working_days
+		try:
+			pm_max = datetime.timedelta(seconds=max(pm_objs))
+		except:
+			pm_max = datetime.timedelta(seconds=0)
+		try:
+			pm_min = datetime.timedelta(seconds=min(pm_objs))
+		except:
+			pm_min = datetime.timedelta(seconds=0)
+		try:
+			pm_avg_per_day = pm_total / working_days
+		except:
+			pm_avg_per_day = datetime.timedelta(seconds=0)
 
 		month = {
 			'early': early,
