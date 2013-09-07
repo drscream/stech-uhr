@@ -195,6 +195,8 @@ def reports(request):
 		pass
 	else:
 		total = reports.count()
+		if total == 0:
+			return render(request, 'reports.html', context)
 		opened = [report.is_closed() for report in reports].count(False)
 		working_days = [report.is_working_day() for report in reports].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
