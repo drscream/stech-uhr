@@ -68,7 +68,8 @@ def dashboard(request):
 	else:
 		total = reports.count()
 		opened = [report.is_closed() for report in reports].count(False)
-		working_days = [report.is_working_day() for report in reports].count(True)
+		working_days = [report.is_working_day() for report in reports if
+				report.is_closed()].count(True)
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
 		working_time = sum([report.get_working_time() for report in reports],
@@ -202,9 +203,10 @@ def reports(request):
 
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		working_days = [report.is_working_day() for report in reports].count(True)
+		working_days = [report.is_working_day() for report in reports if
+				report.is_closed()].count(True)
 
-		if working_days == 0:
+		if working_days == 0 or opened == working_days:
 			data = {
 				'count': {
 					'total': total,
