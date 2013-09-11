@@ -94,12 +94,10 @@
 				<table class="table table-stripped table-hover">
 					<thead>
 						<tr>
-							<th>Days</th>
-							<th>Working</th>
-							<th>Leave</th>
-							<th>Sick</th>
-							<th>Earliest</th>
-							<th>Latest</th>
+							<th>Reports</th>
+							<th>Working days</th>
+							<th>Leave days</th>
+							<th>Sick days</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -108,8 +106,27 @@
 							<td>{{ data.count.working_days }}</td>
 							<td>{{ data.count.leave_days }}</td>
 							<td>{{ data.count.sick_days }}</td>
-							<td>{{ data.early }}</td>
-							<td>{{ data.late }}</td>
+						</tr>
+					</tbody>
+				</table>
+			{% if data.count.working_days > 0 %}
+				<table class="table table-stripped table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Earliest</th>
+							<th>Latest</th>
+							<th>Longest</th>
+							<th>Shortest</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Day</th>
+							<td>{{ data.day.early }}</td>
+							<td>{{ data.day.late }}</td>
+							<td>{{ data.day.long }}</td>
+							<td>{{ data.day.short }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -126,20 +143,21 @@
 					<tbody>
 						<tr>
 							<th>Working time</th>
-							<td>{{ data.count.working_time.total|timeelapsed:"d" }}</td>
-							<td>{{ data.count.working_time.avg_per_day|timeelapsed }}</td>
-							<td>{{ data.count.working_time.max|timeelapsed }}</td>
-							<td>{{ data.count.working_time.min|timeelapsed }}</td>
+							<td>{{ data.working_time.total|timeelapsed:"d" }}</td>
+							<td>{{ data.working_time.avg_per_day|timeelapsed }}</td>
+							<td>{{ data.working_time.max|timeelapsed }}</td>
+							<td>{{ data.working_time.min|timeelapsed }}</td>
 						</tr>
 						<tr>
 							<th>Pause</th>
-							<td>{{ data.count.pause.total|timeelapsed:"d" }}</td>
-							<td>{{ data.count.pause.avg_per_day|timeelapsed }}</td>
-							<td>{{ data.count.pause.max|timeelapsed }}</td>
-							<td>{{ data.count.pause.min|timeelapsed }}</td>
+							<td>{{ data.pause.total|timeelapsed:"d" }}</td>
+							<td>{{ data.pause.avg_per_day|timeelapsed }}</td>
+							<td>{{ data.pause.max|timeelapsed }}</td>
+							<td>{{ data.pause.min|timeelapsed }}</td>
 						</tr>
 					</tbody>
 				</table>
+			{% endif %}
 			{% else %}
 				<div class="alert alert-info">
 					No reports found.

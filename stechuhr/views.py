@@ -197,16 +197,44 @@ def reports(request):
 		total = reports.count()
 		if total == 0:
 			return render(request, 'reports.html', context)
+
 		opened = [report.is_closed() for report in reports].count(False)
-		working_days = [report.is_working_day() for report in reports].count(True)
+
 		leave_days = [report.is_leave_day() for report in reports].count(True)
 		sick_days = [report.is_sick_day() for report in reports].count(True)
-		early = reports.filter(start_time__gt='00:00.00') . \
-				order_by('start_time')[0]. \
-				get_start_time_as_date()
-		late = reports.filter(end_time__gt='00:00.00') . \
-				order_by('-end_time')[0]. \
-				get_end_time_as_date()
+		working_days = [report.is_working_day() for report in reports].count(True)
+
+		if working_days == 0:
+			data = {
+				'count': {
+					'total': total,
+					'opened': opened,
+					'working_days': working_days,
+					'leave_days': leave_days,
+					'sick_days': sick_days,
+				}
+			}
+			context.update(data=data)
+
+			return render(request, 'reports.html', context)
+
+		d_early_days = reports.filter(start_time__gt='00:00.00'). \
+				order_by('start_time')
+		d_early = [day.get_start_time_as_date() for day in d_early_days if
+				day.is_working_day()][0]
+		d_late_days = reports.filter(end_time__gt='00:00.00'). \
+				order_by('-end_time')
+		d_late = [day.get_start_time_as_date() for day in d_late_days if
+				day.is_working_day()][0]
+
+		d_working_dates = [report.date for report in reports if
+				report.is_working_day()]
+		d_working_times = [report.get_working_time() for report in reports if
+				report.is_working_day()]
+		d_short_idx = d_working_times.index(min(d_working_times))
+		d_long_idx = d_working_times.index(max(d_working_times))
+		d_short = d_working_dates[d_short_idx]
+		d_long = d_working_dates[d_long_idx]
 
 		wt_objs = [report.get_working_time() for report in reports]
 		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
@@ -224,26 +252,30 @@ def reports(request):
 		pm_avg_per_day = pm_total / working_days
 
 		data = {
-			'early': early,
-			'late': late,
 			'count': {
 				'total': total,
 				'opened': opened,
 				'working_days': working_days,
 				'leave_days': leave_days,
 				'sick_days': sick_days,
-				'working_time': {
-					'total': wt_total,
-					'max': wt_max,
-					'min': wt_min,
-					'avg_per_day': wt_avg_per_day,
-				},
-				'pause': {
-					'total': pm_total,
-					'max': pm_max,
-					'min': pm_min,
-					'avg_per_day': pm_avg_per_day
-				},
+			},
+			'day': {
+				'early': d_early,
+				'late': d_late,
+				'short': d_short,
+				'long': d_long,
+			},
+			'working_time': {
+				'total': wt_total,
+				'max': wt_max,
+				'min': wt_min,
+				'avg_per_day': wt_avg_per_day,
+			},
+			'pause': {
+				'total': pm_total,
+				'max': pm_max,
+				'min': pm_min,
+				'avg_per_day': pm_avg_per_day
 			},
 		}
 		context.update(data=data)
