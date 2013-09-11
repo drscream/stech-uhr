@@ -75,16 +75,12 @@ def dashboard(request):
 		working_time = sum([report.get_working_time() for report in reports],
 			datetime.timedelta(seconds=0))
 		week = {
-			'reports': {
-				'count': {
-					'total': total,
-					'opened': opened,
-					'working_days': working_days,
-					'leave_days': leave_days,
-					'sick_days': sick_days,
-				},
-				'working_time': working_time,
-			}
+			'total': total,
+			'opened': opened,
+			'working_days': working_days,
+			'leave_days': leave_days,
+			'sick_days': sick_days,
+			'working_time': working_time,
 		}
 		context.update(week=week)
 

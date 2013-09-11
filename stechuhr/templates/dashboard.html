@@ -112,7 +112,7 @@
 				<h3 class="table-header"><i class="icon-calendar"></i> Week
 					<small>
 						{% now "Y/W" %}
-					{% if week.reports.count.opened > 0 %}
+					{% if week.opened > 0  or week.total == 0 %}
 						<span class="text-info">
 							<i class="icon-star-empty"></i>
 						</span>
@@ -123,7 +123,7 @@
 					{% endif %}
 					</small>
 				</h3>
-			{% if week %}
+			{% if week.total > 0 %}
 				<table class="table table-stripped table-hover">
 					<thead>
 						<tr>
@@ -136,16 +136,16 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>{{ week.reports.count.total }}</td>
-							<td>{{ week.reports.count.working_days }}</td>
-							<td>{{ week.reports.count.leave_days }}</td>
-							<td>{{ week.reports.count.sick_days }}</td>
+							<td>{{ week.total }}</td>
+							<td>{{ week.working_days }}</td>
+							<td>{{ week.leave_days }}</td>
+							<td>{{ week.sick_days }}</td>
 							<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="alert alert-info">
-					{{ week.reports.working_time|timeelapsed:"h" }} worked this week.
+					{{ week.working_time|timeelapsed:"h" }} worked this week.
 				</div>
 			{% else %}
 				<div class="alert alert-info">
