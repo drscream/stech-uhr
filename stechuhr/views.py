@@ -202,18 +202,16 @@ def reports(request):
 		working_days = [report.is_working_day() for report in reports if
 				report.is_closed()].count(True)
 
-		if working_days == 0 or opened == working_days:
-			data = {
-				'count': {
-					'total': total,
-					'opened': opened,
-					'working_days': working_days,
-					'leave_days': leave_days,
-					'sick_days': sick_days,
-				}
-			}
-			context.update(data=data)
+		count = {
+			'total': total,
+			'opened': opened,
+			'working_days': working_days,
+			'leave_days': leave_days,
+			'sick_days': sick_days,
+		}
+		context.update(count=count)
 
+		if working_days == 0 or opened == working_days:
 			return render(request, 'reports.html', context)
 
 		d_early_days = reports.filter(start_time__gt='00:00.00'). \
@@ -234,6 +232,14 @@ def reports(request):
 		d_short = d_working_dates[d_short_idx]
 		d_long = d_working_dates[d_long_idx]
 
+		day = {
+			'early': d_early,
+			'late': d_late,
+			'short': d_short,
+			'long': d_long,
+		}
+		context.update(day=day)
+
 		wt_objs = [report.get_working_time() for report in reports]
 		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
 		wt_avg_per_day = wt_total / working_days
@@ -242,41 +248,29 @@ def reports(request):
 		wt_max = datetime.timedelta(seconds=max(wt_objs_secs))
 		wt_min = datetime.timedelta(seconds=min(wt_objs_secs))
 
+		working_time = {
+			'total': wt_total,
+			'max': wt_max,
+			'min': wt_min,
+			'avg_per_day': wt_avg_per_day,
+		}
+		context.update(working_time=working_time)
+
 		pm_objs = [report.pause_minutes * 60 for report in reports if
 				report.pause_minutes > 0 and report.is_closed()]
-		pm_total = datetime.timedelta(seconds=sum(pm_objs))
-		pm_max = datetime.timedelta(seconds=max(pm_objs))
-		pm_min = datetime.timedelta(seconds=min(pm_objs))
-		pm_avg_per_day = pm_total / working_days
+		if len(pm_objs) > 0:
+			pm_total = datetime.timedelta(seconds=sum(pm_objs))
+			pm_max = datetime.timedelta(seconds=max(pm_objs))
+			pm_min = datetime.timedelta(seconds=min(pm_objs))
+			pm_avg_per_day = pm_total / working_days
 
-		data = {
-			'count': {
-				'total': total,
-				'opened': opened,
-				'working_days': working_days,
-				'leave_days': leave_days,
-				'sick_days': sick_days,
-			},
-			'day': {
-				'early': d_early,
-				'late': d_late,
-				'short': d_short,
-				'long': d_long,
-			},
-			'working_time': {
-				'total': wt_total,
-				'max': wt_max,
-				'min': wt_min,
-				'avg_per_day': wt_avg_per_day,
-			},
-			'pause': {
+			pause = {
 				'total': pm_total,
 				'max': pm_max,
 				'min': pm_min,
 				'avg_per_day': pm_avg_per_day
-			},
-		}
-		context.update(data=data)
+			}
+			context.update(pause=pause)
 
 	return render(request, 'reports.html', context)
 
