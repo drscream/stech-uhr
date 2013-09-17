@@ -3,16 +3,16 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/dashboard/" class="navbar-link">
+	<li><a href="{% url 'dashboard' %}" class="navbar-link">
 		<i class="icon-dashboard"></i> Dashboard</a>
 	</li>
-	<li><a href="/stechuhr/reports/" class="navbar-link">
+	<li><a href="{% url 'reports' %}" class="navbar-link">
 		<i class="icon-calendar"></i> Reports</a>
 	</li>
-	<li><a href="/stechuhr/settings/" class="navbar-link">
+	<li><a href="{% url 'settings' %}" class="navbar-link">
 		<i class="icon-gears"></i> Settings</a>
 	</li>
-	<li><a href="/stechuhr/logout/" class="navbar-link">
+	<li><a href="{% url 'logout' %}" class="navbar-link">
 		<i class="icon-off"></i> Log out</a>
 	</li>
 </ul>
@@ -31,17 +31,17 @@
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/dashboard/" class="list-group-item active">
+			<a href="{% url 'dashboard' %}" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/" class="list-group-item">
+			<a href="{% url 'reports' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/" class="list-group-item">
+			<a href="{% url 'settings' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
@@ -84,7 +84,7 @@
 							<td>{{ day.report.workday }}</td>
 							<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
 							<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
-							<td><a href="/stechuhr/reports/day/{{ day.report.date|date:"Y/n/j" }}/">
+							<td><a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}">
 								Show</a>
 							</td>
 						</tr>
@@ -105,7 +105,7 @@
 				{% endif %}
 			{% else %}
 				<div class="alert alert-info">
-					<a href="/stechuhr/reports/day/{% now "Y" %}/{% now "n" %}/{% now "j" %}/">
+					<a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}">
 					<strong>Create</strong></a> today's report.
 				</div>
 			{% endif %}
@@ -140,7 +140,7 @@
 							<td>{{ week.working_days }}</td>
 							<td>{{ week.leave_days }}</td>
 							<td>{{ week.sick_days }}</td>
-							<td><a href="/stechuhr/reports/week/{% now "Y/W" %}">Show</a></td>
+							<td><a href="{% url 'reports_week' date|date:"Y" date|date:"W" %}">Show</a></td>
 						</tr>
 					</tbody>
 				</table>

@@ -15,7 +15,7 @@
 	</div>
 </div>
 <div class="row last-row">
-		<form action="/stechuhr/signin/" method="post" id="form_signin">
+		<form action="{% url 'signin' %}" method="post" id="form_signin">
 			{% csrf_token %}
 			<fieldset>
 				<div class="col-lg-4">
@@ -40,7 +40,7 @@
 				{% if next %}
 					<input type="hidden" name="next" value="{{ next }}" />
 				{% else %}
-					<input type="hidden" name="next" value="/stechuhr/" />
+					<input type="hidden" name="next" value="{% url 'settings' %}" />
 				{% endif %}
 					<button class="btn btn-primary btn-sm" type="submit" value="signin">
 						Sign in

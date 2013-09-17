@@ -32,29 +32,29 @@
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/dashboard/" class="list-group-item">
+			<a href="{% url 'dashboard' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/" class="list-group-item">
+			<a href="{% url 'reports' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/" class="list-group-item">
+			<a href="{% url 'settings' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="/stechuhr/settings/basic/" class="list-group-item">
+			<a href="{% url 'settings_basic' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/jobs/" class="list-group-item active">
+			<a href="{% url 'settings_jobs' %}" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-desktop"></i> Jobs
 				</h5>
@@ -82,7 +82,7 @@
 							<td>{{ job.company }}</td>
 							<td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
 							<td>{{ job.leaved_at|date:"DATE_FORMAT" }}</td>
-							<td><a href="/stechuhr/settings/jobs/{{ job.pk }}/">Show</a></td>
+							<td><a href="{% url 'settings_job_details' job.pk %}">Show</a></td>
 						</tr>
 					{% endfor %}
 					</tbody>
@@ -97,7 +97,7 @@
 			<div class="col-lg-12">
 				<h3 class="table-header">No jobs found</h3>
 				<div class="alert alert-info form-alert">
-					<a href="/stechuhr/settings/jobs/new/" class="alert-link">
+					<a href="{% url 'settings_job_new' %}" class="alert-link">
 						Create
 					</a>
 					a job record.

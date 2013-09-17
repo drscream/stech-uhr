@@ -3,16 +3,16 @@
 
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
-	<li><a href="/stechuhr/dashboard/" class="navbar-link">
+	<li><a href="{% url 'dashboard' %}" class="navbar-link">
 		<i class="icon-dashboard"></i> Dashboard</a>
 	</li>
-	<li><a href="/stechuhr/reports/" class="navbar-link">
+	<li><a href="{% url 'reports' %}" class="navbar-link">
 		<i class="icon-calendar"></i> Reports</a>
 	</li>
-	<li><a href="/stechuhr/settings/" class="navbar-link">
+	<li><a href="{% url 'settings' %}" class="navbar-link">
 		<i class="icon-gears"></i> Settings</a>
 	</li>
-	<li><a href="/stechuhr/logout/" class="navbar-link">
+	<li><a href="{% url 'logout' %}" class="navbar-link">
 		<i class="icon-off"></i> Log out</a>
 	</li>
 </ul>
@@ -25,10 +25,10 @@
 			<h1><i class="icon-calendar"></i> Day
 				<small>
 					{{ date|date:"Y/n/j" }}
-					<a href="/stechuhr/reports/day/{{ date|prevday|date:"Y/n/j" }}/" class="report-header-link">
+					<a href="{% url 'reports_day' date|prevday|date:"Y" date|prevday|date:"n" date|prevday|date:"j" %}" class="report-header-link">
 						<i class="icon-arrow-left"></i>
 					</a>
-					<a href="/stechuhr/reports/day/{{ date|nextday|date:"Y/n/j" }}/" class="report-header-link">
+					<a href="{% url 'reports_day' date|nextday|date:"Y" date|nextday|date:"n" date|nextday|date:"j" %}" class="report-header-link">
 						<i class="icon-arrow-right"></i>
 					</a>
 				</small>
@@ -39,38 +39,36 @@
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/dashboard/" class="list-group-item">
+			<a href="{% url 'dashboard' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/" class="list-group-item">
+			<a href="{% url 'reports' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/" class="list-group-item">
+			<a href="{% url 'settings' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="/stechuhr/reports/day/{% now "Y/n/j" %}/"
-				class="list-group-item active">
+			<a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Day
 					<small>{% now "Y/n/j" %}</small>
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/week/{% now "Y" %}/{% now "W" %}/"
-				class="list-group-item">
+			<a href="{% url 'reports_week' date|date:"Y" date|date:"W" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Week
 					<small>{% now "Y" %}/{% now "W" %}</small>
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/month/{% now "Y/n" %}" class="list-group-item">
+			<a href="{% url 'reports_month' date|date:"Y" date|date:"n" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Month
 					<small>{% now "Y/n" %}</small>
@@ -80,7 +78,7 @@
 	</div>
 	<div class="col-lg-7">
 		{% if report %}
-		<form action="/stechuhr/reports/day/{{ date|date:"Y/n/j" }}/" method="post"
+		<form action="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}" method="post"
 			id="form_reports_modify_day">
 			{% csrf_token %}
 			<fieldset>
@@ -179,7 +177,7 @@
 		</form>
 		{% include "reports/print.html" %}
 	{% else %}
-		<form action="/stechuhr/reports/day/{{ date|date:"Y/n/j" }}/" method="post"
+		<form action="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}" method="post"
 			id="form_reports_new_day">
 			{% csrf_token %}
 			<fieldset>

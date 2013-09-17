@@ -35,8 +35,11 @@ def signin(request):
 @login_required(login_url='/stechuhr/login/')
 def dashboard(request):
 	today = datetime.date.today()
+	date = today
 
-	context = {}
+	context = {
+		'date': date,
+	}
 
 	try:
 		report = Report.objects. \

@@ -5,14 +5,14 @@
 {% block navbar-right %}
 <ul class="nav navbar-nav pull-right">
 {% if user.is_authenticated %}
-	<li><a href="/stechuhr/logout/" class="navbar-link">
+<li><a href="{% url 'logout' %}" class="navbar-link">
 		<i class="icon-off"></i> Log out</a>
 	</li>
 {% else %}
-	<li><a href="/stechuhr/signin/" class="navbar-link">
+<li><a href="{% url 'signin' %}" class="navbar-link">
 		<i class="icon-edit"></i> Sign in</a>
 	</li>
-	<li><a href="/stechuhr/login/" class="navbar-link">
+	<li><a href="{% url 'login' %}" class="navbar-link">
 		<i class="icon-off"></i> Log in</a>
 	</li>
 {% endif %}

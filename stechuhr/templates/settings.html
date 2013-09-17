@@ -32,29 +32,29 @@
 <div class="row last-row">
 	<div class="col-lg-2">
 		<div class="list-group">
-			<a href="/stechuhr/dashboard/" class="list-group-item">
+			<a href="{% url 'dashboard' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-dashboard"></i> Dashboard
 				</h5>
 			</a>
-			<a href="/stechuhr/reports/" class="list-group-item">
+			<a href="{% url 'reports' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Reports
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/" class="list-group-item active">
+			<a href="{% url 'settings' %}" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-gears"></i> Settings
 				</h5>
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="/stechuhr/settings/basic/" class="list-group-item">
+			<a href="{% url 'settings_basic' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-user"></i> Basic
 				</h5>
 			</a>
-			<a href="/stechuhr/settings/jobs/" class="list-group-item">
+			<a href="{% url 'settings_jobs' %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-desktop"></i> Jobs
 				</h5>
@@ -83,9 +83,6 @@
 					<tr>
 						<th>Joined at</th><td>{{ job.joined_at|date:"DATE_FORMAT" }}</td>
 					</tr>
-					{% comment %}
-					<tr><th>Leaved at</th><td>{{ job.leaved_at|default:"" }}</td></tr>
-					{% endcomment %}
 				</table>
 			</div>
 			<div class="col-lg-6">
@@ -108,7 +105,7 @@
 			<div class="col-lg-6">
 				<h3 class="table-header"><i class="icon-desktop"></i> Job</h3>
 				<div class="alert alert-info form-alert">
-					<a href="/stechuhr/settings/jobs/new/" class="alert-link">Create</a>
+					<a href="{% url 'settings_job_new' %}" class="alert-link">Create</a>
 					a job record.
 				</div>
 			</div>

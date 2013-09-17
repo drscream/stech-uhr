@@ -16,7 +16,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-4">
-		<form action="{{ app_path }}" method="post" id="login-form">
+		<form action="{% url 'login' %}" method="post" id="login-form">
 			{% csrf_token %}
 			<fieldset>
 				<div class="form-group">
@@ -33,7 +33,7 @@
 			{% if next %}
 				<input type="hidden" name="next" value="{{ next }}" />
 			{% else %}
-				<input type="hidden" name="next" value="/stechuhr/" />
+				<input type="hidden" name="next" value="{% url 'index' %}" />
 			{% endif %}
 				<button class="btn btn-primary btn-sm" type="submit" value="Log in">
 					Log in
