@@ -49,19 +49,19 @@
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}" class="list-group-item">
+			<a href="{% url 'reports_day' today|date:"Y" today|date:"n" today|date:"j" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Day
 					<small>{% now "Y/n/j" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_week' date|date:"Y" date|date:"W" %}" class="list-group-item">
+			<a href="{% url 'reports_week' today|date:"Y" today|date:"W" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Week
 					<small>{% now "Y" %}/{% now "W" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_month' date|date:"Y" date|date:"n" %}" class="list-group-item">
+			<a href="{% url 'reports_month' today|date:"Y" today|date:"n" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Month
 					<small>{% now "Y/n" %}</small>
@@ -74,11 +74,11 @@
 			<div class="col-lg-12">
 				<h3 class="table-header"><i class="icon-calendar"></i>
 					{% if period == "year" %}
-						Year <small> {{ date|date:"Y" }}
+						Year <small> {{ today|date:"Y" }}
 					{% elif period == "month" %}
-						Month <small> {{ date|date:"Y/m" }}
+						Month <small> {{ today|date:"Y/m" }}
 					{% elif period == "week" %}
-						Week <small> {{ date|isocalendar:"ISOYEARWEEK" }}
+						Week <small> {{ today|isocalendar:"ISOYEARWEEK" }}
 					{% endif %}
 					{% if not data or data.count.opened > 0 %}
 						<span class="text-info">
@@ -180,15 +180,15 @@
 							name="period">
 							<option value="year"
 								{% if period == "year" %}selected{% endif %}>
-								Year {{ date|date:"Y" }}
-							</option>
-							<option value="month"
-								{% if period == "month" %}selected{% endif %}>
-								Month {{ date|date:"Y/m" }}
+								Year {{ today|date:"Y" }}
 							</option>
 							<option value="week"
 								{% if period == "week" %}selected{% endif %}>
-								Week {{ date|isocalendar:"ISOYEARWEEK" }}
+								Week {{ today|isocalendar:"ISOYEARWEEK" }}
+							</option>
+							<option value="month"
+								{% if period == "month" %}selected{% endif %}>
+								Month {{ today|date:"Y/m" }}
 							</option>
 						</select>
 					</div>

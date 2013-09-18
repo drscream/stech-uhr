@@ -54,7 +54,7 @@
 				<h3 class="table-header"><i class="icon-calendar"></i> Today
 					<small>
 						{% now "Y/n/j" %}
-					{% if day.closed %}
+					{% if day.report.is_closed %}
 						<span class="text-info">
 							<i class="icon-star"></i>
 						</span>
@@ -84,23 +84,23 @@
 							<td>{{ day.report.workday }}</td>
 							<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
 							<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
-							<td><a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}">
+							<td><a href="{% url 'reports_day' today|date:"Y" today|date:"n" today|date:"j" %}">
 								Show</a>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				{% if not day.is_working_day %}
+				{% if not day.report.is_working_day %}
 				<div class="alert alert-info">
 					No working day.
 				</div>
-				{% elif day.end_date %}
+				{% elif day.report.end_time %}
 				<div class="alert alert-info">
-					{{ day.end_date|timeuntil  }} to go till end of work.
+					{{ day.report.get_end_time_as_date|timeuntil  }} to go till end of work.
 				</div>
-				{% elif day.start_date %}
+				{% elif day.report.start_time %}
 				<div class="alert alert-info">
-					{{ day.start_date|timesince  }} past since start of work.
+					{{ day.report.get_start_time_as_date|timesince  }} past since start of work.
 				</div>
 				{% endif %}
 			{% else %}
@@ -140,7 +140,7 @@
 							<td>{{ week.working_days }}</td>
 							<td>{{ week.leave_days }}</td>
 							<td>{{ week.sick_days }}</td>
-							<td><a href="{% url 'reports_week' date|date:"Y" date|date:"W" %}">Show</a></td>
+							<td><a href="{% url 'reports_week' today|date:"Y" today|date:"W" %}">Show</a></td>
 						</tr>
 					</tbody>
 				</table>

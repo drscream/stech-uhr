@@ -35,10 +35,9 @@ def signin(request):
 @login_required(login_url='/stechuhr/login/')
 def dashboard(request):
 	today = datetime.date.today()
-	date = today
 
 	context = {
-		'date': date,
+		'today': today,
 	}
 
 	try:
@@ -51,10 +50,6 @@ def dashboard(request):
 	else:
 		day = {
 			'report': report,
-			'closed': report.is_closed(),
-			'is_working_day': report.is_working_day(),
-			'start_date': report.get_start_time_as_date(),
-			'end_date': report.get_end_time_as_date(),
 		}
 		context.update(day=day)
 
@@ -170,7 +165,7 @@ def settings_job_new(request):
 def reports(request):
 	today = datetime.date.today()
 	context = {
-		'date': today,
+		'today': today,
 	}
 
 	period = 'year'
@@ -292,6 +287,7 @@ def reports_day(request, year, month, day):
 	else:
 		form = ReportForm()
 
+	today = datetime.date.today()
 	try:
 		date = datetime.date(int(year), int(month), int(day))
 	except ValueError:
@@ -315,6 +311,7 @@ def reports_day(request, year, month, day):
 		job = None
 
 	context = {
+		'today': today,
 		'date': date,
 		'report': report,
 		'job': job,
@@ -330,6 +327,7 @@ def reports_week(request, year, week):
 		date = datetime.datetime.strptime(js_date, "%Y-%m-%d")
 		year, week, dow = date.isocalendar()
 
+	today = datetime.date.today()
 	try:
 		date = first_day_isoweek(int(year), int(week))
 	except:
@@ -347,6 +345,7 @@ def reports_week(request, year, week):
 		reports = None
 
 	context = {
+		'today': today,
 		'date': date,
 		'reports': reports,
 	}
@@ -355,6 +354,7 @@ def reports_week(request, year, week):
 
 @login_required(login_url='/stechuhr/login/')
 def reports_month(request, year, month):
+	today = datetime.date.today()
 	try:
 		date = datetime.date(int(year), int(month), 1)
 	except:
@@ -381,6 +381,7 @@ def reports_month(request, year, month):
 		reports = None
 
 	context = {
+		'today': today,
 		'date': date,
 		'reports': reports,
 	}

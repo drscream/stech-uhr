@@ -56,19 +56,19 @@
 			</a>
 		</div>
 		<div class="list-group">
-			<a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}" class="list-group-item">
+			<a href="{% url 'reports_day' today|date:"Y" today|date:"n" today|date:"j" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Day
 					<small>{% now "Y/n/j" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_week' date|date:"Y" date|date:"W" %}" class="list-group-item active">
+			<a href="{% url 'reports_week' today|date:"Y" today|date:"W" %}" class="list-group-item active">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Week
 					<small>{% now "Y" %}/{% now "W" %}</small>
 				</h5>
 			</a>
-			<a href="{% url 'reports_month' date|date:"Y" date|date:"n" %}" class="list-group-item">
+			<a href="{% url 'reports_month' today|date:"Y" today|date:"n" %}" class="list-group-item">
 				<h5 class="list-group-item-heading">
 					<i class="icon-fixed-width icon-calendar"></i> Month
 					<small>{% now "Y/n" %}</small>
@@ -88,6 +88,7 @@
 							<th>Kind of workday</th>
 							<th>Start time</th>
 							<th>End time</th>
+							<th>Hours worked</th>
 							<th>Details</th>
 						</tr>
 					</thead>
@@ -99,6 +100,7 @@
 							<td>{{ report.workday }}</td>
 							<td>{{ report.start_time|time:"TIME_FORMAT" }}</td>
 							<td>{{ report.end_time|time:"TIME_FORMAT" }}</td>
+							<td>{{ report.get_working_time|timeelapsed:"h" }}</td>
 							<td><a href="{% url 'reports_day' report.date|date:"Y" report.date|date:"n" report.date|date:"j" %}">
 								Show</a></td>
 						</tr>
