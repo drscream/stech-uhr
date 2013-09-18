@@ -105,7 +105,7 @@
 				{% endif %}
 			{% else %}
 				<div class="alert alert-info">
-					<a href="{% url 'reports_day' date|date:"Y" date|date:"n" date|date:"j" %}">
+					<a href="{% url 'reports_day' today|date:"Y" today|date:"n" today|date:"j" %}">
 					<strong>Create</strong></a> today's report.
 				</div>
 			{% endif %}
