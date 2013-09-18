@@ -182,13 +182,13 @@
 								{% if period == "year" %}selected{% endif %}>
 								Year {{ today|date:"Y" }}
 							</option>
-							<option value="week"
-								{% if period == "week" %}selected{% endif %}>
-								Week {{ today|isocalendar:"ISOYEARWEEK" }}
-							</option>
 							<option value="month"
 								{% if period == "month" %}selected{% endif %}>
 								Month {{ today|date:"Y/m" }}
+							</option>
+							<option value="week"
+								{% if period == "week" %}selected{% endif %}>
+								Week {{ today|isocalendar:"ISOYEARWEEK" }}
 							</option>
 						</select>
 					</div>
