@@ -80,7 +80,7 @@
 					{% elif period == "week" %}
 						Week <small> {{ today|isocalendar:"ISOYEARWEEK" }}
 					{% endif %}
-					{% if not data or data.count.opened > 0 %}
+					{% if not count or count.opened > 0 %}
 						<span class="text-info">
 							<i class="icon-star-empty"></i>
 						</span>
