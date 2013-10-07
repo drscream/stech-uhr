@@ -226,7 +226,7 @@ def reports(request):
 					}
 			]),
 			'options': simplejson.dumps({
-				'animation': 0,
+				'animation': 1,
 			}),
 		}
 		count.update(chart=chart)
@@ -287,7 +287,7 @@ def reports(request):
 				]
 			}),
 			'options': simplejson.dumps({
-				'animation': 0,
+				'animation': 1,
 				'scaleShowLabels': 0,
 				'scaleShowGridLines': 0,
 			}),
@@ -352,7 +352,7 @@ def reports(request):
 				]
 			}),
 			'options': simplejson.dumps({
-				'animation': 0,
+				'animation': 1,
 				'scaleShowLabels': 0,
 				'scaleShowGridLines': 0,
 			}),
