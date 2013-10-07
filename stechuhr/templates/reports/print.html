@@ -10,7 +10,9 @@
 						<small>
 							{{ report.date|date:"l" }}, {{ report.date|date:"DATE_FORMAT" }},
 							{{ report.start_time|time:"TIME_FORMAT" }} to
-							{{ report.end_time|time:"TIME_FORMAT" }} @{{ report.workplace }}.
+							{{ report.end_time|time:"TIME_FORMAT" }} for
+							{{ report.get_working_time|timeelapsed }}
+							@{{ report.workplace }}.
 						</small>
 					</h4>
 					{{ report.log|markdown2html|safe|escape }}
