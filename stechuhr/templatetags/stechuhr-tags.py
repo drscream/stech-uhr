@@ -11,6 +11,16 @@ from stechuhr.utils import first_day_isoweek, last_day_isoweek
 
 register = template.Library()
 
+@register.filter(name='chart')
+def chart(chart, classid='chart'):
+	js = 'var data = %s;' % (chart['data'])
+	js += 'var options = %s;' % (chart['options'])
+	js += 'var canvas = document.getElementById("%s");' % (classid)
+	js += 'var ctx = canvas.getContext("2d");'
+	js += 'new Chart(ctx).%s(data,options);' % (chart['type'])
+
+	return js
+
 @register.filter(name='append')
 @stringfilter
 def append(value, arg):

@@ -209,39 +209,42 @@ def reports(request):
 			'sick_days': sick_days,
 		}
 
-		chart = [
-			{
-				'value': working_days,
-				'color': '#B0E67E',
-			},
-			{
-				'value': leave_days,
-				'color': '#7EB0E6',
-			},
-			{
-				'value': sick_days,
-				'color': '#E67EB0',
-			}
-		]
-		count.update(chart=simplejson.dumps(chart))
+		chart = {
+			'type': 'Pie',
+			'data': simplejson.dumps([
+					{
+						'value': working_days,
+						'color': '#4247CA',
+					},
+					{
+						'value': leave_days,
+						'color': '#8142CA',
+					},
+					{
+						'value': sick_days,
+						'color': '#42CA81',
+					}
+			]),
+			'options': simplejson.dumps({
+				'animation': 0,
+			}),
+		}
+		count.update(chart=chart)
+
 		context.update(count=count)
 
 		if working_days == 0 or opened == working_days:
 			return render(request, 'reports.html', context)
 
-		d_early_days = reports.filter(start_time__gt='00:00.00'). \
-				order_by('start_time')
-		d_early = [day.get_start_time_as_date() for day in d_early_days if
-				day.is_working_day()][0]
-		d_late_days = reports.filter(end_time__gt='00:00.00'). \
-				order_by('-end_time')
-		d_late = [day.get_start_time_as_date() for day in d_late_days if
-				day.is_working_day()][0]
+		reports = reports.filter(workday__exact='Daily routine')
 
-		d_working_dates = [report.date for report in reports if
-				report.is_working_day()]
-		d_working_times = [report.get_working_time() for report in reports if
-				report.is_working_day()]
+		d_early = reports.filter(start_time__gt='00:00.00'). \
+				order_by('start_time')[0].get_start_time_as_date()
+		d_late = reports.filter(end_time__gt='00:00.00'). \
+				order_by('-end_time')[0].get_end_time_as_date()
+
+		d_working_dates = [report.date for report in reports]
+		d_working_times = [report.get_working_time() for report in reports]
 		d_short_idx = d_working_times.index(min(d_working_times))
 		d_long_idx = d_working_times.index(max(d_working_times))
 		d_short = d_working_dates[d_short_idx]
@@ -254,6 +257,35 @@ def reports(request):
 			'long': d_long,
 		}
 		context.update(day=day)
+
+		chart = {
+			'type': 'Line',
+			'data': simplejson.dumps({
+				'labels': [report.date.strftime("%m/%d") for report in reports],
+				'datasets': [
+					{
+						'fillColor': "rgba(66,71,202,0.5)",
+						'strokeColor': "rgba(66,71,202,1)",
+						'pointColor': "rgba(66,71,202,1)",
+						'pointStrokeColor': "#fff",
+						'data': [report.end_time.strftime("%H%M") for report in reports][-8:],
+					},
+					{
+						'fillColor': "rgba(129,66,202,0.5)",
+						'strokeColor': "rgba(129,66,202,1)",
+						'pointColor': "rgba(129,66,202,1)",
+						'pointStrokeColor': "#fff",
+						'data': [report.start_time.strftime("%H%M") for report in reports][-8:],
+					},
+				]
+			}),
+			'options': simplejson.dumps({
+				'animation': 0,
+				'scaleShowLabels': 0,
+				'scaleShowGridLines': 0,
+			}),
+		}
+		day.update(chart=chart)
 
 		wt_objs = [report.get_working_time() for report in reports]
 		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
@@ -286,6 +318,37 @@ def reports(request):
 				'avg_per_day': pm_avg_per_day
 			}
 			context.update(pause=pause)
+
+		chart = {
+			'type': 'Line',
+			'data': simplejson.dumps({
+				'labels': [report.date.strftime("%m/%d") for report in reports],
+				'datasets': [
+					{
+						'fillColor': "rgba(66,71,202,0.5)",
+						'strokeColor': "rgba(66,71,202,1)",
+						'pointColor': "rgba(66,71,202,1)",
+						'pointStrokeColor': "#fff",
+						'data': [(report.get_working_time().seconds / 60) for
+							report in reports][-8:],
+					},
+					{
+						'fillColor': "rgba(129,66,202,0.5)",
+						'strokeColor': "rgba(129,66,202,1)",
+						'pointColor': "rgba(129,66,202,1)",
+						'pointStrokeColor': "#fff",
+						'data': [report.pause_minutes for report in
+							reports][-8:],
+					},
+				]
+			}),
+			'options': simplejson.dumps({
+				'animation': 0,
+				'scaleShowLabels': 0,
+				'scaleShowGridLines': 0,
+			}),
+		}
+		working_time.update(chart=chart)
 
 	return render(request, 'reports.html', context)
 

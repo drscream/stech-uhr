@@ -95,9 +95,9 @@
 					<thead>
 						<tr>
 							<th>Reports</th>
-							<th><i style="color: #B0E67E;" class="icon-tint"></i> Working days</th>
-							<th><i style="color: #7EB0E6;" class="icon-tint"></i> Leave days</th>
-							<th><i style="color: #E67EB0;" class="icon-tint"></i> Sick days</th>
+							<th>Working days</th>
+							<th>Leave days</th>
+							<th>Sick days</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -109,28 +109,19 @@
 						</tr>
 					</tbody>
 				</table>
-				<canvas id="count-chart" width="600" height="250"></canvas>
+				<div>
+					<canvas id="count-chart" width="650" height="250"></canvas>
+					<p>Relation of working days, leave days and sick days</p>
+					<ul class="list-unstyled">
+						<li><i style="color: #4247CA;" class="icon-tint"></i>
+						Working days</li>
+						<li><i style="color: #8142CA;" class="icon-tint"></i>
+						Leave days</li>
+						<li><i style="color: #42CA81;" class="icon-tint"></i>
+						Sick days</li>
+					</ul>
+				</div>
 			{% if count.working_days > 0 %}
-				<table class="table table-stripped table-hover">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Earliest</th>
-							<th>Latest</th>
-							<th>Longest</th>
-							<th>Shortest</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th>Day</th>
-							<td>{{ day.early }}</td>
-							<td>{{ day.late }}</td>
-							<td>{{ day.long }}</td>
-							<td>{{ day.short }}</td>
-						</tr>
-					</tbody>
-				</table>
 				<table class="table table-stripped table-hover">
 					<thead>
 						<tr>
@@ -160,6 +151,47 @@
 					{% endif %}
 					</tbody>
 				</table>
+				<div>
+					<canvas id="wt-chart" width="650" height="250"></canvas>
+					<p>Working time and pause trend of last eight working days</p>
+					<ul class="list-unstyled">
+						<li><i style="color: #4247CA;" class="icon-tint"></i>
+						Working time</li>
+						<li><i style="color: #8142CA;" class="icon-tint"></i>
+						Pause</li>
+					</ul>
+				</div>
+				<table class="table table-stripped table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Earliest</th>
+							<th>Latest</th>
+							<th>Longest</th>
+							<th>Shortest</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Day</th>
+							<td>{{ day.early }}</td>
+							<td>{{ day.late }}</td>
+							<td>{{ day.long }}</td>
+							<td>{{ day.short }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<canvas id="day-chart" width="650" height="250"></canvas>
+					<p>Start time and end time trend of last eight working
+					days</p>
+					<ul class="list-unstyled">
+						<li><i style="color: #8142CA;" class="icon-tint"></i>
+						Start time</li>
+						<li><i style="color: #4247CA;" class="icon-tint"></i>
+						End time</li>
+					</ul>
+				</div>
 			{% endif %}
 			{% else %}
 				<div class="alert alert-info">
@@ -203,10 +235,13 @@
 
 {% block script %}
 <script>
-	var data = {{ count.chart|safe }}
-	var canvas = document.getElementById("count-chart");
-	var ctx = canvas.getContext("2d");
-	new Chart(ctx).Pie(data);
+	{{ count.chart|chart:"count-chart"|safe }}
+</script>
+<script>
+	{{ working_time.chart|chart:"wt-chart"|safe }}
+</script>
+<script>
+	{{ day.chart|chart:"day-chart"|safe }}
 </script>
 {% endblock %}
 
