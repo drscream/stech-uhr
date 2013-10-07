@@ -236,15 +236,19 @@ def reports(request):
 		if working_days == 0 or opened == working_days:
 			return render(request, 'reports.html', context)
 
-		reports = reports.filter(workday__exact='Daily routine')
-
-		d_early = reports.filter(start_time__gt='00:00.00'). \
-				order_by('start_time')[0].get_start_time_as_date()
-		d_late = reports.filter(end_time__gt='00:00.00'). \
+		d_early_reports = reports.filter(start_time__gt='00:00.00'). \
+				order_by('start_time')
+		d_early = [report for report in reports if
+				report.is_working_day()][0].get_start_time_as_date()
+		d_late_reports = reports.filter(end_time__gt='00:00.00'). \
 				order_by('-end_time')[0].get_end_time_as_date()
+		d_late = [report for report in reports if
+				report.is_working_day()][0].get_end_time_as_date()
 
-		d_working_dates = [report.date for report in reports]
-		d_working_times = [report.get_working_time() for report in reports]
+		d_working_dates = [report.date for report in reports if
+				report.is_working_day()]
+		d_working_times = [report.get_working_time() for report in reports if
+				report.is_working_day()]
 		d_short_idx = d_working_times.index(min(d_working_times))
 		d_long_idx = d_working_times.index(max(d_working_times))
 		d_short = d_working_dates[d_short_idx]
@@ -261,21 +265,24 @@ def reports(request):
 		chart = {
 			'type': 'Line',
 			'data': simplejson.dumps({
-				'labels': [report.date.strftime("%m/%d") for report in reports],
+				'labels': [report.date.strftime("%m/%d") for report in reports
+					if report.is_working_day()],
 				'datasets': [
 					{
 						'fillColor': "rgba(66,71,202,0.5)",
 						'strokeColor': "rgba(66,71,202,1)",
 						'pointColor': "rgba(66,71,202,1)",
 						'pointStrokeColor': "#fff",
-						'data': [report.end_time.strftime("%H%M") for report in reports][-8:],
+						'data': [report.end_time.strftime("%H%M") for report
+							in reports if report.is_working_day()][-10:],
 					},
 					{
 						'fillColor': "rgba(129,66,202,0.5)",
 						'strokeColor': "rgba(129,66,202,1)",
 						'pointColor': "rgba(129,66,202,1)",
 						'pointStrokeColor': "#fff",
-						'data': [report.start_time.strftime("%H%M") for report in reports][-8:],
+						'data': [report.start_time.strftime("%H%M") for report
+							in reports if report.is_working_day()][-10:],
 					},
 				]
 			}),
@@ -287,7 +294,8 @@ def reports(request):
 		}
 		day.update(chart=chart)
 
-		wt_objs = [report.get_working_time() for report in reports]
+		wt_objs = [report.get_working_time() for report in reports if
+				report.is_working_day()]
 		wt_total = sum(wt_objs, datetime.timedelta(seconds=0))
 		wt_avg_per_day = wt_total / working_days
 		wt_objs_secs = [wt_obj.seconds for wt_obj in wt_objs
@@ -322,7 +330,8 @@ def reports(request):
 		chart = {
 			'type': 'Line',
 			'data': simplejson.dumps({
-				'labels': [report.date.strftime("%m/%d") for report in reports],
+				'labels': [report.date.strftime("%m/%d") for report in reports
+					if report.is_working_day()],
 				'datasets': [
 					{
 						'fillColor': "rgba(66,71,202,0.5)",
@@ -330,7 +339,7 @@ def reports(request):
 						'pointColor': "rgba(66,71,202,1)",
 						'pointStrokeColor': "#fff",
 						'data': [(report.get_working_time().seconds / 60) for
-							report in reports][-8:],
+							report in reports if report.is_working_day()][-10:],
 					},
 					{
 						'fillColor': "rgba(129,66,202,0.5)",
@@ -338,7 +347,7 @@ def reports(request):
 						'pointColor': "rgba(129,66,202,1)",
 						'pointStrokeColor': "#fff",
 						'data': [report.pause_minutes for report in
-							reports][-8:],
+							reports if report.is_working_day()][-10:],
 					},
 				]
 			}),
