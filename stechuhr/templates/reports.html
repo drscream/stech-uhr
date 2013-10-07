@@ -16,7 +16,6 @@
 		<i class="icon-off"></i> Log out</a>
 	</li>
 </ul>
-
 {% endblock %}
 
 {% block content %}
@@ -96,9 +95,9 @@
 					<thead>
 						<tr>
 							<th>Reports</th>
-							<th>Working days</th>
-							<th>Leave days</th>
-							<th>Sick days</th>
+							<th><i style="color: #B0E67E;" class="icon-tint"></i> Working days</th>
+							<th><i style="color: #7EB0E6;" class="icon-tint"></i> Leave days</th>
+							<th><i style="color: #E67EB0;" class="icon-tint"></i> Sick days</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -110,6 +109,7 @@
 						</tr>
 					</tbody>
 				</table>
+				<canvas id="count-chart" width="600" height="250"></canvas>
 			{% if count.working_days > 0 %}
 				<table class="table table-stripped table-hover">
 					<thead>
@@ -200,5 +200,15 @@
 	</div>
 </div>
 {% endblock %}
+
+{% block script %}
+<script>
+	var data = {{ count.chart|safe }}
+	var canvas = document.getElementById("count-chart");
+	var ctx = canvas.getContext("2d");
+	new Chart(ctx).Pie(data);
+</script>
+{% endblock %}
+
 
 <!-- vim: set ft=htmldjango ts=4 sw=4 : -->

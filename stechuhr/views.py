@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import simplejson
 
 from stechuhr.models import Job, Report
 from stechuhr.forms import UserForm, JobForm, SigninForm, ReportForm
@@ -207,6 +208,22 @@ def reports(request):
 			'leave_days': leave_days,
 			'sick_days': sick_days,
 		}
+
+		chart = [
+			{
+				'value': working_days,
+				'color': '#B0E67E',
+			},
+			{
+				'value': leave_days,
+				'color': '#7EB0E6',
+			},
+			{
+				'value': sick_days,
+				'color': '#E67EB0',
+			}
+		]
+		count.update(chart=simplejson.dumps(chart))
 		context.update(count=count)
 
 		if working_days == 0 or opened == working_days:
