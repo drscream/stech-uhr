@@ -96,11 +96,16 @@
 				</div>
 				{% elif day.report.end_time %}
 				<div class="alert alert-info">
-					{{ day.report.get_end_time_as_date|timeuntil  }} to go till end of work.
+					{% if day.report.is_closed %}
+						End of work reached since {{ day.report.get_end_time_as_date|timesince }}.
+						You worked for {{ day.report.get_working_time|timeelapsed }}.
+					{% else %}
+						{{ day.report.get_end_time_as_date|timeuntil }} to go till end of work.
+					{% endif %}
 				</div>
 				{% elif day.report.start_time %}
 				<div class="alert alert-info">
-					{{ day.report.get_start_time_as_date|timesince  }} past since start of work.
+					{{ day.report.get_start_time_as_date|timesince }} past since start of work.
 				</div>
 				{% endif %}
 			{% else %}
