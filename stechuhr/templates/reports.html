@@ -109,18 +109,19 @@
 						</tr>
 					</tbody>
 				</table>
+				{% if count.working_days > 0 %}
 				<div>
+					<p class="text-center">
+						<small>
+							Relation of
+							working days <i style="color: #4247CA;" class="icon-tint"></i>,
+							leave days <i style="color: #8142CA;" class="icon-tint"></i>,
+							sick days <i style="color: #42CA81;" class="icon-tint"></i>.
+						</small>
+					</p>
 					<canvas id="count-chart" width="650" height="250"></canvas>
-					<p>Relation of working days, leave days and sick days</p>
-					<ul class="list-unstyled">
-						<li><i style="color: #4247CA;" class="icon-tint"></i>
-						Working days</li>
-						<li><i style="color: #8142CA;" class="icon-tint"></i>
-						Leave days</li>
-						<li><i style="color: #42CA81;" class="icon-tint"></i>
-						Sick days</li>
-					</ul>
 				</div>
+				{% endif %}
 			{% if count.working_days > 0 %}
 				<table class="table table-stripped table-hover">
 					<thead>
@@ -151,16 +152,20 @@
 					{% endif %}
 					</tbody>
 				</table>
+				{% if count.working_days > 1 %}
 				<div>
+					<p class="text-center">
+						<small>
+							Trend of
+							working time <i style="color: #4247CA;" class="icon-tint"></i>
+							and
+							pause minutes <i style="color: #8142CA;" class="icon-tint"></i>
+							of current working days.
+						</small>
+					</p>
 					<canvas id="wt-chart" width="650" height="250"></canvas>
-					<p>Working time and pause trend of last eight working days</p>
-					<ul class="list-unstyled">
-						<li><i style="color: #4247CA;" class="icon-tint"></i>
-						Working time</li>
-						<li><i style="color: #8142CA;" class="icon-tint"></i>
-						Pause</li>
-					</ul>
 				</div>
+				{% endif %}
 				<table class="table table-stripped table-hover">
 					<thead>
 						<tr>
@@ -181,17 +186,20 @@
 						</tr>
 					</tbody>
 				</table>
+				{% if count.working_days > 1 %}
 				<div>
+					<p class="text-center">
+						<small>
+							Trend of
+							start time <i style="color: #8142CA;" class="icon-tint"></i>
+							and
+							end time <i style="color: #4247CA;" class="icon-tint"></i>
+							of current working days.
+						</small>
+					</p>
 					<canvas id="day-chart" width="650" height="250"></canvas>
-					<p>Start time and end time trend of last eight working
-					days</p>
-					<ul class="list-unstyled">
-						<li><i style="color: #8142CA;" class="icon-tint"></i>
-						Start time</li>
-						<li><i style="color: #4247CA;" class="icon-tint"></i>
-						End time</li>
-					</ul>
 				</div>
+				{% endif %}
 			{% endif %}
 			{% else %}
 				<div class="alert alert-info">
@@ -234,15 +242,19 @@
 {% endblock %}
 
 {% block script %}
+{% if count.working_days > 0 %}
 <script>
 	{{ count.chart|chart:"count-chart"|safe }}
 </script>
+{% endif %}
+{% if count.working_days > 1 %}
 <script>
 	{{ working_time.chart|chart:"wt-chart"|safe }}
 </script>
 <script>
 	{{ day.chart|chart:"day-chart"|safe }}
 </script>
+{% endif %}
 {% endblock %}
 
 
