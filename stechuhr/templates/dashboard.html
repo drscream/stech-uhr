@@ -74,6 +74,7 @@
 							<th>Kind of workday</th>
 							<th>Start time</th>
 							<th>End time</th>
+							<th>Hours worked</th>
 							<th>Details</th>
 						</tr>
 					</thead>
@@ -84,6 +85,13 @@
 							<td>{{ day.report.workday }}</td>
 							<td>{{ day.report.start_time|time:"TIME_FORMAT" }}</td>
 							<td>{{ day.report.end_time|time:"TIME_FORMAT" }}</td>
+							<td>
+							{% if day.report.is_closed %}
+								{{ day.report.get_working_time|timeelapsed }}
+							{% elif day.report.start_time %}
+								{{ day.report.get_start_time_as_date|timesince }}
+							{% endif %}
+							</td>
 							<td><a href="{% url 'reports_day' today|date:"Y" today|date:"n" today|date:"j" %}">
 								Show</a>
 							</td>
@@ -96,11 +104,9 @@
 				</div>
 				{% elif day.report.end_time %}
 				<div class="alert alert-info">
-					{% if day.report.is_closed %}
+					{% if day.report.get_end_time_as_date|timeuntil == '0 minutes' %}
 						{{ day.report.get_end_time_as_date|timesince }} past
-						since end of work..
-						{{ day.report.get_working_time|timeelapsed }} worked
-						today.
+						since end of work.
 					{% else %}
 						{{ day.report.get_end_time_as_date|timeuntil }} to go till end of work.
 					{% endif %}
