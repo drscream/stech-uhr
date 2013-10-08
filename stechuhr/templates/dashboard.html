@@ -97,8 +97,10 @@
 				{% elif day.report.end_time %}
 				<div class="alert alert-info">
 					{% if day.report.is_closed %}
-						End of work reached since {{ day.report.get_end_time_as_date|timesince }}.
-						You worked for {{ day.report.get_working_time|timeelapsed }}.
+						{{ day.report.get_end_time_as_date|timesince }} past
+						since end of work..
+						{{ day.report.get_working_time|timeelapsed }} worked
+						today.
 					{% else %}
 						{{ day.report.get_end_time_as_date|timeuntil }} to go till end of work.
 					{% endif %}
