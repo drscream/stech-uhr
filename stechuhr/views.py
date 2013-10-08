@@ -208,21 +208,22 @@ def reports(request):
 			'leave_days': leave_days,
 			'sick_days': sick_days,
 		}
+		context.update(count=count)
 
 		chart = {
 			'type': 'Pie',
 			'data': simplejson.dumps([
 					{
 						'value': working_days,
-						'color': '#4247CA',
+						'color': 'rgba(66,71,202,1)',
 					},
 					{
 						'value': leave_days,
-						'color': '#8142CA',
+						'color': 'rgba(129,66,202,1)',
 					},
 					{
 						'value': sick_days,
-						'color': '#42CA81',
+						'color': 'rgba(66,202,129,1)',
 					}
 			]),
 			'options': simplejson.dumps({
@@ -230,8 +231,6 @@ def reports(request):
 			}),
 		}
 		count.update(chart=chart)
-
-		context.update(count=count)
 
 		if working_days == 0 or opened == working_days:
 			return render(request, 'reports.html', context)
@@ -289,7 +288,7 @@ def reports(request):
 			'options': simplejson.dumps({
 				'animation': 1,
 				'scaleShowLabels': 0,
-				'scaleShowGridLines': 0,
+				'scaleShowGridLines': 1,
 			}),
 		}
 		day.update(chart=chart)
@@ -354,7 +353,7 @@ def reports(request):
 			'options': simplejson.dumps({
 				'animation': 1,
 				'scaleShowLabels': 0,
-				'scaleShowGridLines': 0,
+				'scaleShowGridLines': 1,
 			}),
 		}
 		working_time.update(chart=chart)
